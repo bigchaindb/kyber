@@ -6,7 +6,7 @@ This is your team's base repository for the BS Hackathon, please clone it and up
 
 In order to ease development during the event we've configured a private Ethereum network, this network is shared by all the teams and composed of several Linux virtual machines, each running a dedicated Ethereum node ([`geth`](https://github.com/ethereum/go-ethereum/wiki/geth)). Each team has access to its own unique VM:
 
-![Network](IMAGES/network.png)
+![Network](images/network.png)
 
 ###Access to your Ethereum node
 
