@@ -29,7 +29,7 @@ BSToken is a set of Solidity contracts that model the concept of a *virtual asse
 
 This contract(s) follows the [ERC20](https://github.com/ethereum/EIPs/issues/20) token specification:
 
-```javascript
+```
 // Abstract contract for the full ERC 20 Token standard
 // https://github.com/ethereum/EIPs/issues/20
 pragma solidity ^0.4.6;
@@ -101,7 +101,7 @@ Test credit card:
 * CIP: `123456`
 
 ##FAQ's
-* **Must our project rely on the token contract?** No, we offer the token and escrow contract as an starting point or a base for *inspiration*.
+* **Must our project rely on the token contract?** No, we provide the token and escrow contracts as an starting point or a base for *inspiration*.
 
 ##Resources
 
