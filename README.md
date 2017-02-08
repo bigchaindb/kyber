@@ -27,8 +27,6 @@ In case your project depends on additional software (e.g. Node) you have full ac
 
 BSToken is a [digital token](https://www.ethereum.org/token) created exclusively by Banc Sabadell for this hackathon, you can integrate your Ethereum contracts with this token to create a variety of applications based on _tradable goods_ (E.g. [debt](https://forum.ethereum.org/discussion/2989/decentralized-system-for-securitizing-collateral-debt-obligations-using-the-ethereum-blockchain), [watts](http://www.coindesk.com/ethereum-used-first-paid-energy-trade-using-blockchain-technology/), etc. See [bs-scrow](https://github.com/BancoSabadell/bs-escrow) below for an example).
 
-BSToken is a set of [Solidity](http://solidity.readthedocs.io/en/develop/) contracts that model the concept of a *virtual asset* supported by the Banc Sabadell. Your contracts can integrate with the BSToken contract, see [bs-scrow](https://github.com/BancoSabadell/bs-escrow) for an example.
-
 BSToken is implemented with a set of Solidity contracts that follow the [ERC20](https://github.com/ethereum/EIPs/issues/20) token specification:
 
 ```
