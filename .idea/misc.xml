@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaScriptLibraryMappings">
+    <includedPredefinedLibrary name="ECMAScript 6" />
+  </component>
+  <component name="JsBowerSettings">
+    <exe-path />
+    <config-path />
+  </component>
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 2.7.11 (~/anaconda/envs/venv-diamond-explorer/bin/python)" project-jdk-type="Python SDK" />
+</project>
