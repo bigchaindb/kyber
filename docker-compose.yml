@@ -14,6 +14,14 @@ services:
     ports:
       - "58585:8080"
       - "28015"
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - '80:80'
+    volumes:
+      - .:/etc/nginx/
+
   bdb-server:
     build: ./compose/bigchaindb-server
     environment:
@@ -34,5 +42,7 @@ services:
       BIGCHAINDB_SERVER_BIND: 0.0.0.0:9985
     ports:
       - "9985"
+    volumes:
+      - ./bigchaindb-khyber:/usr/src/app/bigchaindb-khyber
     command: python bigchaindb-khyber/web/server_flask.py
 

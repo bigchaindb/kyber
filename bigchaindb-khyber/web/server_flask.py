@@ -12,7 +12,7 @@ import gunicorn.app.base
 
 from bigchaindb import utils
 from bigchaindb import Bigchain
-from bigchaindb.web.routes import add_routes
+from routes import add_routes
 
 
 # TODO: Figure out if we do we need all this boilerplate.
@@ -96,5 +96,6 @@ def create_server(settings):
 
 
 if __name__ == '__main__':
-    server = create_server({})
+    print('hallo')
+    server = create_server({'bind': '0.0.0.0:9985'})
     server.run()
