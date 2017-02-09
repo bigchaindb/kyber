@@ -9,4 +9,4 @@ RUN pip install --upgrade pip ipdb ipython
 
 COPY . /usr/src/app/
 
-RUN pip install -r bigchaindb-khyber/requirements.txt
+RUN pip install -r bigchaindb-kyber/requirements.txt

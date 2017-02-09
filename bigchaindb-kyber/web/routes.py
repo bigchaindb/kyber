@@ -15,6 +15,11 @@ def r(*args, **kwargs):
     return (args, kwargs)
 
 
+ROUTES_API_V1 = [
+    r('/', info.RootIndex),
+]
+
+
 API_SECTIONS = [
-    (None, [r('/dbh/', info.RootIndex)]),
+    ('/api/kyber/', ROUTES_API_V1),
 ]
