@@ -4,7 +4,7 @@ services:
   bdb-driver:
     build:
       context: .
-      dockerfile: ./compose/bigchaindb-driver-khyber/Dockerfile
+      dockerfile: ./compose/bigchaindb-driver-kyber/Dockerfile
     environment:
       BDB_HOST: bdb-server
       BIGCHAINDB_KEYPAIR_PUBLIC: GW1nrdZm4mbVC8ePeiGWz6DqHexqewqy5teURVHi3RG4
@@ -33,16 +33,16 @@ services:
       - "9984"
     command: bigchaindb start
 
-  bdb-server-khyber:
+  bdb-server-kyber:
     build:
       context: .
-      dockerfile: ./compose/bigchaindb-server-khyber-flask/Dockerfile
+      dockerfile: ./compose/bigchaindb-server-kyber-flask/Dockerfile
     environment:
       BIGCHAINDB_DATABASE_HOST: rdb
       BIGCHAINDB_SERVER_BIND: 0.0.0.0:9985
     ports:
       - "9985"
     volumes:
-      - ./bigchaindb-khyber:/usr/src/app/bigchaindb-khyber
-    command: python bigchaindb-khyber/web/server_flask.py
+      - ./bigchaindb-kyber:/usr/src/app/bigchaindb-kyber
+    command: python bigchaindb-kyber/web/server_flask.py
 
