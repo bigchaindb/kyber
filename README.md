@@ -25,9 +25,9 @@ Getting started? Have a look at our docs:
 
 ### Kyber
 
-Welcome to our Hackaton Laboratory!
+Welcome to our Hackathon Laboratory!
 
-Our kyber version of BigchainDB will be built during this hackaton.
+Our kyber version of BigchainDB will be built during this hackathon.
 To say it in Dunglish: You ask, we turn! 
 
 The repo of experimental code is here and the instance is running at:
@@ -76,7 +76,6 @@ make stop
 
 We'll be monitoring the performance of our kyber network.
 
-The logs will be available as assets - and we're curious to see how much data will be produced during the hackaton.
+The logs will be available as assets - and we're curious to see how much data will be produced during the hackathon.
 
 Stay Tuned!
- 
