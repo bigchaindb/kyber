@@ -2,12 +2,12 @@
 
 BigchainDB opens a public API for the Dutch Blockchain Hackathon '17!
 
-- http://vanilla.ipdb.foundation:9984/
+- [Under Maintenance] http://vanilla.ipdb.foundation:9984/
 - http://kyber.ipdb.foundation/
 
 ## What?! ¯\\\_(ツ)_/¯
 
-### Vanilla
+### Vanilla [Under Maintenance]
 
 Meet our classic, pristine BigchainDB network running on v0.9.1.
 
@@ -23,7 +23,7 @@ Getting started? Have a look at our docs:
 - a [Python Driver](https://docs.bigchaindb.com/projects/py-driver/en/latest/index.html)
 - some [JS utilities](https://github.com/sohkai/js-bigchaindb-quickstart) for creating transactions
 
-### Kyber
+### Kyber [Use this one!]
 
 Welcome to our Hackathon Laboratory!
 
