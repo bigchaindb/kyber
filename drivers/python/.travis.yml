@@ -1,0 +1,21 @@
+language: python
+python: 3.5
+
+env:
+  - TOXENV=py35
+  - TOXENV=flake8
+  - TOXENV=docs
+
+before_install:
+  - sudo .ci/travis-before-install.sh
+
+install:
+  - .ci/travis-install.sh
+
+before_script:
+  - .ci/travis-before-script.sh
+
+script: tox -e ${TOXENV}
+
+after_success:
+  - .ci/travis-after-success.sh
