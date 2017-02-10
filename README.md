@@ -35,13 +35,7 @@ The repo of experimental code is here and the instance is running at:
 http://kyber.ipdb.foundation/
 ```
 
-If you have docker installed, you can spin it up locally:
-
-```
-make
-```
-
-The vanilla API is avaible under
+The vanilla API is available under
 
 ```
 http://kyber.ipdb.foundation/api/v1/
@@ -57,6 +51,25 @@ and the API code can be found under [bigchaindb-kyber](https://github.com/bigcha
 
 We'll also take requests for the drivers (python and JS)... just give us a shout
 
+
+#### Run locally
+If you have `docker-compose` installed, you can spin it up locally:
+
+```
+make
+```
+
+If you already built the images:
+
+```
+make run
+```
+
+Stop the containers:
+
+```
+make stop
+```
 ## What Else?
 
 **"Make BigchainDB Big!"**
@@ -65,5 +78,5 @@ We'll be monitoring the performance of our kyber network.
 
 The logs will be available as assets - and we're curious to see how much data will be produced during the hackaton.
 
-Coming soon!
+Stay Tuned!
  

@@ -1,24 +1,28 @@
 all: build init start
 
 build:
-	docker-compose -f docker-compose.yml build
+	docker-compose build
 
 init: reinit_db
 
 start:
-	docker-compose -f docker-compose.yml up
+	docker-compose up -d bdb-server
+	docker-compose up -d bdb-server-kyber
+	docker-compose up -d nginx
 
 restart: init start
 
 drop_db:
-	docker-compose -f docker-compose.yml stop rdb
-	docker-compose -f docker-compose.yml rm -f rdb
+	docker-compose stop rdb
+	docker-compose rm -f rdb
 
 start_db:
-	docker-compose -f docker-compose.yml up -d rdb
+	docker-compose up -d rdb
+
+run: init start
 
 reinit_db: drop_db start_db
 	sleep 10
 
 stop:
-	docker-compose -f docker-compose.yml down
+	docker-compose down
