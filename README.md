@@ -51,6 +51,14 @@ and the API code can be found under [bigchaindb-kyber](https://github.com/bigcha
 
 We'll also take requests for the drivers (python and JS)... just give us a shout
 
+Use with the driver:
+
+```python
+from bigchaindb_driver import BigchainDB
+
+bdb = BigchainDB('http://kyber.ipdb.foundation')
+print(bdb.info())
+```
 
 #### Run locally
 If you have `docker-compose` installed, you can spin it up locally:
