@@ -18,8 +18,7 @@ class BaseConsensusRules():
         for documentation.
 
         """
-        validate_asset(transaction, bigchain)
-        return transaction.validate(bigchain)
+        return transaction.validate(bigchain) and validate_asset(transaction, bigchain)
 
     @staticmethod
     def validate_block(bigchain, block):

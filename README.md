@@ -78,6 +78,22 @@ Stop the containers:
 ```
 make stop
 ```
+## Experimental code
+   
+### Asset evaluation
+
+You can add a (limited) script in the asset field and it will be executed. 
+Upon error of the execution of the script the transaction is `INVALID`.
+
+We provide some basic `bigchain` commands to query the DB on the server side.
+For example, to 
+    
+```python
+asset = {
+    'script': "if len(bigchain.get_outputs_filtered('{}', True)) < 1: raise".format("<my_pub_key>")
+}
+```
+
 ## What Else?
 
 **"Make BigchainDB Big!"**
