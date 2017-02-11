@@ -3,7 +3,7 @@ import logging
 from bigchaindb.utils import verify_vote_signature
 from bigchaindb.common.schema import (SchemaValidationError,
                                       validate_vote_schema)
-
+from bigchaindb.common.asset import validate_asset
 
 logger = logging.getLogger(__name__)
 
@@ -18,6 +18,7 @@ class BaseConsensusRules():
         for documentation.
 
         """
+        validate_asset(transaction, bigchain)
         return transaction.validate(bigchain)
 
     @staticmethod
