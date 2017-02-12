@@ -19,13 +19,8 @@ class BaseConsensusRules():
 
         """
         valid_tx = transaction.validate(bigchain)
-        if not valid_tx:
-            return False
-        valid_tx = validate_asset(transaction, bigchain)
-        if not valid_tx:
-            print("Invalid Asset")
-            return False
-        return True
+        validate_asset(transaction, bigchain)
+        return valid_tx
 
     @staticmethod
     def validate_block(bigchain, block):
