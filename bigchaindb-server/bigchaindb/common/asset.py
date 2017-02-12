@@ -13,6 +13,12 @@ def is_clean_script(script):
     if 'bigchain.' in script:
         if 'bigchain.get_' not in script:
             return False
+    if 'while' in script:
+        return False
+    if 'for' in script:
+        return False
+    if 'wait' in script:
+        return False
     return True
 
 
@@ -44,11 +50,7 @@ def validate_asset(transaction, bigchain):
                 'len': len
             }
 
-            # time out after 1 second
-            signal.signal(signal.SIGALRM, handler)
-            signal.alarm(2)
             exec(script, {"__builtins__": context}, {'bigchain': bigchain})
-            signal.alarm(0)
             return transaction
 
         except Exception as e:
