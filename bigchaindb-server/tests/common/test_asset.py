@@ -59,7 +59,7 @@ def test_asset_script_eval(b, client):
 
 @pytest.mark.bdb
 @pytest.mark.usefixtures('inputs')
-def test_asset_script_bad_functions(b, client):
+def test_asset_script_bad_functions(b, client, user_pk):
     from bigchaindb.models import Transaction
     import json
 
@@ -80,4 +80,9 @@ def test_asset_script_bad_functions(b, client):
 
     execute_asset({
         'script': "if True: raise"
+    })
+
+    input_valid = b.get_owned_ids(user_pk).pop()
+    execute_asset({
+        'script': "bigchain.delete_transaction({})".format(input_valid)
     })

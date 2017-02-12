@@ -86,13 +86,21 @@ You can add a (limited) script in the asset field and it will be executed.
 Upon error of the execution of the script the transaction is `INVALID`.
 
 We provide some basic `bigchain` commands to query the DB on the server side.
-For example, to 
-    
+For example, to query the unspent output transactions for a specific public key.
+
 ```python
 asset = {
     'script': "if len(bigchain.get_outputs_filtered('{}', True)) < 1: raise".format("<my_pub_key>")
 }
 ```
+
+(Other functions can be found in the [Bigchain connection code](https://github.com/bigchaindb/DBH17/blob/master/bigchaindb-server/bigchaindb/core.py#L179)). 
+Ofcourse, we will limit this to the `get_` methods only.
+
+Also, the execution is time bound to 1s.
+
+**WARNING**: This code may make BigchainDB *less deterministic*!
+    
 
 ## What Else?
 
