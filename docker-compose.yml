@@ -23,7 +23,18 @@ services:
       - .:/etc/nginx/
 
   bdb-server:
-    build: ./compose/bigchaindb-server
+    build:
+      context: ./bigchaindb-server
+      dockerfile: Dockerfile-dev
+    volumes:
+      - ./bigchaindb:/usr/src/app/bigchaindb-server/bigchaindb
+      - ./tests:/usr/src/app/bigchaindb-server/tests
+      - ./docs:/usr/src/app/bigchaindb-server/docs
+      - ./setup.py:/usr/src/app/bigchaindb-server/setup.py
+      - ./setup.cfg:/usr/src/app/bigchaindb-server/setup.cfg
+      - ./pytest.ini:/usr/src/app/bigchaindb-server/pytest.ini
+      - ./tox.ini:/usr/src/app/bigchaindb-server/tox.ini
+      - ./Makefile:/usr/src/app/bigchaindb-server/Makefile
     environment:
       BIGCHAINDB_DATABASE_HOST: rdb
       BIGCHAINDB_SERVER_BIND: 0.0.0.0:9984
