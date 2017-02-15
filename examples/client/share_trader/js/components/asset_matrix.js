@@ -1,0 +1,117 @@
+import React from 'react';
+import Matrix from 'react-matrix';
+import { safeInvoke } from 'js-utility-belt/es6';
+
+const AssetMatrix = React.createClass({
+
+    propTypes: {
+        assetList: React.PropTypes.array,
+        cols: React.PropTypes.number,
+        handleAssetClick: React.PropTypes.func,
+        rows: React.PropTypes.number,
+        squareSize: React.PropTypes.number,
+        states: React.PropTypes.object
+    },
+
+    getDefaultProps() {
+        return {
+            rows: 8,
+            cols: 8,
+            squareSize: 50,
+            states: {
+                '0': 'available',
+                '1': 'state1',
+                '2': 'state2',
+                '3': 'state3',
+                '4': 'state4',
+                '5': 'state5',
+                '6': 'state6',
+                '7': 'state7',
+                '8': 'state8'
+            }
+        };
+    },
+
+    initializeMatrix(rows, cols) {
+        const matrix = new Array(cols);
+
+        for (let i = 0; i < rows; i++) {
+            matrix[i] = new Array(cols);
+
+            for (let j = 0; j < cols; j++) {
+                matrix[i][j] = 'default';
+            }
+        }
+        return matrix;
+    },
+
+    mapAssetsOnMatrix() {
+        const { rows, cols } = this.props;
+        const matrix = this.initializeMatrix(cols, rows);
+
+        for (const content of this.getAssetListContent()) {
+            matrix[content.y][content.x] = content.vk;
+        }
+
+        return matrix;
+    },
+
+    getAssetListContent() {
+        const { assetList } = this.props;
+
+        if (assetList) {
+            return assetList.map((asset) => ({
+                vk: asset.transaction.conditions[0].new_owners[0],
+                x: asset.transaction.data.payload.content.x,
+                y: asset.transaction.data.payload.content.y
+            }));
+        }
+        return [];
+    },
+
+    getAssetForCell(x, y) {
+        const { assetList } = this.props;
+
+        if (assetList) {
+            for (const asset of assetList) {
+                const content = asset.transaction.data.payload.content;
+
+                if (content.x === x && content.y === y) {
+                    return asset;
+                }
+            }
+        }
+
+        return null;
+    },
+
+    handleCellClick(cellState) {
+        const { handleAssetClick } = this.props;
+
+        const x = parseInt(cellState.x, 10);
+        const y = parseInt(cellState.y, 10);
+
+        const activeAsset = this.getAssetForCell(x, y);
+        safeInvoke(handleAssetClick, activeAsset);
+    },
+
+    render() {
+        const {
+            squareSize,
+            states
+        } = this.props;
+
+        return (
+            <div style={{ textAlign: 'center' }}>
+                <Matrix
+                    cellStates={states}
+                    matrix={this.mapAssetsOnMatrix()}
+                    onCellClick={this.handleCellClick}
+                    squareSize={squareSize} />
+            </div>
+        );
+    }
+});
+
+
+export default AssetMatrix;
