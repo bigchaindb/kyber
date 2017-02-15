@@ -1,0 +1,121 @@
+@import "variables";
+
+/**
+ * Colors and backgrounds
+ */
+
+$row: 100%;
+$row--wide: 900px;
+$gutter: 20px;
+$small: 12px;
+
+$color--brand: #c90000;
+$color--background-secondary: #EEE;
+
+html {
+    font-family: 'Lato', sans-serif;
+}
+
+body {
+    background-color: $bg-color;
+}
+
+.app {
+    margin: auto;
+    //max-width: $content--max-width + $sidebar--wide;
+    height: 100%;
+}
+
+a {
+    color: $fg-color;
+}
+
+#page-content-wrapper {
+    width: 100%;
+}
+
+.page-content {
+    padding: 0 1em;
+}
+
+.content-text {
+    margin-top: 2em;
+    text-align: center;
+}
+
+.hero,
+.page--result {
+    background-color: $color--background-secondary;
+}
+
+.logo-brand {
+    > span:first-of-type {
+        font-weight: 700;
+    }
+}
+
+.navbar-fixed-bottom {
+    margin-left: $sidebar--wide;
+}
+
+@media (max-width: 930px) {
+    .navbar-fixed-bottom {
+        margin-left: 0;
+    }
+}
+
+/**
+ * Layout
+ */
+
+.row {
+    max-width: $row;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.vertical-align-outer {
+    position: absolute;
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+
+.vertical-align-inner {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+input {
+    width: 100%;
+    font-size: 20px;
+    line-height: 130%;
+    border: 1px solid #BBB;
+    padding: 1em;
+}
+
+#app-container {
+    margin-top: 50vh;
+    text-align: center;
+    background: $fg-color;
+    color: black;
+}
+
+#container {
+    background-color: $color--background;
+}
+
+.content-header-wrapper {
+    background-color: $bg-color;
+    width: 100%;
+}
+
+.content-header {
+    width: 100%;
+    max-width: $content--max-width;
+    position: fixed;
+    background-color: $bg-color;
+    height: 70px;
+    box-shadow: 0 2px 2px -2px rgba(0, 0, 0, .5);
+    z-index: 1200;
+}

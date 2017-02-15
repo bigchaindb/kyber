@@ -1,0 +1,99 @@
+.share-trader {
+    $colorAvailable: #ECF0F1;
+    $colorGrid: #BDC3C7;
+    $colorState0: #3498DB;
+    $colorState1: #39418b;
+    $colorState2: #E74C3C;
+    $colorState3: #34495E;
+    $colorState4: #1ABC9C;
+    $colorState5: #ff8600;
+    $colorState6: #437c2b;
+    $colorState7: #adaf35;
+    $colorState8: #5bbc50;
+
+    $colorList: (
+        ("available", $colorAvailable),
+        ("state0", $colorState0),
+        ("state1", $colorState1),
+        ("state2", $colorState2),
+        ("state3", $colorState3),
+        ("state4", $colorState4),
+        ("state5", $colorState5),
+        ("state6", $colorState6),
+        ("state7", $colorState7),
+        ("state8", $colorState8)
+    );
+
+    .Matrix {
+        border: 1px solid black;
+
+        .Grid {
+            stroke: $colorGrid;
+        }
+
+        .Cell {
+            @each $colorMap in $colorList {
+                $state: nth($colorMap, 1);
+                $color: nth($colorMap, 2);
+
+                &.#{$state} {
+                    fill: $color;
+                }
+            }
+        }
+        .available {
+            stroke: black;
+            stroke-width: 0.1;
+        }
+    }
+
+    @each $colorMap in $colorList {
+        $state: nth($colorMap, 1);
+        $color: nth($colorMap, 2);
+
+        .asset-container.#{$state} {
+            .asset-container-id,
+            .asset-container-timestamp .glyphicon {
+                color: $color
+            }
+            &.active {
+                background: rgba($color, 0.1);
+                border-left-color: $color;
+            }
+            &:hover {
+                background: rgba($color, 0.05);
+                border-left-color: rgba($color, 0.6);
+                cursor: pointer;
+            }
+            &.inTransfer {
+                background: rgba($color, 0.05);
+                border-left-color: rgba($color, 0.4);
+                cursor: wait;
+            }
+        }
+    }
+
+    .asset-container {
+        width: 100%
+    }
+
+    .asset-history {
+        height: calc(100vh - 70px);
+        overflow-y: scroll;
+        padding: 0;
+    }
+
+    .asset-matrix {
+        border-right: 1px solid #888888;
+        height: 100%;
+    }
+
+    .page-content {
+        height: calc(100vh - 70px);
+        padding-right: 0;
+
+        .row {
+            height: 100%;
+        }
+    }
+}
