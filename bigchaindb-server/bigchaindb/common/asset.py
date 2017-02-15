@@ -15,8 +15,8 @@ def is_clean_script(script):
             return False
     if 'while' in script:
         return False
-    if 'for' in script:
-        return False
+    # if 'for' in script:
+    #     return False
     if 'wait' in script:
         return False
     return True
@@ -31,8 +31,7 @@ def validate_asset(transaction, bigchain):
         return transaction
 
     if 'id' in asset:
-        create_tx, _ = bigchain. \
-            get_transaction(asset['id'], include_status=True)
+        create_tx = bigchain.get_transaction(asset['id'])
         asset = create_tx.asset
 
     asset_data = asset['data']
@@ -41,7 +40,7 @@ def validate_asset(transaction, bigchain):
         script = asset_data['script']
 
         if not is_clean_script(script):
-            raise ValueError('Asset script might contain malicious code')
+            raise ValueError('Asset script might contain malicious code:\n{}'.format(script))
 
         try:
             # do not allow builtins or other funky business
@@ -50,12 +49,12 @@ def validate_asset(transaction, bigchain):
                 'len': len
             }
 
-            exec(script, {"__builtins__": context}, {'bigchain': bigchain})
+            exec(script, {"__builtins__": context}, {'bigchain': bigchain, 'self': transaction})
             return transaction
 
         except Exception as e:
             raise ValueError('Asset script evaluation failed with {} : {}'
-                                 .format(e.__class__.__name__, e).rstrip())
+                             .format(e.__class__.__name__, e).rstrip())
     else:
         # No script, asset is always valid
         return transaction
