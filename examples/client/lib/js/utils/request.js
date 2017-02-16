@@ -6,8 +6,7 @@ import ApiUrls from '../constants/api_urls';
 const DEFAULT_REQUEST_CONFIG = {
     credentials: 'include',
     headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Accept': 'application/json'
     }
 };
 
@@ -22,6 +21,11 @@ export default function request(url, config = {}) {
     });
     let apiUrl = url;
 
+    if (requestConfig.jsonBody) {
+        requestConfig.headers = Object.assign({}, requestConfig.headers, {
+            'Content-Type': 'application/json'
+        });
+    }
     if (!url) {
         return Promise.reject(new Error('Request was not given a url.'));
     } else if (!url.match(/^http/)) {
