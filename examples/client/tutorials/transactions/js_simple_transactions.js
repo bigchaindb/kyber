@@ -15,7 +15,7 @@ import {
 import {
     postTransaction,
     pollStatusAndFetchTransaction
-} from './bigchaindb_utils';
+} from '../utils/bigchaindb_utils';
 
 
 const alice = new Ed25519Keypair();
@@ -30,22 +30,9 @@ const tx = makeCreateTransaction(
 );
 const signedTx = signTransaction(tx, alice.privateKey);
 
-const txTransfer = makeTransferTransaction(
-    signedTx,
-    {metaDataMessage: 'I am specific to this transfer transaction'},
-    [makeOutput(makeEd25519Condition(carly.publicKey))], 0);
-const signedTxTransfer = signTransaction(txTransfer, bob.privateKey);
-
 console.log('Posting signed transaction: ', signedTx);
 postTransaction(signedTx)
     .then((res) => {
         console.log('Response from BDB server', res);
-        pollStatusAndFetchTransaction(signedTx, () => {
-            console.log('Posting signed transaction: ', signedTxTransfer);
-            postTransaction(signedTxTransfer)
-                .then((res) => {
-                    console.log('Response from BDB server:', res);
-                    pollStatusAndFetchTransaction(signedTxTransfer)
-                });
-        });
+        pollStatusAndFetchTransaction(signedTx)
 });
