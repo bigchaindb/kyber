@@ -9,6 +9,8 @@ start:
 	docker-compose up -d bdb-server
 	docker-compose up -d bdb-server-kyber
 	docker-compose up -d nginx
+	docker-compose up -d examples-frontend
+	docker-compose up -d examples-server-flask
 
 restart: init start
 
@@ -26,3 +28,11 @@ reinit_db: drop_db start_db
 
 stop:
 	docker-compose down
+
+init_examples: init_examples_accounts init_examples_assets
+
+init_examples_accounts:
+	docker-compose run --rm examples-server-flask python init_accounts.py
+
+init_examples_assets:
+	docker-compose run --rm examples-server-flask python init_assets.py

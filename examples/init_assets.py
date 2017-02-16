@@ -3,11 +3,11 @@ import logging
 
 import bigchaindb
 import bigchaindb.config_utils
+from bigchaindb import Bigchain
 
 import apps_config
-from server.lib.models.accounts import retrieve_accounts
-from server.lib.models.assets import create_asset
-from server.config_bigchaindb import get_bigchain
+from server.models.accounts import retrieve_accounts
+from server.models.assets import create_asset
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -24,14 +24,16 @@ def main():
     for app in APPS:
         app_name = '{}'.format(app['name'])
         if 'num_accounts' in app:
-            ledger_name = 'bigchaindb_examples_{}'.format(app['ledger'])
-            bigchain = get_bigchain(ledger_id=app['ledger'])
+            ledger_name = 'bigchain'.format(app['ledger'])
+            bigchain = Bigchain()
             accounts = retrieve_accounts(bigchain, app_name)
             assets = []
             for i in range(app['num_assets']):
+                user = accounts[random.randint(0, app['num_accounts'] - 1)]
                 asset = create_asset(bigchain=bigchain,
-                                     to=accounts[random.randint(0, app['num_accounts'] - 1)]['vk'],
-                                     payload=app['payload_func'](i))
+                                     user_pub=user['vk'],
+                                     user_priv=user['sk'],
+                                     asset=app['payload_func'](i))
                 assets.append(asset)
             logging.info('{} assets initialized for app {} on ledger {}'.format(len(assets),
                                                                                 app_name,

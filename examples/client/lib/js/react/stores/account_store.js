@@ -61,13 +61,16 @@ class AccountStore {
         processedAccount.api = `http://${account.ledger.api}/api`;
 
         // connectors
-        processedAccount.ledger.getConnectors()
-            .then((res) => {
-                processedAccount.connectors = res.connectors;
-                processedAccount.isConnector =
-                    res.connectors.filter((connector) => connector.vk === account.vk).length > 0;
-            });
-
+        try {
+            processedAccount.ledger.getConnectors()
+                .then((res) => {
+                    processedAccount.connectors = res.connectors;
+                    processedAccount.isConnector =
+                        res.connectors.filter((connector) => connector.vk === account.vk).length > 0;
+                });
+        } catch (e) {
+            console.error(e);
+        }
         // assets
         AssetActions.fetchAssetList.defer({
             account: processedAccount

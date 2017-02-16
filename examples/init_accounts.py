@@ -2,10 +2,10 @@ import logging
 import os.path
 
 import bigchaindb.config_utils
+from bigchaindb import Bigchain
 
 import apps_config
-from server.config_bigchaindb import get_bigchain
-from server.lib.models.accounts import Account
+from server.models.accounts import Account
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -17,7 +17,7 @@ LEDGER_API_BASE_PORT = int(os.environ.get('LEDGER_API_BASE_PORT', '8000'))
 LEDGER_WS_BASE_HOST = os.environ.get('DOCKER_MACHINE_IP') or 'localhost'
 LEDGER_WS_BASE_PORT = int(os.environ.get('LEDGER_WS_BASE_PORT', '8888'))
 
-bigchain = get_bigchain()
+bigchain = Bigchain()
 logging.info('INIT: bigchain initialized with database: {}'.format(bigchaindb.config['database']['name']))
 
 

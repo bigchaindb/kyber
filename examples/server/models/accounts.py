@@ -1,6 +1,6 @@
 import rethinkdb as r
 
-import bigchaindb.crypto
+from bigchaindb.common import crypto
 from .assets import transfer_asset
 
 
@@ -9,7 +9,7 @@ class Account:
         self.bigchain = bigchain
         self.db = db
         self.name = name
-        self.sk, self.vk = bigchaindb.crypto.generate_key_pair()
+        self.sk, self.vk = crypto.generate_key_pair()
         self.ledger = ledger
         self.save()
 
@@ -25,26 +25,25 @@ class Account:
                               sk=self.sk)
 
     def save(self):
+        conn = self.bigchain.connection
         try:
-            r.db_create(self.db).run(self.bigchain.conn)
+            conn.run(r.db_create(self.db))
         except r.ReqlOpFailedError:
             pass
 
         try:
-            r.db(self.db).table_create('accounts').run(self.bigchain.conn)
+            conn.run(r.db(self.db).table_create('accounts'))
         except r.ReqlOpFailedError:
             pass
 
-        user_exists = list(r.db(self.db)
-                           .table('accounts')
-                           .filter(lambda user: (user['name'] == self.name)
-                                                & (user['ledger']['id'] == self.ledger['id']))
-                           .run(self.bigchain.conn))
+        user_exists = list(conn.run(r.db(self.db)
+                                    .table('accounts')
+                                    .filter(lambda user: (user['name'] == self.name)
+                                                         & (user['ledger']['id'] == self.ledger['id']))))
         if not len(user_exists):
-            r.db(self.db)\
-                .table('accounts')\
-                .insert(self.as_dict(), durability='hard')\
-                .run(self.bigchain.conn)
+            conn.run(r.db(self.db)
+                     .table('accounts')
+                     .insert(self.as_dict(), durability='hard'))
         else:
             user_persistent = user_exists[0]
             self.vk = user_persistent['vk']
@@ -60,24 +59,24 @@ class Account:
 
 
 def retrieve_accounts(bigchain, db):
-    return list(r.db(db)
-                .table('accounts')
-                .run(bigchain.conn))
+    return list(bigchain.connection.run(r.db(db)
+                                        .table('accounts')))
 
 
 def get_connectors(bigchain, ledger_id, db):
+    conn = bigchain.connection
     account_on_ledgers = \
-        list(r.db(db)
-              .table('accounts')
-              .filter(lambda user: user['ledger']['id'] == int(ledger_id))
-              .run(bigchain.conn))
+        list(conn.run(r.db(db)
+                      .table('accounts')
+                      .filter(lambda user: user['ledger']['id'] == int(ledger_id))))
     result = []
     for account_on_ledger in account_on_ledgers:
         account_on_multiple_ledgers = \
-            list(r.db(db)
-                  .table('accounts')
-                  .filter(lambda user: user['name'] == account_on_ledger['name'])
-                  .run(bigchain.conn))
+            list(conn.run(r.db(db)
+                          .table('accounts')
+                          .filter(lambda user: user['name'] == account_on_ledger['name'])
+                          ))
         if len(account_on_multiple_ledgers) > 1:
-            result += [account for account in account_on_multiple_ledgers if account['ledger']['id'] == int(ledger_id)]
+            result += [account for account in account_on_multiple_ledgers
+                       if account['ledger']['id'] == int(ledger_id)]
     return result

@@ -9,6 +9,7 @@ services:
       BDB_HOST: bdb-server
       BIGCHAINDB_KEYPAIR_PUBLIC: GW1nrdZm4mbVC8ePeiGWz6DqHexqewqy5teURVHi3RG4
     command: pytest -v
+
   rdb:
     image: rethinkdb
     ports:
@@ -27,14 +28,14 @@ services:
       context: ./bigchaindb-server
       dockerfile: Dockerfile-dev
     volumes:
-      - ./bigchaindb:/usr/src/app/bigchaindb-server/bigchaindb
-      - ./tests:/usr/src/app/bigchaindb-server/tests
-      - ./docs:/usr/src/app/bigchaindb-server/docs
-      - ./setup.py:/usr/src/app/bigchaindb-server/setup.py
-      - ./setup.cfg:/usr/src/app/bigchaindb-server/setup.cfg
-      - ./pytest.ini:/usr/src/app/bigchaindb-server/pytest.ini
-      - ./tox.ini:/usr/src/app/bigchaindb-server/tox.ini
-      - ./Makefile:/usr/src/app/bigchaindb-server/Makefile
+      - ./bigchaindb-server/bigchaindb:/usr/src/app/bigchaindb
+      - ./bigchaindb-server/tests:/usr/src/app/tests
+      - ./bigchaindb-server/docs:/usr/src/app/docs
+      - ./bigchaindb-server/setup.py:/usr/src/app/setup.py
+      - ./bigchaindb-server/setup.cfg:/usr/src/app/setup.cfg
+      - ./bigchaindb-server/pytest.ini:/usr/src/app/pytest.ini
+      - ./bigchaindb-server/tox.ini:/usr/src/app/tox.ini
+      - ./bigchaindb-server/Makefile:/usr/src/app/Makefile
     environment:
       BIGCHAINDB_DATABASE_HOST: rdb
       BIGCHAINDB_SERVER_BIND: 0.0.0.0:9984
@@ -56,4 +57,45 @@ services:
     volumes:
       - ./bigchaindb-kyber:/usr/src/app/bigchaindb-kyber
     command: python bigchaindb-kyber/web/server_flask.py
+
+  examples-frontend:
+    build:
+      context: ./examples
+      dockerfile: ./compose/frontend/Dockerfile
+    volumes:
+      - ./examples/client/demo:/usr/src/app/client/demo
+      - ./examples/client/lib:/usr/src/app/client/lib
+      - ./examples/client/on_the_record:/usr/src/app/client/on_the_record
+      - ./examples/client/share_trader:/usr/src/app/client/share_trader
+      - ./examples/client/app_index_template.html:/usr/src/app/client/app_index_template.html
+      - ./examples/client/browserlist:/usr/src/app/client/browserlist
+      - ./examples/client/package.json:/usr/src/app/client/package.json
+      - ./examples/client/server.demo.js/:/usr/src/app/client/server.demo.js
+      - ./examples/client/webpack.config.js:/usr/src/app/client/webpack.config.js
+    environment:
+      CLIENT_HOST: 0.0.0.0
+      FLASK_HOST: "${DOCKER_MACHINE_IP}"
+      FLASK_PORT: 48000
+    ports:
+      - "33000:3000"
+    command: node server.demo.js
+
+  examples-server-flask:
+    build:
+      context: .
+      dockerfile: ./compose/examples-server/Dockerfile
+    volumes:
+      - ./examples/server:/usr/src/app/examples/server
+    volumes_from:
+      - bdb-server
+    environment:
+      BIGCHAINDB_DATABASE_HOST: rdb
+      BIGCHAINDB_SERVER_BIND: 0.0.0.0:9984
+      BIGCHAINDB_KEYPAIR_PUBLIC: GW1nrdZm4mbVC8ePeiGWz6DqHexqewqy5teURVHi3RG4
+      BIGCHAINDB_KEYPAIR_PRIVATE: 2kQgBtQnHoauw8QchKM7xYvEBW1QDoHzhBsCL9Vi1AzB
+      FLASK_HOST: 0.0.0.0
+      DOCKER_MACHINE_IP: "${DOCKER_MACHINE_IP}"
+    ports:
+      - "48000:8000"
+    command: python -m server.server_flask
 

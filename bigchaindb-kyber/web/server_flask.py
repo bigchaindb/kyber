@@ -96,6 +96,5 @@ def create_server(settings):
 
 
 if __name__ == '__main__':
-    print('hallo')
     server = create_server({'bind': '0.0.0.0:9985'})
     server.run()

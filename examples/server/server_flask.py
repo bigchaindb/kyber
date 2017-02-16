@@ -7,7 +7,7 @@ import os
 from flask import Flask
 from flask.ext.cors import CORS
 
-from server.lib.api.views import api_views
+from server.routes import add_routes
 
 
 def create_app(debug):
@@ -43,7 +43,7 @@ def create_app(debug):
 
     app.debug = debug
 
-    app.register_blueprint(api_views, url_prefix='/api')
+    add_routes(app)
     return app
 
 

@@ -2,13 +2,6 @@ version: '2'
 
 
 services:
-
-  rdb:
-    image: rethinkdb
-    ports:
-      - "58087:8080"
-      - "28015"
-
   frontend:
     build:
       context: .

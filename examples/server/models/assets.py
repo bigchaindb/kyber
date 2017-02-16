@@ -7,8 +7,13 @@ import cryptoconditions as cc
 from decorator import contextmanager
 
 import bigchaindb
-import bigchaindb.util
-import bigchaindb.crypto
+from bigchaindb.common import crypto
+from bigchaindb.common.utils import (
+    gen_timestamp,
+)
+from bigchaindb.common.shorthands import (
+    create_simple_tx
+)
 
 
 @contextmanager
@@ -27,7 +32,7 @@ def query_reql_response(response, query):
     result = list(response)
 
     if result and len(result):
-        content = result[0]["transaction"]["data"]["payload"]["content"]
+        content = result[0]['asset']['data']['content']
         if query and content is not None:
             if query in content:
                 return result
@@ -46,7 +51,7 @@ def get_owned_assets(bigchain, vk, query=None, table='bigchain'):
                 .filter(lambda tx: tx['transaction']['conditions']
                         .contains(lambda c: c['new_owners']
                                   .contains(vk)))
-        response = query_reql_response(reql_query.run(bigchain.conn), query)
+        response = query_reql_response(bigchain.connection.run(reql_query), query)
         if response:
             assets += response
 
@@ -56,8 +61,8 @@ def get_owned_assets(bigchain, vk, query=None, table='bigchain'):
 
             reql_query = r.table(table) \
                 .concat_map(lambda doc: doc['block']['transactions']) \
-                .filter(lambda transaction: transaction['id'] == txid)
-            response = query_reql_response(reql_query.run(bigchain.conn), query)
+                .filter(lambda transaction: transaction['id'] == txid.txid)
+            response = query_reql_response(bigchain.connection.run(reql_query), query)
             if response:
                 assets += response
 
@@ -79,17 +84,10 @@ def get_assets(bigchain, search):
     return list(cursor)
 
 
-def create_asset(bigchain, to, payload):
-    # a create transaction uses the operation `CREATE` and has no inputs
-    tx = bigchain.create_transaction(bigchain.me, to, None, 'CREATE', payload=payload)
-
-    # all transactions need to be signed by the user creating the transaction
-    tx_signed = bigchain.sign_transaction(tx, bigchain.me_private)
-
-    bigchain.validate_transaction(tx_signed)
-    # write the transaction to the bigchain
-    bigchain.write_transaction(tx_signed)
-    return tx_signed
+def create_asset(bigchain, user_pub, user_priv, asset=None, metadata=None):
+    create_tx_signed = create_simple_tx(user_pub, user_priv, asset=asset, metadata=metadata)
+    bigchain.write_transaction(create_tx_signed)
+    return create_tx_signed
 
 
 def create_asset_hashlock(bigchain, payload, secret):
@@ -109,7 +107,7 @@ def create_asset_hashlock(bigchain, payload, secret):
     })
 
     # Conditions have been updated, so hash needs updating
-    hashlock_tx['id'] = bigchaindb.util.get_hash_data(hashlock_tx)
+    hashlock_tx['id'] = crypto.hash_data(hashlock_tx)
 
     # The asset needs to be signed by the current_owner
     hashlock_tx_signed = bigchain.sign_transaction(hashlock_tx, bigchain.me_private)
@@ -143,7 +141,7 @@ def escrow_asset(bigchain, source, to, asset_id, sk,
     if not expires_at:
         # Set expiry time (100 secs from now)
         time_sleep = 100
-        expires_at = float(bigchaindb.util.timestamp()) + time_sleep
+        expires_at = float(gen_timestamp()) + time_sleep
 
     # Create escrow and timeout condition
     condition_escrow = cc.ThresholdSha256Fulfillment(threshold=1)  # OR Gate
@@ -173,7 +171,7 @@ def escrow_asset(bigchain, source, to, asset_id, sk,
     }
 
     # conditions have been updated, so hash needs updating
-    asset_escrow['id'] = bigchaindb.util.get_hash_data(asset_escrow)
+    asset_escrow['id'] = crypto.hash_data(asset_escrow)
 
     # sign transaction
     asset_escrow_signed = bigchaindb.util.sign_tx(asset_escrow, sk, bigchain=bigchain)
@@ -208,7 +206,7 @@ def fulfill_escrow_asset(bigchain, source, to, asset_id, sk, execution_fulfillme
         subfulfillment_source = subfulfillment_source.subconditions[index]['body']
 
     # sign the fulfillment
-    subfulfillment_source.sign(tx_escrow_execute_fulfillment_message, bigchaindb.crypto.SigningKey(sk))
+    subfulfillment_source.sign(tx_escrow_execute_fulfillment_message, crypto.PrivateKey(sk))
 
     # get the indices path for the other source that delivers the condition
     _, indices = get_subcondition_indices_from_vk(escrow_fulfillment, other_owner)

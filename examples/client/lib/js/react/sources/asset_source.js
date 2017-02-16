@@ -8,9 +8,12 @@ const AssetSource = {
         remote(state) {
             const { account, search } = state.assetMeta;
             // fetch assets for account
-            const url = `${account.api}/accounts/${account.vk}/assets/`;
-            return request(url, {
-                query: { search }
+            // const url = `${account.api}/assets/`;
+            return request(`assets`, {
+                query: {
+                    search,
+                    public_key: account.vk
+                }
             });
         },
 
@@ -22,7 +25,7 @@ const AssetSource = {
         remote(state) {
             const { account, payloadToPost } = state.assetMeta;
             const url = `${account.api}/assets/`;
-            return request(url, {
+            return request(`assets`, {
                 method: 'POST',
                 jsonBody: payloadToPost
             });

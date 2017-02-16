@@ -7,10 +7,10 @@ from tornado.gen import coroutine
 
 import rethinkdb as r
 
-from server.config_bigchaindb import get_bigchain
+from bigchaindb import Bigchain
 
 clients = []
-bigchain = get_bigchain(ledger_id=os.environ.get('BIGCHAINDB_LEDGER_NUMBER'))
+bigchain = Bigchain()
 
 # from http://blog.hiphipjorge.com/django-and-realtime-using-django-with-tornado-and-rethinkdb/
 r.set_loop_type('tornado')
@@ -21,8 +21,7 @@ logger = logging.getLogger('tornado')
 
 @coroutine
 def print_changes(db_table):
-    conn = yield bigchain.conn
-    feed = yield r.table(db_table).changes().run(conn)
+    feed = yield bigchain.connection.run(r.table(db_table).changes())
     while (yield feed.fetch_next()):
         change = yield feed.next()
         block = get_block_from_change(change, db_table)

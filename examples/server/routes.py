@@ -1,6 +1,10 @@
 """ API routes definition """
 from flask_restful import Api
-from views import info
+from server.views import (
+    accounts,
+    assets,
+    info
+)
 
 
 def add_routes(app):
@@ -18,9 +22,12 @@ def r(*args, **kwargs):
 
 ROUTES_API_V1 = [
     r('/', info.RootIndex),
+    r('accounts', accounts.AccountListApi),
+    r('assets', assets.AssetListApi),
+    r('connectors', accounts.ConnectorListApi)
 ]
 
 
 API_SECTIONS = [
-    ('/api/kyber/', ROUTES_API_V1),
+    ('/api/examples/', ROUTES_API_V1),
 ]

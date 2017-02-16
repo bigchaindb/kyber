@@ -3,70 +3,46 @@
 For more information please refer to the documentation in Apiary:
  - http://docs.bigchaindb.apiary.io/
 """
-import os
-
 import flask
 from flask import request, Blueprint
+from flask_restful import Resource, reqparse
 
-from server.config_bigchaindb import get_bigchain
-from server.lib.models import accounts
-from server.lib.models import assets
+import bigchaindb
+from bigchaindb.web.views import parameters
+from server.models import assets
 
 api_views = Blueprint('api_views', __name__)
 
-bigchain = get_bigchain(ledger_id=os.environ.get('BIGCHAINDB_LEDGER_NUMBER'))
+bigchain = bigchaindb.Bigchain()
 
 
-@api_views.route('/accounts/')
-def get_accounts():
-    app = '{}'.format(request.args.get('app'))
-    result = accounts.retrieve_accounts(bigchain, app)
-    return flask.jsonify({'accounts': result})
+class AssetListApi(Resource):
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('public_key',
+                            type=parameters.valid_ed25519,
+                            location='args',
+                            required=True)
+        parser.add_argument('search', type=str, location='args')
+        args = parser.parse_args()
+        public_key = args['public_key']
+        search = args['search']
+        result = {
+            'bigchain': assets.get_owned_assets(bigchain, vk=public_key, query=search),
+            'backlog': assets.get_owned_assets(bigchain, vk=public_key, query=search, table='backlog')
+        }
+        return flask.jsonify({
+            'assets': result,
+            'account': public_key
+        })
 
-
-@api_views.route('/accounts/', methods=['POST'])
-def post_account():
-    json_payload = request.get_json(force=True)
-    tx = assets.create_asset(bigchain=bigchain,
-                             to=json_payload['to'],
-                             payload={'content': json_payload['content']})
-    return flask.jsonify(**tx)
-
-
-@api_views.route('/accounts/<account_vk>/assets/')
-def get_assets_for_account(account_vk):
-    query = request.args.get('search')
-
-    result = {
-        'bigchain': assets.get_owned_assets(bigchain, vk=account_vk, query=query),
-        'backlog': assets.get_owned_assets(bigchain, vk=account_vk, query=query, table='backlog')
-    }
-    return flask.jsonify({'assets': result, 'account': account_vk})
-
-
-@api_views.route('/ledgers/<ledger_id>/connectors/')
-def get_connectors_for_account(ledger_id):
-    app = '{}'.format(request.args.get('app'))
-    result = accounts.get_connectors(bigchain, ledger_id, app)
-    return flask.jsonify({'connectors': result})
-
-
-@api_views.route('/assets/')
-def get_assets():
-    search = request.args.get('search')
-    result = assets.get_assets(bigchain, search)
-    return flask.jsonify({'assets': result})
-
-
-@api_views.route('/assets/', methods=['POST'])
-def post_asset():
-    json_payload = request.get_json(force=True)
-    to = json_payload.pop('to')
-    tx = assets.create_asset(bigchain=bigchain,
-                             to=to,
-                             payload=json_payload)
-
-    return flask.jsonify(**tx)
+    def post(self):
+        payload = request.get_json(force=True)
+        tx = assets.create_asset(bigchain=bigchain,
+                                 user_pub=payload['to'],
+                                 user_priv=payload['priv_key'],
+                                 metadata=payload['metadata'])
+        return flask.jsonify(**tx)
 
 
 @api_views.route('/assets/<asset_id>/<cid>/transfer/', methods=['POST'])

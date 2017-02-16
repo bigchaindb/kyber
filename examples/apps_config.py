@@ -26,46 +26,46 @@ APPS = [
             }
         )
     },
-    {
-        'name': 'interledger',
-        'accounts': [
-            {
-                'name': 'alice',
-                'ledgers': [
-                    {
-                        'id': 0,
-                        'num_assets': 3
-                    }
-                ]
-            },
-            {
-                'name': 'bob',
-                'ledgers': [
-                    {
-                        'id': 1,
-                        'num_assets': 3
-                    }
-                ]
-            },
-            {
-                'name': 'chloe',
-                'ledgers': [
-                    {
-                        'id': 0,
-                        'num_assets': 3
-                    },
-                    {
-                        'id': 1,
-                        'num_assets': 3
-                    }
-                ]
-            }
-        ],
-        'payload_func': (
-            lambda x: {
-                'app': 'interledger',
-                'content': x
-            }
-        )
-    }
+    # {
+    #     'name': 'interledger',
+    #     'accounts': [
+    #         {
+    #             'name': 'alice',
+    #             'ledgers': [
+    #                 {
+    #                     'id': 0,
+    #                     'num_assets': 3
+    #                 }
+    #             ]
+    #         },
+    #         {
+    #             'name': 'bob',
+    #             'ledgers': [
+    #                 {
+    #                     'id': 1,
+    #                     'num_assets': 3
+    #                 }
+    #             ]
+    #         },
+    #         {
+    #             'name': 'chloe',
+    #             'ledgers': [
+    #                 {
+    #                     'id': 0,
+    #                     'num_assets': 3
+    #                 },
+    #                 {
+    #                     'id': 1,
+    #                     'num_assets': 3
+    #                 }
+    #             ]
+    #         }
+    #     ],
+    #     'payload_func': (
+    #         lambda x: {
+    #             'app': 'interledger',
+    #             'content': x
+    #         }
+    #     )
+    # }
 ]
