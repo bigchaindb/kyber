@@ -1,5 +1,3 @@
-from bigchaindb.common.transaction import Transaction
-
 from bigchaindb_driver import (
     BigchainDB,
 )
@@ -56,8 +54,17 @@ poll_status_and_fetch_transaction(tx_create_alice_divisible_signed['id'], driver
 
 # instead of transfering to a simple public key we can craft
 # custom cryptoconditions using thresholds, signatures, hashlocks, ...
-# this example is a multisig between (carly and (bob and secret/hashlock))
-# the cryptocondition is added as an output
+# this example is a multisig between
+#
+#             bob     secret/hashlock
+#      carly     \   /
+#           \     and
+#            \   /
+#             and
+#              |
+#              o
+#
+#  the cryptocondition is added as an output
 condition = ThresholdSha256Fulfillment(threshold=2)
 condition.add_subfulfillment(Ed25519Fulfillment(public_key=Ed25519VerifyingKey(carly.public_key)))
 subfulfillment = ThresholdSha256Fulfillment(threshold=2)

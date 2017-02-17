@@ -18,6 +18,7 @@ const EXTRACT = process.env.NODE_ENV === 'extract';
 const PATHS = {
     SIMPLE_TRANSACTIONS: path.resolve(__dirname, 'tutorials/transactions/simple_transactions.js'),
     ASSETS_UNSPENTS: path.resolve(__dirname, 'tutorials/transactions/assets_unspents.js'),
+    DIVISIBLE_TRANSACTIONS: path.resolve(__dirname, 'tutorials/transactions/divisible_transactions.js'),
 
     BUILD: path.resolve(__dirname, 'build'),
     DIST: path.resolve(__dirname, 'dist'),
@@ -30,6 +31,7 @@ const ENTRY = {
     // Use one entry per app
     simple_transactions: PATHS.SIMPLE_TRANSACTIONS,
     assets_unspents: PATHS.ASSETS_UNSPENTS,
+    divisible_transactions: PATHS.DIVISIBLE_TRANSACTIONS
 };
 
 
