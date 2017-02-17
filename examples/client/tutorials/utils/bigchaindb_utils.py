@@ -62,13 +62,15 @@ def prepare_transfer(inputs, outputs, metadata=None):
         Condition
     )
 
+    asset = inputs[0]['tx']['asset']
     asset = {
-        'id': inputs[0]['tx']['asset']['id'] if 'id' in inputs[0]['tx']['asset'] else inputs[0]['tx']['id']
+        'id': asset['id'] if 'id' in asset else inputs[0]['tx']['id']
     }
 
     _inputs, _outputs = [], []
 
     for _input in inputs:
+
         _output = _input['tx']['outputs'][_input['output']]
         _inputs.append(
             Input(
@@ -85,7 +87,7 @@ def prepare_transfer(inputs, outputs, metadata=None):
             Output(
                 fulfillment=output['condition'],
                 public_keys=output['public_keys'] if "public_keys" in output else None,
-                amount=output['amount'] if "amount" in outputs else 1
+                amount=output['amount'] if "amount" in output else 1
             )
         )
 
@@ -119,12 +121,15 @@ def prepare_transfer_ed25519_simple(transaction, receiver, metadata=None):
         metadata=metadata)
 
 
-def sign_ed25519_simple(transaction, private_key):
+def sign_ed25519(transaction, private_keys):
     from cryptoconditions import Ed25519Fulfillment
     from cryptoconditions.crypto import Ed25519VerifyingKey
 
-    receiver = transaction.inputs[0].owners_before[0]
-    transaction.inputs[0].fulfillment = Ed25519Fulfillment(
-        public_key=Ed25519VerifyingKey(receiver)
-    )
-    return transaction.sign([private_key]).to_dict()
+    for index, _input in enumerate(transaction.inputs):
+        receiver = _input.owners_before[0]
+        transaction.inputs[index].fulfillment = Ed25519Fulfillment(
+            public_key=Ed25519VerifyingKey(receiver)
+        )
+
+    private_keys = [private_keys] if not isinstance(private_keys, list) else private_keys
+    return transaction.sign(private_keys).to_dict()
