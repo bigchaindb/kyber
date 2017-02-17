@@ -24,7 +24,7 @@ const alice = new Ed25519Keypair();
 const bob = new Ed25519Keypair();
 const carly = new Ed25519Keypair();
 
-`const txCreateAlice = makeCreateTransaction(
+const txCreateAlice = makeCreateTransaction(
     {assetMessage: 'I will stick to every future transfer transaction'},
     {metaDataMessage: 'I am specific to this create transaction'},
     [makeOutput(makeEd25519Condition(alice.publicKey), 4)],

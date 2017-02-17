@@ -26,7 +26,7 @@ export function listTransactions({ asset_id, operation }) {
     })
 }
 
-``export function pollStatusAndFetchTransaction(transaction) {
+export function pollStatusAndFetchTransaction(transaction) {
     return new Promise((resolve, reject) => {
         const timer = setInterval(() => {
             requestStatus(transaction.id)
