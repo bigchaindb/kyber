@@ -16,7 +16,7 @@ const PRODUCTION = process.env.NODE_ENV === 'production';
 const EXTRACT = process.env.NODE_ENV === 'extract';
 
 const PATHS = {
-    // SIMPLE_TRANSACTIONS: path.resolve(__dirname, 'tutorials/transactions/js_simple_transactions.js'),
+    SIMPLE_TRANSACTIONS: path.resolve(__dirname, 'tutorials/transactions/js_simple_transactions.js'),
     ASSETS_UNSPENTS: path.resolve(__dirname, 'tutorials/transactions/js_assets_unspents.js'),
 
     BUILD: path.resolve(__dirname, 'build'),
@@ -28,7 +28,7 @@ const PATHS = {
 /** ENTRY POINTS **/
 const ENTRY = {
     // Use one entry per app
-    // simple_transactions: PATHS.SIMPLE_TRANSACTIONS,
+    simple_transactions: PATHS.SIMPLE_TRANSACTIONS,
     assets_unspents: PATHS.ASSETS_UNSPENTS,
 };
 

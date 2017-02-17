@@ -26,21 +26,18 @@ export function listTransactions({ asset_id, operation }) {
     })
 }
 
-export function pollStatusAndFetchTransaction(transaction, callback) {
+``export function pollStatusAndFetchTransaction(transaction) {
     return new Promise((resolve, reject) => {
         const timer = setInterval(() => {
-            requestStatus(transaction)
+            requestStatus(transaction.id)
                 .then((res) => {
                     console.log('Fetched transaction status:', res);
                     if (res.status === 'valid') {
                         clearInterval(timer);
                         requestTransaction(transaction.id)
                             .then((res) => {
-                                console.log('Fetched transaction:', res)
+                                console.log('Fetched transaction:', res);
                                 resolve();
-                                // if (callback) {
-                                //     callback();
-                                // }
                             });
                     }
                 });
@@ -57,10 +54,10 @@ export function listOutputs({ public_key, unspent }) {
     })
 }
 
-export function requestStatus(transaction) {
+export function requestStatus(tx_id) {
     return request(ApiUrls['statuses'], {
             query: {
-                tx_id: transaction.id
+                tx_id
             }
         });
 }

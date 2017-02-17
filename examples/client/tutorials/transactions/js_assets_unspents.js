@@ -24,81 +24,83 @@ const alice = new Ed25519Keypair();
 const bob = new Ed25519Keypair();
 const carly = new Ed25519Keypair();
 
-const tx = makeCreateTransaction(
+`const txCreateAlice = makeCreateTransaction(
     {assetMessage: 'I will stick to every future transfer transaction'},
     {metaDataMessage: 'I am specific to this create transaction'},
-    [makeOutput(makeEd25519Condition(alice.publicKey))],
+    [makeOutput(makeEd25519Condition(alice.publicKey), 4)],
     alice.publicKey
 );
-const signedTx = signTransaction(tx, alice.privateKey);
+const txCreateAliceSigned = signTransaction(txCreateAlice, alice.privateKey);
 
-let signedTxTransferToBob;
-let signedTxTransferToCarly;
+let txTransferBobSigned;
+let txTransferCarlySigned;
 
-console.log('Posting signed transaction: ', signedTx);
-postTransaction(signedTx)
+console.log('Posting signed transaction: ', txCreateAliceSigned);
+postTransaction(txCreateAliceSigned)
     .then((res) => {
         console.log('Response from BDB server', res);
-        return pollStatusAndFetchTransaction(signedTx)
+        return pollStatusAndFetchTransaction(txCreateAliceSigned)
     })
     .then((res) => {
-        const txTransferToBob = makeTransferTransaction(
-            signedTx,
+        const txTransferBob = makeTransferTransaction(
+            txCreateAliceSigned,
             {metaDataMessage: 'I am specific to this transfer transaction'},
-            [makeOutput(makeEd25519Condition(bob.publicKey))], 0);
-        signedTxTransferToBob = signTransaction(txTransferToBob, alice.privateKey);
+            [makeOutput(makeEd25519Condition(alice.publicKey), 3),
+             makeOutput(makeEd25519Condition(bob.publicKey), 1)], 0);
+        console.log(txTransferBob)
+        txTransferBobSigned = signTransaction(txTransferBob, alice.privateKey);
 
-        console.log('Posting signed transaction: ', signedTxTransferToBob);
-        return postTransaction(signedTxTransferToBob)
+        console.log('Posting signed transaction: ', txTransferBobSigned);
+        return postTransaction(txTransferBobSigned)
     })
     .then((res) => {
         console.log('Response from BDB server:', res);
-        return pollStatusAndFetchTransaction(signedTxTransferToBob);
+        return pollStatusAndFetchTransaction(txTransferBobSigned);
     })
     .then((res) => {
-        const txTransferToBobDouble = makeTransferTransaction(
-            signedTx,
+        const txTransferBobDouble = makeTransferTransaction(
+            txCreateAliceSigned,
             {metaDataMessage: 'Double spending transaction: will fail'},
             [makeOutput(makeEd25519Condition(bob.publicKey))], 0);
-        const signedTxTransferToBobDouble = signTransaction(txTransferToBobDouble, alice.privateKey);
+        const txTransferBobDoubleSigned = signTransaction(txTransferBobDouble, alice.privateKey);
 
-        console.log('Posting double spend transaction: ', signedTxTransferToBobDouble);
-        return postTransaction(signedTxTransferToBobDouble)
+        console.log('Posting double spend transaction: ', txTransferBobDoubleSigned);
+        return postTransaction(txTransferBobDoubleSigned)
     })
     .then((res) => {
         console.log('We shouldnt be in here, as double spents fail');
     })
     .catch((res) => {
-        const txTransferToCarly = makeTransferTransaction(
-            signedTxTransferToBob,
+        const txTransferCarly = makeTransferTransaction(
+            txTransferBobSigned,
             {metaDataMessage: 'I am specific to this transfer transaction'},
-            [makeOutput(makeEd25519Condition(carly.publicKey))], 0);
-        signedTxTransferToCarly = signTransaction(txTransferToCarly, bob.privateKey);
+            [makeOutput(makeEd25519Condition(carly.publicKey))], 1);
+        txTransferCarlySigned = signTransaction(txTransferCarly, bob.privateKey);
 
-        console.log('Posting signed transaction: ', signedTxTransferToCarly);
-        return postTransaction(signedTxTransferToCarly)
+        console.log('Posting signed transaction: ', txTransferCarlySigned);
+        return postTransaction(txTransferCarlySigned)
     })
     .then((res) => {
         console.log('Response from BDB server:', res);
-        return pollStatusAndFetchTransaction(signedTxTransferToCarly);
+        return pollStatusAndFetchTransaction(txTransferCarlySigned);
     })
     .then((res) => {
-        listTransactions({asset_id: signedTxTransferToCarly.asset.id})
+        listTransactions({asset_id: txTransferCarlySigned.asset.id})
             .then((res) => {
                 console.log('Retrieve list of transactions with asset_id',
-                    signedTxTransferToCarly.asset.id, res);
+                    txTransferCarlySigned.asset.id, res);
             });
 
-        listTransactions({asset_id: signedTxTransferToCarly.asset.id, operation: 'create'})
+        listTransactions({asset_id: txTransferCarlySigned.asset.id, operation: 'create'})
             .then((res) => {
                 console.log('Retrieve list of create transactions with asset_id',
-                    signedTxTransferToCarly.asset.id, res);
+                    txTransferCarlySigned.asset.id, res);
             });
 
-        listTransactions({asset_id: signedTxTransferToCarly.asset.id, operation: 'transfer'})
+        listTransactions({asset_id: txTransferCarlySigned.asset.id, operation: 'transfer'})
             .then((res) => {
                 console.log('Retrieve list of transfer transactions with asset_id',
-                    signedTxTransferToCarly.asset.id, res);
+                    txTransferCarlySigned.asset.id, res);
             });
 
         listOutputs({public_key: alice.publicKey})
