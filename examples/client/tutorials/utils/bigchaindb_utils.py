@@ -133,3 +133,10 @@ def sign_ed25519(transaction, private_keys):
 
     private_keys = [private_keys] if not isinstance(private_keys, list) else private_keys
     return transaction.sign(private_keys).to_dict()
+
+
+def get_message_to_sign(transaction):
+    from bigchaindb.common.transaction import Transaction
+    # fulfillments are not part of the message to sign
+    tx_dict = Transaction._remove_signatures(transaction.to_dict())
+    return Transaction._to_str(tx_dict).encode()
