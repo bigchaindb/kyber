@@ -8,20 +8,123 @@ def get_connection_default():
     return BigchainDB(BDB_SERVER_URL)
 
 
-def poll_status_and_fetch_transaction(txid, connection=None):
-    if not connection:
-        return get_connection_default()
+def poll_status_and_fetch_transaction(txid, driver=None):
+    if not driver:
+        driver = get_connection_default()
     trials = 0
     tx_retrieved = None
     while trials < 100:
         try:
-            res = connection.transactions.status(txid)
+            res = driver.transactions.status(txid)
             print("Fetched transaction status: {}".format(res))
             if res.get('status') == 'valid':
-                tx_retrieved = connection.transactions.retrieve(txid)
+                tx_retrieved = driver.transactions.retrieve(txid)
                 print("Fetched transaction", tx_retrieved)
                 break
         except bigchaindb_driver.exceptions.NotFoundError:
             trials += 1
         sleep(0.5)
     return tx_retrieved
+
+
+def prepare_transfer(inputs, outputs, metadata=None):
+    """Create an instance of a :class:`~.Output`.
+
+    Args:
+        inputs (list of
+                    (dict):
+                        {
+                            'tx': <(bigchaindb.common.transactionTransaction):
+                                    input transaction, can differ but must have same asset id>,
+                            'output': <(int): output index of tx>
+                        }
+                )
+        outputs (list of
+                    (dict):
+                        {
+                            'condition': <(cryptoconditions.Condition): output condition>,
+                            'public_keys': <(optional list of base58): for indexing defaults to `None`>,
+                            'amount': <(int): defaults to `1`>
+                        }
+                )
+        metadata (dict)
+    Raises:
+        TypeError: if `public_keys` is not instance of `list`.
+            """
+    from bigchaindb.common.transaction import (
+        Input,
+        Output,
+        Transaction,
+        TransactionLink
+    )
+    from cryptoconditions import (
+        Fulfillment,
+        Condition
+    )
+
+    asset = {
+        'id': inputs[0]['tx']['asset']['id'] if 'id' in inputs[0]['tx']['asset'] else inputs[0]['tx']['id']
+    }
+
+    _inputs, _outputs = [], []
+
+    for _input in inputs:
+        _output = _input['tx']['outputs'][_input['output']]
+        _inputs.append(
+            Input(
+                fulfillment=Condition.from_uri(_output['condition']['uri']),
+                owners_before=_output['public_keys'],
+                fulfills=TransactionLink(
+                    txid=_input['tx']['id'],
+                    output=_input['output'])
+            )
+        )
+
+    for output in outputs:
+        _outputs.append(
+            Output(
+                fulfillment=output['condition'],
+                public_keys=output['public_keys'] if "public_keys" in output else None,
+                amount=output['amount'] if "amount" in outputs else 1
+            )
+        )
+
+    return Transaction(
+        operation='TRANSFER',
+        asset=asset,
+        inputs=_inputs,
+        outputs=_outputs,
+        metadata=metadata,
+    )
+
+
+def prepare_transfer_ed25519_simple(transaction, receiver, metadata=None):
+    from cryptoconditions import Ed25519Fulfillment
+    from cryptoconditions.crypto import Ed25519VerifyingKey
+
+    return prepare_transfer(
+        inputs=[
+            {
+                'tx': transaction,
+                'output': 0
+            }
+        ],
+        outputs=[
+            {
+                'condition': Ed25519Fulfillment(public_key=Ed25519VerifyingKey(receiver)),
+                'public_keys': [receiver],
+                'amount': 1
+            }
+        ],
+        metadata=metadata)
+
+
+def sign_ed25519_simple(transaction, private_key):
+    from cryptoconditions import Ed25519Fulfillment
+    from cryptoconditions.crypto import Ed25519VerifyingKey
+
+    receiver = transaction.inputs[0].owners_before[0]
+    transaction.inputs[0].fulfillment = Ed25519Fulfillment(
+        public_key=Ed25519VerifyingKey(receiver)
+    )
+    return transaction.sign([private_key]).to_dict()

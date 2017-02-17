@@ -34,6 +34,7 @@ const txCreateAliceSigned = signTransaction(txCreateAlice, alice.privateKey);
 
 let txTransferBobSigned;
 let txTransferCarlySigned;
+const assetId = txCreateAliceSigned.id;
 
 console.log('Posting signed transaction: ', txCreateAliceSigned);
 postTransaction(txCreateAliceSigned)
@@ -85,22 +86,19 @@ postTransaction(txCreateAliceSigned)
         return pollStatusAndFetchTransaction(txTransferCarlySigned);
     })
     .then((res) => {
-        listTransactions({asset_id: txTransferCarlySigned.asset.id})
+        listTransactions({asset_id: assetId})
             .then((res) => {
-                console.log('Retrieve list of transactions with asset_id',
-                    txTransferCarlySigned.asset.id, res);
+                console.log('Retrieve list of transactions with asset_id', assetId, res);
             });
 
-        listTransactions({asset_id: txTransferCarlySigned.asset.id, operation: 'create'})
+        listTransactions({asset_id: assetId, operation: 'create'})
             .then((res) => {
-                console.log('Retrieve list of create transactions with asset_id',
-                    txTransferCarlySigned.asset.id, res);
+                console.log('Retrieve list of create transactions with asset_id', assetId, res);
             });
 
-        listTransactions({asset_id: txTransferCarlySigned.asset.id, operation: 'transfer'})
+        listTransactions({asset_id: assetId, operation: 'transfer'})
             .then((res) => {
-                console.log('Retrieve list of transfer transactions with asset_id',
-                    txTransferCarlySigned.asset.id, res);
+                console.log('Retrieve list of transfer transactions with asset_id', assetId, res);
             });
 
         listOutputs({public_key: alice.publicKey})

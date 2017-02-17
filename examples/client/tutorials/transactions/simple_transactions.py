@@ -27,7 +27,7 @@ tx_create_alice_simple_signed = bdb.transactions.fulfill(
 
 print('Posting signed transaction{}'.format(tx_create_alice_simple_signed))
 res = bdb.transactions.send(tx_create_alice_simple_signed)
-poll_status_and_fetch_transaction(tx_create_alice_simple_signed['id'], connection=bdb)
+poll_status_and_fetch_transaction(tx_create_alice_simple_signed['id'], driver=bdb)
 
 tx_create_alice_divisible = bdb.transactions.prepare(
     operation='CREATE',
@@ -44,4 +44,4 @@ tx_create_alice_divisible_signed = bdb.transactions.fulfill(
 
 print('Posting signed transaction{}'.format(tx_create_alice_divisible))
 res = bdb.transactions.send(tx_create_alice_divisible_signed)
-poll_status_and_fetch_transaction(tx_create_alice_divisible['id'], connection=bdb)
+poll_status_and_fetch_transaction(tx_create_alice_divisible['id'], driver=bdb)
