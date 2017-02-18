@@ -233,7 +233,10 @@ Here are some go-to's to server local `html` files:
 
 For example, using the python server uses `port:8000`. 
 You can access a (blank) page that will run the JavaScript in the background:
-[http://localhost:8000/tutorials/transactions/simple_transactions.html](http://localhost:8000/tutorials/transactions/simple_transactions.html)
+
+- [http://localhost:8000/tutorials/transactions/simple_transactions.html](http://localhost:8000/tutorials/transactions/simple_transactions.html)
+- [http://localhost:8000/tutorials/transactions/assets_unspents.html](http://localhost:8000/tutorials/transactions/assets_unspents.html)
+- [http://localhost:8000/tutorials/transactions/divisible_transactions.html](http://localhost:8000/tutorials/transactions/divisible_transactions.html)
 
 The tutorials only use JavaScript without frontend visuals. (sorry for that, could go into the ideabox)
 However statements are printed in the dev console (`F12` in the browser, and `F5` to reload)
