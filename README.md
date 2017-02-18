@@ -19,7 +19,7 @@ Kyber is a full suite of BigchainDB repo's including:
 - BigchainDB client Tutorials (
 [python](https://github.com/bigchaindb/kyber#python-client-tutorials), 
 [JavaScript](https://github.com/bigchaindb/kyber#javascript-client-tutorials))
-- [Example applications](https://github.com/bigchaindb/kyber#examples-applications-with-reactjs-frontend)
+- [Example applications](https://github.com/bigchaindb/kyber#example-applications-with-reactjs-frontend)
 
 All versions of the above:
 - Are in sync with the master branch of each BigchainDB repo
@@ -62,6 +62,7 @@ make
 ```
 
 This might take a few minutes, perfect moment for a :coffee:!
+
 Once docker-composed has built and launched all services, have a look:
 
 ```bash
@@ -76,21 +77,22 @@ kyber_rdb_1          rethinkdb --bind all   Up      0.0.0.0:32772->28015/tcp, 29
 ...
 ```
 
-Which means that the internal docker port for the API is `:9984` 
-and the external one is `:32773`.
+Which means that the internal docker port for the API is `9984` 
+and the external one is `32773`.
 
 The external ports might change, so for the following use the ports as indicated by `docker-compose ps`.
 
-You can simply check if it's running by going to `http://localhost:<external-docker-port-bdb-server>`
-Also you can access the RethinkDB dashboard on `http://localhost:<external-docker-port-rdb>` 
+You can simply check if it's running by going to `http://localhost<external-docker-port-bdb-server>`.
 
-If you already built the images and want to start them:
+Also you can access the RethinkDB dashboard on `http://localhost:<external-docker-port-rdb>`, which is `58585` in our case
+
+If you already built the images and want to `restart`:
 
 ```bash
 make restart
 ```
 
-Stop the containers:
+Stop the containers with
 
 ```bash
 make stop
@@ -249,4 +251,4 @@ kyber_examples-client-     node server.demo.js        Up                        
 frontend_1                                                                                                
 ```
 
-Typically the port is `:33000`, so you can simple see the examples on [http://localhost:33000/](http://localhost:33000/).
+Typically the port is `33000`, so you can simple see the examples on [http://localhost:33000/](http://localhost:33000/).
