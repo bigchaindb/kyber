@@ -270,9 +270,16 @@ Typically the port is `33000`, so you can simple see the examples on [http://loc
 Assuming the python driver:
 
 You can add a (limited) script in the asset field and it will be executed. 
-Upon error of the execution of the script the transaction is `INVALID`.
+This means that everytime a transaction with that `asset_id` is made that code will be executed on all server nodes.
+Upon error of the execution of the script the transaction is `INVALID`, otherwise it becomes a `VALID` UTXO.
 
+Think of it as permissioned execution of logic/simple contracts.
+
+- Permissioned execution: you need to have the asset in your UTXO set.
+- Logic: for now we'll strip it down to conditional statements and (indexed) BigchainDB queries.
 We provide some basic `bigchain` commands to query the DB on the server side.
+- Contracts: the script is not part of the UTXO lock but has a fixed address at transaction with `tx_id=asset_id`
+
 For example, to query the unspent output transactions for a specific public key.
 
 ```python
