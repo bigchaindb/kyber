@@ -12,6 +12,7 @@ import {
     signTransaction,
 } from 'js-bigchaindb-quickstart';
 
+import { API_PATH } from '../constants/api_urls'
 import {
     postTransaction,
     pollStatusAndFetchTransaction,
@@ -19,6 +20,7 @@ import {
 } from '../utils/bigchaindb_utils';
 
 
+console.log("API_PATH:", API_PATH);
 // create some identities with a private and a public key
 const alice = new Ed25519Keypair();
 const bob = new Ed25519Keypair();
