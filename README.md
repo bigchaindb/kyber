@@ -263,9 +263,9 @@ Typically the port is `33000`, so you can simple see the examples on [http://loc
    
 ### Asset scripts
 
-> :bangbang:: Very highly extremely unsafe evaluation, avoid in production for now!
+> :bangbang: Very highly extremely unsafe evaluation, avoid in production for now! :fire:
 
-> :bangbang:: This code may make BigchainDB *less deterministic*!
+> :bangbang: This code may make BigchainDB *less deterministic*! :fire:
     
 
 You can add a (limited) script in the asset field and it will be executed. 
