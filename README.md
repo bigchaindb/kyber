@@ -233,3 +233,18 @@ You can access a (blank) page that will run the JavaScript in the background:
 
 The tutorials only use JavaScript without frontend visuals. (sorry for that, could go into the ideabox)
 However statements are printed in the dev console (`F12` in the browser, and `F5` to reload)
+
+## Examples (with ReactJS frontend)
+
+__Disclaimer__: The examples are out of business for a short period due to maintenance
+
+If you used the `make` approach, then examples should be running under the Docker container `examples-client-frontend`:
+
+```bash
+          Name                     Command                     State                      Ports           
+---------------------------------------------------------------------------------------------------------
+kyber_examples-client-     node server.demo.js        Up                         0.0.0.0:33000->3000/tcp  
+frontend_1                                                                                                
+```
+
+Typically the port is `:33000`, so you can simple see the examples on (http://localhost:33000/)[http://localhost:33000/].
