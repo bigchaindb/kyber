@@ -34,13 +34,14 @@ const ENTRY = {
     divisible_transactions: PATHS.DIVISIBLE_TRANSACTIONS
 };
 
-
+console.log('Using BDB server at ', process.env.BDB_SERVER_URL)
 /** EXTERNAL DEFINITIONS INJECTED INTO APP **/
 const DEFINITIONS = {
     'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
         FLASK_BASE_URL: JSON.stringify(`http://${process.env.FLASK_HOST || 'localhost'}:` +
                                        `${process.env.FLASK_PORT || '8000'}`),
+        BDB_SERVER_URL: JSON.stringify(`${process.env.BDB_SERVER_URL || 'http://localhost:9984'}`),
     },
 };
 

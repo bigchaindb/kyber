@@ -7,7 +7,7 @@ init: reinit_db
 
 start:
 	docker-compose up -d bdb-server
-	docker-compose up -d examples-client
+	docker-compose up -d examples-client-frontend
 	docker-compose up -d nginx
 	docker-compose up -d bdb-server-kyber
 	docker-compose up -d examples-server-flask
