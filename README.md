@@ -15,9 +15,11 @@ Getting started with BigchainDB? Have a look at our docs:
 Welcome to the BigchainDB application laboratory!
 
 Kyber is a full suite of BigchainDB repo's including:
-- BigchainDB server
-- BigchainDB drivers (python, JavaScript)
-- Examples and Tutorials
+- BigchainDB [server](https://github.com/bigchaindb/kyber#server-side-setup)
+- BigchainDB client Tutorials (
+[python](https://github.com/bigchaindb/kyber#python-client-tutorials), 
+[JavaScript](https://github.com/bigchaindb/kyber#javascript-client-tutorials))
+- [Example applications](https://github.com/bigchaindb/kyber#examples-applications-with-reactjs-frontend)
 
 All versions of the above:
 - Are in sync with the master branch of each BigchainDB repo
@@ -225,7 +227,7 @@ Here are some go-to's to server local `html` files:
 
 - `python`: `python -m SimpleHTTPServer`
 - `python3`: `python3 -m http.server`
-- `node`: the `local-web-server` model see [https://www.npmjs.com/package/local-web-server](https://www.npmjs.com/package/local-web-server)
+- `node`: the `local-web-server` module see [https://www.npmjs.com/package/local-web-server](https://www.npmjs.com/package/local-web-server)
 
 For example, using the python server uses `port:8000`. 
 You can access a (blank) page that will run the JavaScript in the background:
@@ -234,7 +236,7 @@ You can access a (blank) page that will run the JavaScript in the background:
 The tutorials only use JavaScript without frontend visuals. (sorry for that, could go into the ideabox)
 However statements are printed in the dev console (`F12` in the browser, and `F5` to reload)
 
-## Examples (with ReactJS frontend)
+## Example Applications (with ReactJS frontend)
 
 __Disclaimer__: The examples are out of business for a short period due to maintenance
 
