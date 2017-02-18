@@ -20,6 +20,7 @@ Kyber is a full suite of BigchainDB repo's including:
 [python](https://github.com/bigchaindb/kyber#python-client-tutorials), 
 [JavaScript](https://github.com/bigchaindb/kyber#javascript-client-tutorials))
 - [Example applications](https://github.com/bigchaindb/kyber#example-applications-with-reactjs-frontend)
+- [Experimental stuff](https://github.com/bigchaindb/kyber#experimental-stuff)
 
 All versions of the above:
 - Are in sync with the master branch of each BigchainDB repo
@@ -255,3 +256,35 @@ frontend_1
 ```
 
 Typically the port is `33000`, so you can simple see the examples on [http://localhost:33000/](http://localhost:33000/).
+
+## Experimental stuff 
+
+> :bangbang: High chance of :fire: and :rage: ahead if you expect this to be production-ready.
+   
+### Asset scripts
+
+> :bangbang:: Very highly extremely unsafe evaluation, avoid in production for now!
+
+> :bangbang:: This code may make BigchainDB *less deterministic*!
+    
+
+You can add a (limited) script in the asset field and it will be executed. 
+Upon error of the execution of the script the transaction is `INVALID`.
+
+We provide some basic `bigchain` commands to query the DB on the server side.
+For example, to query the unspent output transactions for a specific public key.
+
+```python
+asset = {
+    'script': """
+if len(bigchain.get_outputs_filtered('{}', True)) < 1: 
+    raise".format("<my_pub_key>")
+"""    
+}
+```
+
+(Other functions can be found in the [Bigchain connection code](https://github.com/bigchaindb/DBH17/blob/master/bigchaindb-server/bigchaindb/core.py#L179)). 
+Of course, we will limit this to the `get_` methods only.
+
+Some examples can be found in the [tests](https://github.com/bigchaindb/kyber/blob/master/bigchaindb-server/tests/common/test_asset.py).
+
