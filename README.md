@@ -247,4 +247,4 @@ kyber_examples-client-     node server.demo.js        Up                        
 frontend_1                                                                                                
 ```
 
-Typically the port is `:33000`, so you can simple see the examples on (http://localhost:33000/)[http://localhost:33000/].
+Typically the port is `:33000`, so you can simple see the examples on [http://localhost:33000/](http://localhost:33000/).
