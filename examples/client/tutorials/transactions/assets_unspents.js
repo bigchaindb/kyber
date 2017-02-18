@@ -48,7 +48,6 @@ postTransaction(txCreateAliceSigned)
             {metaDataMessage: 'I am specific to this transfer transaction'},
             [makeOutput(makeEd25519Condition(alice.publicKey), 3),
              makeOutput(makeEd25519Condition(bob.publicKey), 1)], 0);
-        console.log(txTransferBob)
         txTransferBobSigned = signTransaction(txTransferBob, alice.privateKey);
 
         console.log('Posting signed transaction: ', txTransferBobSigned);
