@@ -51,12 +51,6 @@ These versions or higher should work:
 - `docker`: `v1.13.0`
 - `docker-compose`: `v1.7.1`
 
-If you want to run the JavaScript tutorial, you'll need `node` and `npm`:
-These versions or higher should work:
-
-- `node`: `v6.2.2`
-- `npm`: `v3.9.5`
-
 #### Locally launch BigchainDB server and other (sometimes experimental) services 
 
 To spin up the services, simple run the make command, which will orchestrate `docker-compose`
@@ -80,13 +74,13 @@ kyber_rdb_1          rethinkdb --bind all   Up      0.0.0.0:32772->28015/tcp, 29
 ...
 ```
 
-Which means that the internal docker url for the API is `http://localhost:9984` 
-and the external one is `http://localhost:32773`.
+Which means that the internal docker port for the API is `:9984` 
+and the external one is `:32773`.
 
 The external ports might change, so for the following use the ports as indicated by `docker-compose ps`.
 
-You can simply check if it's running by going to [http://localhost:32773](http://localhost:32773).
-Also you can access the RethinkDB dashboard on [http://localhost:58585](http://localhost:58585)  
+You can simply check if it's running by going to `http://localhost:<external-docker-port-bdb-server>`
+Also you can access the RethinkDB dashboard on `http://localhost:<external-docker-port-rdb>` 
 
 If you already built the images and want to start them:
 
@@ -116,9 +110,28 @@ Wait about 10 seconds and then launch the server:
 docker-compose up -d bdb-server
 ```
 
-## Run Python tutorials
+## Python Client Tutorials
 
-Here is a list of JS tutorials:
+### Prequisites
+
+Ok, so this goes well under LINUX, as most python devs know. OSX might be fine too, see the 
+[BigchainDB driver docs](](https://docs.bigchaindb.com/projects/py-driver/en/latest/index.html))
+
+If you want to run the Python tutorial with the experimental driver, 
+you'll need to install the local python driver and server of bigchaindb
+ (in a `python3` virtual environment would be smart):
+
+```bash
+cd drivers/python/
+pip install -e .
+cd ../../bigchaindb-server/ 
+pip install -e .
+cd ..
+```
+
+### Run Tutorials
+
+Here is a list of Python tutorials for a BigchainDB client:
 - [simple_transactions.py](https://github.com/bigchaindb/kyber/blob/master/examples/client/tutorials/transactions/simple_transactions.py):
  Prepare, sign and post basic `CREATE`, `TRANSFER` transactions
 - [assets_unspents.py](https://github.com/bigchaindb/kyber/blob/master/examples/client/tutorials/transactions/assets_unspents.py):
@@ -126,11 +139,36 @@ Here is a list of JS tutorials:
 - [divisible_transactions.py](https://github.com/bigchaindb/kyber/blob/master/examples/client/tutorials/transactions/divisible_transactions.py):
  Split and combine transactions with divisible assets
 - [cryptoconditions_transactions.py](https://github.com/bigchaindb/kyber/blob/master/examples/client/tutorials/transactions/cryptoconditions_transactions.py):
- Create custom UTXO scripts using [py-crypto-conditions](https://github.com/bigchaindb/crytoconditions)
+ Create custom UTXO scripts using [py-crypto-conditions](https://github.com/bigchaindb/cryptoconditions)
  
-Ok, so this goes well under LINUX, as most python devs know. OSX might be fine too, see the BigchainDB docs
+Descend into the examples directory
 
-## Run JavaScript tutorials
+```bash
+cd examples/
+```
+
+Run each example as a module. 
+
+To do this we needed to remember the external port `<external-docker-port>` of the API in docker (run `docker-compose ps` in the repo root).
+In our case this was `http://localhost:32773`.
+
+For example:
+
+```bash
+BDB_SERVER_URL=http://localhost:<external-docker-port> python -m client.tutorials.transactions.simple_transactions 
+```
+
+## JavaScript Client Tutorials
+
+### Prequisites
+
+If you want to run the JavaScript tutorial, you'll need `node` and `npm`:
+These versions or higher should work:
+
+- `node`: `v6.2.2`
+- `npm`: `v3.9.5`
+
+### Run Tutorials
 
 Here is a list of JavaScript tutorials:
 
@@ -138,7 +176,7 @@ Here is a list of JavaScript tutorials:
  Prepare, sign and post basic `CREATE`, `TRANSFER` transactions
 - [assets_unspents.js](https://github.com/bigchaindb/kyber/blob/master/examples/client/tutorials/transactions/assets_unspents.js):
  Create, transfer and list assets, unspents, etc.
-- [divisble_transactions.js](https://github.com/bigchaindb/kyber/blob/master/examples/client/tutorials/transactions/divisble_transactions.js):
+- [divisible_transactions.js](https://github.com/bigchaindb/kyber/blob/master/examples/client/tutorials/transactions/divisible_transactions.js):
  Split and combine transactions with divisible assets
 - [TODO] Create custom UTXO scripts using [js-crypto-conditions](https://github.com/interledgerjs/five-bells-condition)
  
@@ -156,7 +194,7 @@ npm link js-bigchaindb-quickstart
 ```
 
 Now that we are in the `examples/client` directory, we can build the JavaScript tutorials.
-To do this we needed to remember the external url of the API (run `docker-compose ps` in the repo root).
+To do this we needed to remember the external port `<external-docker-port>` of the API in docker (run `docker-compose ps` in the repo root).
 In our case this was `http://localhost:32773`.
 
 We can now build the JavaScript bundles using `npm`.
