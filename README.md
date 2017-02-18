@@ -266,7 +266,8 @@ Typically the port is `33000`, so you can simple see the examples on [http://loc
 > :bangbang: Very highly extremely unsafe evaluation, avoid in production for now! :fire:
 
 > :bangbang: This code may make BigchainDB *less deterministic*! :fire:
-    
+
+Assuming the python driver:
 
 You can add a (limited) script in the asset field and it will be executed. 
 Upon error of the execution of the script the transaction is `INVALID`.
@@ -276,7 +277,8 @@ For example, to query the unspent output transactions for a specific public key.
 
 ```python
 asset = {
-    'script': """
+    'script': 
+"""
 if len(bigchain.get_outputs_filtered('{}', True)) < 1: 
     raise".format("<my_pub_key>")
 """    
