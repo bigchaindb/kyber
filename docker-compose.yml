@@ -58,20 +58,20 @@ services:
       - ./bigchaindb-kyber:/usr/src/app/bigchaindb-kyber
     command: python bigchaindb-kyber/web/server_flask.py
 
-  examples-frontend:
+  examples-client-frontend:
     build:
-      context: ./examples
-      dockerfile: ./compose/frontend/Dockerfile
+      context: .
+      dockerfile: ./compose/examples-frontend/Dockerfile
     volumes:
-      - ./examples/client/demo:/usr/src/app/client/demo
-      - ./examples/client/lib:/usr/src/app/client/lib
-      - ./examples/client/on_the_record:/usr/src/app/client/on_the_record
-      - ./examples/client/share_trader:/usr/src/app/client/share_trader
-      - ./examples/client/app_index_template.html:/usr/src/app/client/app_index_template.html
-      - ./examples/client/browserlist:/usr/src/app/client/browserlist
-      - ./examples/client/package.json:/usr/src/app/client/package.json
-      - ./examples/client/server.demo.js/:/usr/src/app/client/server.demo.js
-      - ./examples/client/webpack.config.js:/usr/src/app/client/webpack.config.js
+      - ./examples/client/demo:/usr/src/app/examples/client/demo
+      - ./examples/client/lib:/usr/src/app/examples/client/lib
+      - ./examples/client/on_the_record:/usr/src/app/examples/client/on_the_record
+      - ./examples/client/share_trader:/usr/src/app/examples/client/share_trader
+      - ./examples/client/app_index_template.html:/usr/src/app/examples/client/app_index_template.html
+      - ./examples/client/browserlist:/usr/src/app/examples/client/browserlist
+      - ./examples/client/package.json:/usr/src/app/examples/client/package.json
+      - ./examples/client/server.demo.js/:/usr/src/app/examples/client/server.demo.js
+      - ./examples/client/webpack.config.js:/usr/src/app/examples/client/webpack.config.js
     environment:
       CLIENT_HOST: 0.0.0.0
       FLASK_HOST: "${DOCKER_MACHINE_IP}"

@@ -65,7 +65,6 @@ setup(
     },
 
     install_requires=[
-        "flask-cors==2.1.2",
         "tornado"
     ],
 

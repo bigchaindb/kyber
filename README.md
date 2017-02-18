@@ -1,76 +1,52 @@
-# DBH17: BigchainDB Kyber Version
-
-BigchainDB opens a public API for the Dutch Blockchain Hackathon '17!
-
-- http://vanilla.ipdb.foundation:9984/
-- http://kyber.ipdb.foundation/
+# Kyber: Tutorials, Examples and Experiments with BigchainDB
 
 ## What?! ¯\\\_(ツ)_/¯
 
-### Vanilla
+### BigchainDB
 
-Meet our classic, pristine BigchainDB network running on v0.9.1.
-
-Connect to our API using the following URL:
-
-```
-http://vanilla.ipdb.foundation:9984/
-```
-
-Getting started? Have a look at our docs:
+Getting started with BigchainDB? Have a look at our docs:
 
 - the [HTTP API](https://docs.bigchaindb.com/projects/server/en/latest/drivers-clients/http-client-server-api.html)
 - a [Python Driver](https://docs.bigchaindb.com/projects/py-driver/en/latest/index.html)
-- some [JS utilities](https://github.com/sohkai/js-bigchaindb-quickstart) for creating transactions
+- a (minimal) [JS Driver](https://github.com/bigchaindb/kyber/tree/master/drivers/javascript) for creating transactions
 
-### Kyber [Use this one!]
+### Kyber 
 
-Welcome to our Hackathon Laboratory!
+Welcome to the BigchainDB application laboratory!
 
-Our kyber version of BigchainDB will be built during this hackathon.
-To say it in Dunglish: You ask, we turn! 
+Kyber is a full suite of BigchainDB repo's including:
+- BigchainDB server
+- BigchainDB drivers (python, JavaScript)
+- Examples and Tutorials
 
-The repo of experimental code is here and the instance is running at:
-```
-http://kyber.ipdb.foundation/
-```
+All versions of the above:
+- Are in sync with the master branch of each BigchainDB repo
+- Might have experimental features (watch out that you don't burn yourself ;-) )
 
-The vanilla API is available under
 
-```
-http://kyber.ipdb.foundation/api/v1/
-```
+## Install, run
 
-The intergalactic experimental API can be found under:
+### Quickstart with Docker (Windows, OSX, lazy Linux)
 
-```
-http://kyber.ipdb.foundation/api/kyber/
-```
+#### Prequisites
 
-and the API code can be found under [bigchaindb-kyber](https://github.com/bigchaindb/DBH17/tree/master/bigchaindb-kyber)
+You must have `docker`, `docker-compose` (and `make`) installed.
+These versions or higher should work:
 
-We'll also take requests for the drivers (python and JS)... just give us a shout
+- `docker`: `v1.13.0`
+- `docker-compose`: `v1.7.1`
 
-Use with the driver:
-
-```python
-from bigchaindb_driver import BigchainDB
-
-bdb = BigchainDB('http://kyber.ipdb.foundation')
-print(bdb.info())
-```
-
-#### Run locally
-If you have `docker-compose` installed, you can spin it up locally:
+#### Launch services with make
+To spin up the services, simple run the make command, which will orchestrate `docker-compose`
 
 ```
 make
 ```
 
-If you already built the images:
+If you already built the images and want to start them:
 
 ```
-make run
+make restart
 ```
 
 Stop the containers:
@@ -78,36 +54,19 @@ Stop the containers:
 ```
 make stop
 ```
-## Experimental code
-   
-### Asset evaluation
 
-You can add a (limited) script in the asset field and it will be executed. 
-Upon error of the execution of the script the transaction is `INVALID`.
+#### Launch services manually
 
-We provide some basic `bigchain` commands to query the DB on the server side.
-For example, to query the unspent output transactions for a specific public key.
+No make? Launch the services manually:
 
-```python
-asset = {
-    'script': "if len(bigchain.get_outputs_filtered('{}', True)) < 1: raise".format("<my_pub_key>")
-}
+Launch RethinkDB:
+
+```
+docker-compose up -d rdb
 ```
 
-(Other functions can be found in the [Bigchain connection code](https://github.com/bigchaindb/DBH17/blob/master/bigchaindb-server/bigchaindb/core.py#L179)). 
-Ofcourse, we will limit this to the `get_` methods only.
+Wait about 10 seconds and then launch the server:
 
-Also, the execution is time bound to 1s.
-
-**WARNING**: This code may make BigchainDB *less deterministic*!
-    
-
-## What Else?
-
-**"Make BigchainDB Big!"**
-
-We'll be monitoring the performance of our kyber network.
-
-The logs will be available as assets - and we're curious to see how much data will be produced during the hackathon.
-
-Stay Tuned!
+```
+docker-compose up -d bdb-server
+```

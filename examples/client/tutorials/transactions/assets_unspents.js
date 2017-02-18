@@ -100,33 +100,33 @@ postTransaction(txCreateAliceSigned)
                 console.log('Retrieve list of transfer transactions with asset_id', assetId, res);
             });
 
-        listOutputs({public_key: alice.publicKey})
-            .then((res) => {
-                console.log('Retrieve list of outputs with public_key', alice.publicKey, res);
-            });
-
-        listOutputs({public_key: alice.publicKey, unspent: true})
-            .then((res) => {
-                console.log('Retrieve list of unspent outputs with public_key', alice.publicKey, res);
-            });
-
-        listOutputs({public_key: bob.publicKey})
-            .then((res) => {
-                console.log('Retrieve list of outputs with public_key', bob.publicKey, res);
-            });
-
-        listOutputs({public_key: bob.publicKey, unspent: true})
-            .then((res) => {
-                console.log('Retrieve list of unspent outputs with public_key', bob.publicKey, res);
-            });
-
-        listOutputs({public_key: carly.publicKey})
-            .then((res) => {
-                console.log('Retrieve list of outputs with public_key', carly.publicKey, res);
-            });
-
-        listOutputs({public_key: carly.publicKey, unspent: true})
-            .then((res) => {
-                console.log('Retrieve list of unspent outputs with public_key', carly.publicKey, res);
-            });
+        // listOutputs({public_key: alice.publicKey})
+        //     .then((res) => {
+        //         console.log('Retrieve list of outputs with public_key', alice.publicKey, res);
+        //     });
+        //
+        // listOutputs({public_key: alice.publicKey, unspent: true})
+        //     .then((res) => {
+        //         console.log('Retrieve list of unspent outputs with public_key', alice.publicKey, res);
+        //     });
+        //
+        // listOutputs({public_key: bob.publicKey})
+        //     .then((res) => {
+        //         console.log('Retrieve list of outputs with public_key', bob.publicKey, res);
+        //     });
+        //
+        // listOutputs({public_key: bob.publicKey, unspent: true})
+        //     .then((res) => {
+        //         console.log('Retrieve list of unspent outputs with public_key', bob.publicKey, res);
+        //     });
+        //
+        // listOutputs({public_key: carly.publicKey})
+        //     .then((res) => {
+        //         console.log('Retrieve list of outputs with public_key', carly.publicKey, res);
+        //     });
+        //
+        // listOutputs({public_key: carly.publicKey, unspent: true})
+        //     .then((res) => {
+        //         console.log('Retrieve list of unspent outputs with public_key', carly.publicKey, res);
+        //     });
     });
