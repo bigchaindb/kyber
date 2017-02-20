@@ -8,6 +8,10 @@ In order to ease development during the event we've configured a private Ethereu
 
 ![Network](images/network.png)
 
+To get a better idea of the network and its behavior you can have a look at the different network stats using our monitoring [tool](http://admin-hackathon.westeurope.cloudapp.azure.com/):
+
+![Network](images/monitor.png)
+
 ###Access to your Ethereum node
 
 Connecting to your `geth` instance through **JSON-RPC**:
