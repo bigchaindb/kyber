@@ -199,14 +199,15 @@ npm link js-bigchaindb-quickstart
 ```
 
 Now that we are in the `examples/client` directory, we can build the JavaScript tutorials.
-To do this we needed to remember the external port `<external-docker-port>` of the API in docker (run `docker-compose ps` in the repo root).
-In our case this was `http://localhost:32773`.
+
+The examples require a `BDB_SERVER_URL`. If you are running the server locally with docker we needed to remember the external port `<external-docker-port>` of the API in docker (run `docker-compose ps` in the repo root).
+In our case the `BDB_SERVER_URL` was `http://localhost:32773`.
 
 We can now build the JavaScript bundles using `npm`.
 Make sure you are in the `examples/client` directory first.
 
 ```bash
-BDB_SERVER_URL=http:localhost:<external-docker-port> npm install
+BDB_SERVER_URL=<bigchaindb_server_url> npm install
 ```
 
 A few more sips of :coffee: later...
@@ -216,7 +217,7 @@ If all goes well, you'll see `webpack` spitting out the bundles. That's a good s
 Launch webpack in `watch` mode and wait for the bundles to be emitted:
 
 ```bash
-BDB_SERVER_URL=http://localhost:<external-docker-port> webpack --config webpack.config.tutorial.js -w 
+BDB_SERVER_URL=<bigchaindb_server_url> webpack --config webpack.config.tutorial.js -w 
 ```
 
 As long as the webpack watcher is running, every code change will be trigger a new build of the affected bundle(s).
