@@ -154,13 +154,13 @@ cd examples/
 
 Run each example as a module. 
 
-To do this we needed to remember the external port `<external-docker-port>` of the API in docker (run `docker-compose ps` in the repo root).
-In our case this was `http://localhost:32773`.
+The tutorials require a `BDB_SERVER_URL`. If you are running the server locally with docker we needed to remember the external port `<external-docker-port>` of the API in docker (run `docker-compose ps` in the repo root).
+In our case the `BDB_SERVER_URL` was `http://localhost:32773`.
 
 For example:
 
 ```bash
-BDB_SERVER_URL=http://localhost:<external-docker-port> python -m client.tutorials.transactions.simple_transactions 
+BDB_SERVER_URL=<bigchaindb-server-url> python -m client.tutorials.transactions.simple_transactions 
 ```
 
 ## JavaScript Client Tutorials
@@ -200,7 +200,7 @@ npm link js-bigchaindb-quickstart
 
 Now that we are in the `examples/client` directory, we can build the JavaScript tutorials.
 
-The examples require a `BDB_SERVER_URL`. If you are running the server locally with docker we needed to remember the external port `<external-docker-port>` of the API in docker (run `docker-compose ps` in the repo root).
+The tutorials require a `BDB_SERVER_URL`. If you are running the server locally with docker we needed to remember the external port `<external-docker-port>` of the API in docker (run `docker-compose ps` in the repo root).
 In our case the `BDB_SERVER_URL` was `http://localhost:32773`.
 
 We can now build the JavaScript bundles using `npm`.
