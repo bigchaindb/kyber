@@ -471,6 +471,7 @@ Test credit card:
 ##Resources
 
 * [contract-deployer](https://github.com/BancoSabadell/contract-deployer): An utility script to easily deploy contracts from source code.
+* [gt-permission-manager](https://github.com/BancoSabadell/gt-permission-manager) A contract to manage relationships and permissions of other contracts.
 * [gt-identity](https://github.com/BancoSabadell/gt-identity): An Identity contract to forward calls to other contracts. This contract allows you to have a unique identity in the Ethereum blockchain (ie. same address as msg.sender when executing other contracts) while using several addresses from different devices.
 * [gt-attributes](https://github.com/BancoSabadell/gt-attributes): A contract to attach attributes to identities and validate them.
 * Ethereum JavaScript [Library](https://github.com/ethereum/web3.js/) and [documentation](https://github.com/ethereum/wiki/wiki/JavaScript-API)
