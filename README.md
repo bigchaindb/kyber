@@ -51,7 +51,368 @@ contract Token {
 }
 ```
 
-The full contract(s) source code can be found [here](https://github.com/BancoSabadell/bs-token), including an utility JavaScript library.
+<details>
+<summary>And its corresponding ABI (click to expand)</summary>
+```javascript
+[
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "approve",
+		"outputs": [
+			{
+				"name": "success",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+
+		],
+		"name": "startEmergency",
+		"outputs": [
+
+		],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+
+		],
+		"name": "totalSupply",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "transferFrom",
+		"outputs": [
+			{
+				"name": "success",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+
+		],
+		"name": "bsToken",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "balanceOf",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+
+		],
+		"name": "stopEmergency",
+		"outputs": [
+
+		],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+
+		],
+		"name": "merchant",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "transfer",
+		"outputs": [
+			{
+				"name": "success",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "frozenAccount",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"name": "id",
+				"type": "string"
+			},
+			{
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "approveAndCall",
+		"outputs": [
+
+		],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+
+		],
+		"name": "emergency",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "version",
+				"type": "address"
+			}
+		],
+		"name": "setBSToken",
+		"outputs": [
+
+		],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "account",
+				"type": "address"
+			},
+			{
+				"name": "spender",
+				"type": "address"
+			}
+		],
+		"name": "allowance",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "target",
+				"type": "address"
+			},
+			{
+				"name": "freeze",
+				"type": "bool"
+			}
+		],
+		"name": "freezeAccount",
+		"outputs": [
+
+		],
+		"payable": false,
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"name": "theMerchant",
+				"type": "address"
+			},
+			{
+				"name": "permissionManagerAddress",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"name": "receiver",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "bankAccount",
+				"type": "string"
+			}
+		],
+		"name": "CashOut",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"name": "_from",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "Transfer",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"name": "_owner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "_spender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "Approval",
+		"type": "event"
+	}
+]
+```
+</details>
+
+The full contract(s) source code can be found [here](https://github.com/BancoSabadell/bs-token), including an utility JavaScript library, you may consider using it, instead of using directly the contract instance. This abstraction layer provides (among other benefits) some internal checks which prevents executing transactions when they are going to be rejected, loosing that way ether for nothing.
 
 ###Contract address
 
