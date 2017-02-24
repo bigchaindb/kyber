@@ -78,11 +78,11 @@ If you want to add more tokens to an account or plan to accept payments in excha
 
 ![Redsys](images/redsys.png)
 
-The API is located at: `127.0.0.1`, including de following endpoints:
+The API is located at: `http://admin-hackathon.westeurope.cloudapp.azure.com`, including de following endpoints:
 
 **Add tokens to an account**
 
-	GET /bs_token/api/v1/cashIn
+	GET /bs_banking/api/v1/cashIn
 	
 This call will return an HTML page that will inmediately redirect to the credit card payment form.
 
@@ -93,9 +93,9 @@ name | description
 account | Ethereum address
 amount | token amount _(1 BST == 1/100 EUR)_
 
-Example ([View in browser](http://127.0.0.1/bs_token/api/v1/cashIn?amount=120&address=0x6c8f2a135f6ed072de4503bd7c4999a1a17f824b)):
+Example ([View in browser](http://admin-hackathon.westeurope.cloudapp.azure.com/bs_banking/api/v1/cashIn?amount=120&account=0x6c8f2a135f6ed072de4503bd7c4999a1a17f824b)):
 
-	http://127.0.0.1/bs_token/api/v1/cashIn?amount=120&address=0x6c8f2a135f6ed072de4503bd7c4999a1a17f824b
+	http://admin-hackathon.westeurope.cloudapp.azure.com/bs_banking/api/v1/cashIn?amount=120&account=0x6c8f2a135f6ed072de4503bd7c4999a1a17f824b
 
 Test credit card:
 
