@@ -470,10 +470,12 @@ Test credit card:
 
 ##Resources
 
-* [Ethereum JavaScript API](https://github.com/ethereum/wiki/wiki/JavaScript-API)
-* [web3.js](https://github.com/ethereum/web3.js/)
-* [Solidity](http://solidity.readthedocs.io/en/develop/)
-* [ERC: Token standard](https://github.com/ethereum/EIPs/issues/20)
+* [contract-deployer](https://github.com/BancoSabadell/contract-deployer): An utility script to easily deploy contracts from source code.
+* [gt-identity](https://github.com/BancoSabadell/gt-identity): An Identity contract to forward calls to other contracts. This contract allows you to have a unique identity in the Ethereum blockchain (ie. same address as msg.sender when executing other contracts) while using several addresses from different devices.
+* [gt-attributes](https://github.com/BancoSabadell/gt-attributes): A contract to attach attributes to identities and validate them.
+* Ethereum JavaScript [Library](https://github.com/ethereum/web3.js/) and [documentation](https://github.com/ethereum/wiki/wiki/JavaScript-API)
+* [Solidity](http://solidity.readthedocs.io/en/develop/) Language Documentation
+* [ERC20: Token standard](https://github.com/ethereum/EIPs/issues/20)
 
 ##Contact
 
