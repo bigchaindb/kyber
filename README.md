@@ -418,7 +418,7 @@ The full contract(s) source code can be found [here](https://github.com/BancoSab
 
 The BS Token contract is deployed at address: **`0x6c8f2a135f6ed072de4503bd7c4999a1a17f824b`**
 
-###Accounts per team (with a 1.000 token/ether balance)
+###Accounts per team (with 1000 BST and 100 ETH balances)
 
 account | password
 ---	 | ---
