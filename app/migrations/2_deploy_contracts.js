@@ -1,4 +1,4 @@
-var Token = artifacts.require("./Token.sol");
+var TokenMock = artifacts.require("./TokenMock.sol");
 var MobileEnergy = artifacts.require("./MobileEnergy.sol");
 
 module.exports = function(deployer) {
