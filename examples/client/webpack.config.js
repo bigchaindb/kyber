@@ -30,8 +30,8 @@ const PATHS = {
 const ENTRY = {
     // Use one entry per app
     ontherecord: PATHS.ON_THE_RECORD,
-    sharetrader: PATHS.SHARE_TRADER,
-    interledger: PATHS.INTERLEDGER,
+    // sharetrader: PATHS.SHARE_TRADER,
+    // interledger: PATHS.INTERLEDGER,
 };
 
 const ENTRY_NAMES = {
@@ -40,15 +40,17 @@ const ENTRY_NAMES = {
     interledger: 'Interledger',
 };
 
-
 /** EXTERNAL DEFINITIONS INJECTED INTO APP **/
 const DEFINITIONS = {
     'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
         FLASK_BASE_URL: JSON.stringify(`http://${process.env.FLASK_HOST || 'localhost'}:` +
                                        `${process.env.FLASK_PORT || '8000'}`),
+        BDB_SERVER_URL: JSON.stringify(`${process.env.BDB_SERVER_URL || 'http://localhost:9984'}`),
     },
 };
+
+console.log('DEFINITIONS:', DEFINITIONS);
 
 
 /** PLUGINS **/

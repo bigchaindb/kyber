@@ -99,3 +99,21 @@ services:
       - "48000:8000"
     command: python -m server.server_flask
 
+  examples-server-tornado:
+    build:
+      context: .
+      dockerfile: ./compose/examples-server/Dockerfile
+    volumes_from:
+      - examples-server-flask
+    environment:
+      BIGCHAINDB_DATABASE_HOST: rdb
+      BIGCHAINDB_SERVER_BIND: 0.0.0.0:9984
+      BIGCHAINDB_KEYPAIR_PUBLIC: GW1nrdZm4mbVC8ePeiGWz6DqHexqewqy5teURVHi3RG4
+      BIGCHAINDB_KEYPAIR_PRIVATE: 2kQgBtQnHoauw8QchKM7xYvEBW1QDoHzhBsCL9Vi1AzB
+      FLASK_HOST: 0.0.0.0
+      TORNADO_HOST: 0.0.0.0
+      DOCKER_MACHINE_IP: "${DOCKER_MACHINE_IP}"
+    ports:
+      - "48888:8888"
+    command: python -m server.server_tornado
+

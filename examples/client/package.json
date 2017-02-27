@@ -19,12 +19,11 @@
   "scripts": {
     "lint": "eslint ./",
     "build": "cross-env NODE_ENV=extract webpack",
-    "build:tutorial": "cross-env NODE_ENV=extract webpack --config webpack.config.tutorial.js",
     "build:dist": "cross-env NODE_ENV=production webpack -p",
     "clean": "rimraf ./build ./dist",
     "start": "cross-env NODE_ENV=demo node server.demo.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "npm run clean && npm run build && npm run build:tutorial"
+    "postinstall": "npm run clean && npm run build"
   },
   "dependencies": {
     "alt": "^0.18.4",

@@ -1,13 +1,13 @@
 import React from 'react';
 
-import AssetDetail from '../../../lib/js/react/components/asset_detail';
-import inBacklog from '../../../lib/js/utils/bigchaindb/in_backlog';
+import AssetDetail from '../../../js/react/components/asset_detail';
+import inBacklog from '../../../js/utils/bigchaindb/in_backlog';
 
 
 const AssetHistory = ({
         assetList
     }) => {
-    if (assetList.length === 0) {
+    if (!assetList || assetList.length === 0) {
         return (
             <div className="content-text">
                 No messages found on BigchainDB. Start typing...
@@ -30,7 +30,7 @@ const AssetHistory = ({
 };
 
 AssetHistory.propTypes = {
-    assetList: React.PropTypes.array.isRequired
+    assetList: React.PropTypes.array
 };
 
 export default AssetHistory;

@@ -4,15 +4,16 @@ import { Navbar } from 'react-bootstrap/lib';
 
 import Scroll from 'react-scroll';
 
-import AccountList from '../../../lib/js/react/components/account_list';
-import AccountDetail from '../../../lib/js/react/components/account_detail';
+import AccountList from '../../../js/react/components/account_list';
+import AccountDetail from '../../../js/react/components/account_detail';
 
 import Assets from './assets';
-import Search from '../../../lib/js/react/components/search';
+import Search from '../../../js/react/components/search';
 
-import AssetActions from '../../../lib/js/react/actions/asset_actions';
+import TransactionActions from '../../../js/react/actions/transaction_actions';
+import AssetActions from '../../../js/react/actions/asset_actions';
 
-import BigchainDBConnection from '../../../lib/js/react/components/bigchaindb_connection';
+import BigchainDBConnection from '../../../js/react/components/bigchaindb_connection';
 
 
 const OnTheRecord = React.createClass({
@@ -41,6 +42,25 @@ const OnTheRecord = React.createClass({
         }
     },
 
+    fetchChat(account){
+        if (account) {
+            TransactionActions.fetchOutputList({
+                public_key: account.vk,
+                unspent: false
+            })
+        }
+    },
+
+    fetchTransactionList({ account, search }) {
+        if (account) {
+            TransactionActions.fetchOutputList({
+                public_key: account.vk,
+                unspent: false
+            });
+            Scroll.animateScroll.scrollToBottom();
+        }
+    },
+
     handleAccountChangeAndScroll(account) {
         this.props.handleAccountChange(account);
         Scroll.animateScroll.scrollToBottom();
@@ -63,13 +83,13 @@ const OnTheRecord = React.createClass({
         const {
             activeAccount,
             assetList,
-            assetMeta
+            assetMeta,
+            transactionList
         } = this.props;
 
         const assetListForAccount = (
             assetList && activeAccount && Array.isArray(assetList[activeAccount.vk])) ?
             assetList[activeAccount.vk] : null;
-
         return (
             <div>
                 <Navbar fixedTop inverse>
@@ -91,9 +111,16 @@ const OnTheRecord = React.createClass({
                     </div>
                     <div id="page-content-wrapper">
                         <div className="page-content">
-                            <Assets
-                                activeAccount={activeAccount}
-                                assetList={assetListForAccount} />
+                            {
+                                Object.keys(transactionList).map((assetId) => {
+                                    return (
+                                        <div key={assetId}>{assetId}</div>
+                                    )
+                                })
+                            }
+                            {/*<Assets*/}
+                                {/*activeAccount={activeAccount}*/}
+                                {/*assetList={assetListForAccount} />*/}
                         </div>
                     </div>
                 </div>

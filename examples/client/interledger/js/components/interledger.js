@@ -2,12 +2,12 @@ import React from 'react';
 
 import { Navbar } from 'react-bootstrap/lib';
 
-import AccountList from '../../../lib/js/react/components/account_list';
+import AccountList from '../../../js/react/components/account_list';
 import AccountDetail from './account_detail';
 
-import AssetActions from '../../../lib/js/react/actions/asset_actions';
+import AssetActions from '../../../js/react/actions/asset_actions';
 
-import BigchainDBConnection from '../../../lib/js/react/components/bigchaindb_connection';
+import BigchainDBConnection from '../../../js/react/components/bigchaindb_connection';
 
 
 const Interledger = React.createClass({

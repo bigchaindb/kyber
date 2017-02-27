@@ -8,7 +8,7 @@ import ReactDOM from 'react-dom';
 
 import ShareTrader from './components/share_trader';
 
-import '../../lib/css/scss/main.scss';
+import '../../css/scss/main.scss';
 
 
 const App = () => (

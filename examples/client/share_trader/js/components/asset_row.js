@@ -2,10 +2,10 @@ import React from 'react';
 import classnames from 'classnames';
 import { safeInvoke } from 'js-utility-belt/es6';
 
-import AssetActions from '../../../lib/js/react/actions/asset_actions';
+import AssetActions from '../../../js/react/actions/asset_actions';
 
-import AssetActionPanel from '../../../lib/js/react/components/asset_action_panel';
-import AssetDetail from '../../../lib/js/react/components/asset_detail';
+import AssetActionPanel from '../../../js/react/components/asset_action_panel';
+import AssetDetail from '../../../js/react/components/asset_detail';
 
 
 const AssetRow = React.createClass({

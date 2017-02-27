@@ -137,30 +137,29 @@ cd ..
 ### Run Tutorials
 
 Here is a list of Python tutorials for a BigchainDB client:
-- [simple_transactions.py](https://github.com/bigchaindb/kyber/blob/master/examples/client/tutorials/transactions/simple_transactions.py):
+- [simple_transactions.py](https://github.com/bigchaindb/kyber/blob/master/tutorials/01_simple_transactions/simple_transactions.py):
  Prepare, sign and post basic `CREATE`, `TRANSFER` transactions
-- [assets_unspents.py](https://github.com/bigchaindb/kyber/blob/master/examples/client/tutorials/transactions/assets_unspents.py):
+- [assets_unspents.py](https://github.com/bigchaindb/kyber/blob/master/tutorials/02_assets_unspents/assets_unspents.py):
  Create, transfer and list assets, unspents, etc.
-- [divisible_transactions.py](https://github.com/bigchaindb/kyber/blob/master/examples/client/tutorials/transactions/divisible_transactions.py):
+- [divisible_transactions.py](https://github.com/bigchaindb/kyber/blob/master/tutorials/03_divisble_transactions/divisible_transactions.py):
  Split and combine transactions with divisible assets
-- [cryptoconditions_transactions.py](https://github.com/bigchaindb/kyber/blob/master/examples/client/tutorials/transactions/cryptoconditions_transactions.py):
+- [cryptoconditions_transactions.py](https://github.com/bigchaindb/kyber/blob/master/tutorials/04_cryptoconditions_transactions/cryptoconditions_transactions.py):
  Create custom UTXO scripts using [py-crypto-conditions](https://github.com/bigchaindb/cryptoconditions)
  
-Descend into the examples directory
+Descend into the tutorials directory
 
 ```bash
-cd examples/
+cd tutorials/
 ```
 
-Run each example as a module. 
-
-The tutorials require a `BDB_SERVER_URL`. If you are running the server locally with docker we needed to remember the external port `<external-docker-port>` of the API in docker (run `docker-compose ps` in the repo root).
+Run each tutorial as a module. The tutorials require a `BDB_SERVER_URL`. 
+If you are running the server locally with docker we needed to remember the external port `<external-docker-port>` of the API in docker (run `docker-compose ps` in the repo root).
 In our case the `BDB_SERVER_URL` was `http://localhost:32773`.
 
 For example:
 
 ```bash
-BDB_SERVER_URL=<bigchaindb-server-url> python -m client.tutorials.transactions.simple_transactions 
+BDB_SERVER_URL=<bigchaindb-server-url> python -m 01_simple_transactions.simple_transactions 
 ```
 
 ## JavaScript Client Tutorials
@@ -177,11 +176,11 @@ These versions or higher should work:
 
 Here is a list of JavaScript tutorials:
 
-- [simple_transactions.js](https://github.com/bigchaindb/kyber/blob/master/examples/client/tutorials/transactions/simple_transactions.js):
+- [simple_transactions.js](https://github.com/bigchaindb/kyber/blob/master/tutorials/01_simple_transactions/simple_transactions.js):
  Prepare, sign and post basic `CREATE`, `TRANSFER` transactions
-- [assets_unspents.js](https://github.com/bigchaindb/kyber/blob/master/examples/client/tutorials/transactions/assets_unspents.js):
+- [assets_unspents.js](https://github.com/bigchaindb/kyber/blob/master/tutorials/02_assets_unspents/assets_unspents.js):
  Create, transfer and list assets, unspents, etc.
-- [divisible_transactions.js](https://github.com/bigchaindb/kyber/blob/master/examples/client/tutorials/transactions/divisible_transactions.js):
+- [divisible_transactions.js](https://github.com/bigchaindb/kyber/blob/master/tutorials/03_divisible_transactions/divisible_transactions.js):
  Split and combine transactions with divisible assets
 - [TODO] Create custom UTXO scripts using [js-crypto-conditions](https://github.com/interledgerjs/five-bells-condition)
  
@@ -194,17 +193,15 @@ Here is how you do that:
 cd drivers/javascript
 npm install
 npm link
-cd ../../examples/client
+cd ../../tutorials
 npm link js-bigchaindb-quickstart
 ```
 
-Now that we are in the `examples/client` directory, we can build the JavaScript tutorials.
+We can now build the JavaScript bundles using `npm`.
+Make sure you are in the `tutorials` directory first.
 
 The tutorials require a `BDB_SERVER_URL`. If you are running the server locally with docker we needed to remember the external port `<external-docker-port>` of the API in docker (run `docker-compose ps` in the repo root).
 In our case the `BDB_SERVER_URL` was `http://localhost:32773`.
-
-We can now build the JavaScript bundles using `npm`.
-Make sure you are in the `examples/client` directory first.
 
 ```bash
 BDB_SERVER_URL=<bigchaindb_server_url> npm install
@@ -217,15 +214,15 @@ If all goes well, you'll see `webpack` spitting out the bundles. That's a good s
 Launch webpack in `watch` mode and wait for the bundles to be emitted:
 
 ```bash
-BDB_SERVER_URL=<bigchaindb_server_url> webpack --config webpack.config.tutorial.js -w 
+BDB_SERVER_URL=<bigchaindb_server_url> webpack -w 
 ```
 
 As long as the webpack watcher is running, every code change will be trigger a new build of the affected bundle(s).
 
-We that we have the bundles under `examples/client/build`, we're all set to inject them into a `html` file.
-There are some simple webpages under `examples/client/tutorials/transactions` that can be served under the `examples/client` directory.
+Once we have the bundles under `tutorials/build`, we're all set to inject them into a `html` file.
+There are some simple webpages in each tutorial that can be served under the `tutorials` directory.
 
-Due to `same-origin` policy, you'll need to start a local webserver (in another terminal) to serve the folder `examples/client`.
+Due to `same-origin` policy, you'll need to start a local webserver (in another terminal) to serve the folder `tutorials`.
 
 Here are some go-to's to server local `html` files:
 
@@ -236,9 +233,9 @@ Here are some go-to's to server local `html` files:
 For example, using the python server uses `port:8000`. 
 You can access a (blank) page that will run the JavaScript in the background:
 
-- [http://localhost:8000/tutorials/transactions/simple_transactions.html](http://localhost:8000/tutorials/transactions/simple_transactions.html)
-- [http://localhost:8000/tutorials/transactions/assets_unspents.html](http://localhost:8000/tutorials/transactions/assets_unspents.html)
-- [http://localhost:8000/tutorials/transactions/divisible_transactions.html](http://localhost:8000/tutorials/transactions/divisible_transactions.html)
+- [http://localhost:8000/01_simple_transactions/simple_transactions.html](http://localhost:8000/01_simple_transactions/simple_transactions.html)
+- [http://localhost:8000/02_assets_unspents/assets_unspents.html](http://localhost:8000/02_assets_unspents/assets_unspents.html)
+- [http://localhost:8000/03_divisible_transactions/divisible_transactions.html](http://localhost:8000/03_divisible_transactions/divisible_transactions.html)
 
 The tutorials only use JavaScript without frontend visuals. (sorry for that, could go into the ideabox)
 However statements are printed in the dev console (`F12` in the browser, and `F5` to reload)

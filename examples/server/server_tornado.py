@@ -21,14 +21,15 @@ logger = logging.getLogger('tornado')
 
 @coroutine
 def print_changes(db_table):
-    feed = yield bigchain.connection.run(r.table(db_table).changes())
+    conn = yield r.connect(host=bigchain.connection.host, port=bigchain.connection.port)
+    feed = yield r.db('bigchain').table(db_table).changes().run(conn)
     while (yield feed.fetch_next()):
         change = yield feed.next()
         block = get_block_from_change(change, db_table)
         for client in clients:
             for tx in block:
                 # TODO: use REQL for filtering
-                if tx_contains_vk(tx['transaction'], client.username):
+                if tx_contains_vk(tx, client.username):
                     msg = {'change': change,
                            'client': client.username}
                     client.write_message(msg)
@@ -47,11 +48,11 @@ def get_block_from_change(change, db_table):
 
 
 def tx_contains_vk(tx, vk):
-    for condition in tx['conditions']:
-        if vk in condition['new_owners']:
+    for condition in tx['outputs']:
+        if vk in condition['public_keys']:
             return True
-    for fullfillment in tx['fulfillments']:
-        if vk in fullfillment['current_owners']:
+    for fullfillment in tx['inputs']:
+        if vk in fullfillment['owners_before']:
             return True
 
 

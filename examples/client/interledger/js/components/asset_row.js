@@ -3,10 +3,10 @@ import moment from 'moment';
 import classnames from 'classnames';
 import { safeInvoke } from 'js-utility-belt/es6';
 
-import AssetActionPanel from '../../../lib/js/react/components/asset_action_panel';
-import AssetDetail from '../../../lib/js/react/components/asset_detail';
+import AssetActionPanel from '../../../js/react/components/asset_action_panel';
+import AssetDetail from '../../../js/react/components/asset_detail';
 
-import inBacklog from '../../../lib/js/utils/bigchaindb/in_backlog';
+import inBacklog from '../../../js/utils/bigchaindb/in_backlog';
 
 
 const AssetRow = React.createClass({

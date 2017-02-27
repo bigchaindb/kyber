@@ -1,7 +1,7 @@
 import React from 'react';
 
 import AssetRow from './asset_row';
-import Spinner from '../../../lib/js/react/components/spinner';
+import Spinner from '../../../js/react/components/spinner';
 
 
 const Assets = ({

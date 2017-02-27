@@ -2,7 +2,20 @@ import React from 'react';
 
 import Scroll from 'react-scroll';
 
-import AssetActions from '../../../lib/js/react/actions/asset_actions';
+import {
+    Ed25519Keypair,
+    getStatus,
+    makeCreateTransaction,
+    makeTransferTransaction,
+    makeOutput,
+    makeEd25519Condition,
+    pollStatusAndFetchTransaction,
+    postTransaction,
+    signTransaction,
+} from 'js-bigchaindb-quickstart';
+
+import TransactionActions from '../../../js/react/actions/transaction_actions';
+import AssetActions from '../../../js/react/actions/asset_actions';
 
 import AssetHistory from './asset_history';
 
@@ -22,15 +35,22 @@ const Assets = React.createClass({
         event.preventDefault();
         const { activeAccount } = this.props;
         const { value } = this.state;
-
-        const payloadToPost = {
-            to: activeAccount.vk,
-            content: value
+        const asset = {
+            'chat': ''
         };
-        AssetActions.postAsset({
-            payloadToPost,
-            account: activeAccount
-        });
+
+        const metadata = {
+            'mesage': value
+        };
+
+        const transaction = makeCreateTransaction(
+            asset,
+            metadata,
+            [makeOutput(makeEd25519Condition(activeAccount.vk))],
+            activeAccount.vk
+        );
+        const signedTransaction = signTransaction(transaction, activeAccount.sk);
+        TransactionActions.postTransaction(signedTransaction);
 
         this.setState({ value: "" });
 
@@ -49,7 +69,7 @@ const Assets = React.createClass({
 
         const { value } = this.state;
 
-        if (!assetList || !activeAccount) {
+        if (!activeAccount) {
             return (
                 <div className="content-text">
                     Select account from the list...
