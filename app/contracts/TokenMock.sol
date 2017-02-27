@@ -2,7 +2,7 @@
 // https://github.com/ethereum/EIPs/issues/20
 pragma solidity ^0.4.6;
 
-contract Token {
+contract TokenMock {
     function transferFrom(address _from, address _to, uint256 _value)
     returns (bool success)
     {

@@ -4,6 +4,7 @@ import './Token.sol';
 
 contract MobileEnergy {
   Token private token;
+  address private oracle;
 
   struct Seller {
     uint256 price;
@@ -33,9 +34,10 @@ contract MobileEnergy {
   event NewContract(bytes32 hash);
   event NewInvoice(bytes32 hash);
 
-  function MobileEnergy(Token _token)
+  function MobileEnergy(Token _token, address _oracle)
   {
     token = _token;
+    oracle = _oracle;
   }
 
   function publishOffer(uint256 _price, uint256 _power)
@@ -43,14 +45,17 @@ contract MobileEnergy {
     sellers[msg.sender] = Seller(_price, _power);
   }
 
-  function acceptOffer(address _seller, address _buyer, uint256 _price, uint32 _timestamp)
+  function acceptOffer(address _seller, uint256 _price, uint32 _timestamp)
   returns (bytes32 _contractHash)
   {
-    Contract memory _contract = Contract(_seller, _buyer, _price, _timestamp);
+    if (sellers[_seller] == address(0x0)) {
+      throw;
+    }
+    Contract memory _contract = Contract(_seller, msg.sender, _price, _timestamp);
     _contractHash = calculateContractHash(_contract);
     contracts[_contractHash] = _contract;
     users2contracts[_seller].push(_contractHash);
-    users2contracts[_buyer].push(_contractHash);
+    users2contracts[msg.sender].push(_contractHash);
 
     NewContract(_contractHash);
   }
@@ -58,6 +63,12 @@ contract MobileEnergy {
   function close(bytes32 _contractHash, uint256 _amount, uint32 _timestamp)
   returns (bytes32 _invoiceHash)
   {
+    if (msg.sender != oracle) {
+      throw;
+    }
+    if (contracts[_contractHash] == address(0x0)) {
+      throw;
+    }
     Contract _contract = contracts[_contractHash];
     uint256 _total = _amount * _contract.price;
     Invoice memory _invoice = Invoice(_contractHash, _amount, _timestamp, false);
@@ -75,8 +86,17 @@ contract MobileEnergy {
   function withdraw(bytes32 _invoiceHash)
   returns (bool _success)
   {
+    if (invoices[_invoiceHash] == address(0x0)) {
+      throw;
+    }
+
     Invoice _invoice = invoices[_invoiceHash];
     if (_invoice.isPaid) {
+      throw;
+    }
+
+    Contract _contract = contracts[_invoice.contractHash];
+    if (msg.sender != _contract.seller) {
       throw;
     }
 
