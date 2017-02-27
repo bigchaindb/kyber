@@ -3,6 +3,6 @@ var MobileEnergy = artifacts.require("./MobileEnergy.sol");
 
 module.exports = function(deployer) {
   deployer.deploy(TokenMock).then(function() {
-    deployer.deploy(MobileEnergy, TokenMock.address);
+    return deployer.deploy(MobileEnergy, TokenMock.address);
   });
 };

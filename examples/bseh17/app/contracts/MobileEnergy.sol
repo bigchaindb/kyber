@@ -37,10 +37,10 @@ contract MobileEnergy {
   event NewContract(bytes32 hash);
   event NewInvoice(bytes32 hash);
 
-  function MobileEnergy(Token _token, address _oracle)
+  function MobileEnergy(Token _token)
   {
     token = _token;
-    oracle = _oracle;
+    oracle = msg.sender;
   }
 
   function publishOffer(uint256 _price, uint256 _power)
@@ -48,13 +48,14 @@ contract MobileEnergy {
     sellers[msg.sender] = Seller(_price, _power, true);
   }
 
-  function acceptOffer(address _seller, uint256 _price, uint32 _timestamp)
+  function acceptOffer(address _seller)
   returns (bytes32 _contractHash)
   {
     if (!sellers[_seller].initialized) {
       throw;
     }
-    Contract memory _contract = Contract(_seller, msg.sender, _price, _timestamp, true);
+    Seller _offer = sellers[_seller];
+    Contract memory _contract = Contract(_seller, msg.sender, _offer.price, uint32(now), true);
     _contractHash = calculateContractHash(_contract);
     contracts[_contractHash] = _contract;
     users2contracts[_seller].push(_contractHash);
