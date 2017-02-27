@@ -31,6 +31,7 @@ contract MobileEnergy {
 
 
   event NewContract(bytes32 hash);
+  event NewInvoice(bytes32 hash);
 
   function MobileEnergy(Token _token)
   {
@@ -45,8 +46,8 @@ contract MobileEnergy {
   function acceptOffer(address _seller, address _buyer, uint256 _price, uint32 _timestamp)
   returns (bytes32 _contractHash)
   {
-    Contract _contract = Contract(_seller, _buyer, _price, _timestamp);
-    _contractHash = keccak256(_contract);
+    Contract memory _contract = Contract(_seller, _buyer, _price, _timestamp);
+    _contractHash = calculateContractHash(_contract);
     contracts[_contractHash] = _contract;
     users2contracts[_seller].push(_contractHash);
     users2contracts[_buyer].push(_contractHash);
@@ -54,19 +55,21 @@ contract MobileEnergy {
     NewContract(_contractHash);
   }
 
-  function invoice(bytes32 _contractHash, uint256 _amount, uint32 _timestamp)
+  function close(bytes32 _contractHash, uint256 _amount, uint32 _timestamp)
   returns (bytes32 _invoiceHash)
   {
     Contract _contract = contracts[_contractHash];
     uint256 _total = _amount * _contract.price;
-    Invoice _invoice = Invoice(_contractHash, _amount, _timestamp);
-    _invoiceHash = keccak256(_invoice);
+    Invoice memory _invoice = Invoice(_contractHash, _amount, _timestamp, false);
+    _invoiceHash = calculateInvoiceHash(_invoice);
 
     _invoice.isPaid = token.transferFrom(_contract.buyer, _contract.seller, _total);
 
     invoices[_invoiceHash] = _invoice;
     users2invoices[_contract.seller].push(_invoiceHash);
     users2invoices[_contract.buyer].push(_invoiceHash);
+
+    NewInvoice(_invoiceHash);
   }
 
   function withdraw(bytes32 _invoiceHash)
@@ -80,5 +83,20 @@ contract MobileEnergy {
     Contract _contract = contracts[_invoice.contractHash];
     uint256 _total = _invoice.amount * _contract.price;
     _invoice.isPaid = token.transferFrom(_contract.buyer, _contract.seller, _total);
+  }
+
+  function calculateContractHash(Contract _contract)
+  internal
+  returns (bytes32 hash)
+  {
+    hash = keccak256(_contract.seller, _contract.buyer,
+                     _contract.price, _contract.timestamp);
+  }
+
+  function calculateInvoiceHash(Invoice _invoice)
+  internal
+  returns (bytes32 hash)
+  {
+    hash = keccak256(_invoice.contractHash, _invoice.amount, _invoice.timestamp);
   }
 }
