@@ -4,10 +4,12 @@ import './Token.sol';
 
 contract MobileEnergy {
   Token private token;
+  address private oracle;
 
   struct Seller {
     uint256 price;
     uint256 power;
+    bool initialized;
   }
   mapping(address => Seller) public sellers;
 
@@ -16,6 +18,7 @@ contract MobileEnergy {
     address buyer;
     uint256 price;
     uint32 timestamp;
+    bool initialized;
   }
   mapping(bytes32 => Contract) public contracts;
   mapping(address => bytes32[]) public users2contracts;
@@ -25,6 +28,7 @@ contract MobileEnergy {
     uint256 amount;
     uint32 timestamp;
     bool isPaid;
+    bool initialized;
   }
   mapping(bytes32 => Invoice) public invoices;
   mapping(address => bytes32[]) public users2invoices;
@@ -33,24 +37,28 @@ contract MobileEnergy {
   event NewContract(bytes32 hash);
   event NewInvoice(bytes32 hash);
 
-  function MobileEnergy(Token _token)
+  function MobileEnergy(Token _token, address _oracle)
   {
     token = _token;
+    oracle = _oracle;
   }
 
   function publishOffer(uint256 _price, uint256 _power)
   {
-    sellers[msg.sender] = Seller(_price, _power);
+    sellers[msg.sender] = Seller(_price, _power, true);
   }
 
-  function acceptOffer(address _seller, address _buyer, uint256 _price, uint32 _timestamp)
+  function acceptOffer(address _seller, uint256 _price, uint32 _timestamp)
   returns (bytes32 _contractHash)
   {
-    Contract memory _contract = Contract(_seller, _buyer, _price, _timestamp);
+    if (!sellers[_seller].initialized) {
+      throw;
+    }
+    Contract memory _contract = Contract(_seller, msg.sender, _price, _timestamp, true);
     _contractHash = calculateContractHash(_contract);
     contracts[_contractHash] = _contract;
     users2contracts[_seller].push(_contractHash);
-    users2contracts[_buyer].push(_contractHash);
+    users2contracts[msg.sender].push(_contractHash);
 
     NewContract(_contractHash);
   }
@@ -58,9 +66,15 @@ contract MobileEnergy {
   function close(bytes32 _contractHash, uint256 _amount, uint32 _timestamp)
   returns (bytes32 _invoiceHash)
   {
+    if (msg.sender != oracle) {
+      throw;
+    }
+    if (!contracts[_contractHash].initialized) {
+      throw;
+    }
     Contract _contract = contracts[_contractHash];
     uint256 _total = _amount * _contract.price;
-    Invoice memory _invoice = Invoice(_contractHash, _amount, _timestamp, false);
+    Invoice memory _invoice = Invoice(_contractHash, _amount, _timestamp, false, true);
     _invoiceHash = calculateInvoiceHash(_invoice);
 
     _invoice.isPaid = token.transferFrom(_contract.buyer, _contract.seller, _total);
@@ -75,12 +89,20 @@ contract MobileEnergy {
   function withdraw(bytes32 _invoiceHash)
   returns (bool _success)
   {
+    if (!invoices[_invoiceHash].initialized) {
+      throw;
+    }
+
     Invoice _invoice = invoices[_invoiceHash];
     if (_invoice.isPaid) {
       throw;
     }
 
     Contract _contract = contracts[_invoice.contractHash];
+    if (msg.sender != _contract.seller) {
+      throw;
+    }
+
     uint256 _total = _invoice.amount * _contract.price;
     _invoice.isPaid = token.transferFrom(_contract.buyer, _contract.seller, _total);
   }
