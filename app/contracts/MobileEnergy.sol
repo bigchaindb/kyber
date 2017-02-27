@@ -1,6 +1,6 @@
 pragma solidity ^0.4.6;
 
-import './BSToken.sol';
+import './Token.sol';
 
 contract MobileEnergy {
   Token private token;
@@ -43,10 +43,10 @@ contract MobileEnergy {
   }
 
   function acceptOffer(address _seller, address _buyer, uint256 _price, uint32 _timestamp)
-  returns (Contract _contract)
+  returns (bytes32 _contractHash)
   {
-    _contract = Contract(_seller, _buyer, _price, _timestamp);
-    bytes32 _contractHash = keccak256(_contract);
+    Contract _contract = Contract(_seller, _buyer, _price, _timestamp);
+    _contractHash = keccak256(_contract);
     contracts[_contractHash] = _contract;
     users2contracts[_seller].push(_contractHash);
     users2contracts[_buyer].push(_contractHash);
@@ -55,21 +55,22 @@ contract MobileEnergy {
   }
 
   function invoice(bytes32 _contractHash, uint256 _amount, uint32 _timestamp)
-  returns (Invoice _invoice)
+  returns (bytes32 _invoiceHash)
   {
-    // What if a seller changes the price while buyer is using a plug?
-    uint256 _total = _amount * contracts[_contractHash].price;
-    _invoice = Invoice(_contractHash, _amount, _timestamp);
-    bytes32 _invoiceHash = keccak256(_invoice);
+    Contract _contract = contracts[_contractHash];
+    uint256 _total = _amount * _contract.price;
+    Invoice _invoice = Invoice(_contractHash, _amount, _timestamp);
+    _invoiceHash = keccak256(_invoice);
 
-    _invoice.isPaid = token.transferFrom(_buyer, _seller, _total);
+    _invoice.isPaid = token.transferFrom(_contract.buyer, _contract.seller, _total);
 
     invoices[_invoiceHash] = _invoice;
-    users2invoices[_seller].push(_invoiceHash);
-    users2invoices[_buyer].push(_invoiceHash);
+    users2invoices[_contract.seller].push(_invoiceHash);
+    users2invoices[_contract.buyer].push(_invoiceHash);
   }
 
-  function withdraw(bytes32 _invoiceHash) returns (bool _success)
+  function withdraw(bytes32 _invoiceHash)
+  returns (bool _success)
   {
     Invoice _invoice = invoices[_invoiceHash];
     if (_invoice.isPaid) {
