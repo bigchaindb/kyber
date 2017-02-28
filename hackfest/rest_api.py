@@ -20,10 +20,11 @@ def post_tomtom_data():
 def post_pubkey():
     device_id = request.form.get('device_id', None)
     pubkey = request.form.get('pubkey', None)
+    message = request.form.get('message', None)
     if not pubkey or not device_id:
         return jsonify({'error': 'invalid request'}), 404
 
-    print(device_id, pubkey)
+    print(device_id, pubkey, message)
     return make_response(jsonify({'ok': 1}))
 
 
