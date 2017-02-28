@@ -50,6 +50,8 @@ def handle_telemetry_data():
     # can't be mangled here
     # send it to bdb as is (?!)
     send_data_to_bdb(request.json)
+    # TODO - bubble up any errors
+    return make_response(jsonify({'ok': 1}))
 # end handle_telemetry_data
 
 
@@ -70,12 +72,14 @@ def init_system(app, bdb_ip, bdb_port, pub_key, pr_key):
     app.config['bdb'] = bdb
     app.config['keypair'] = keypair
     app.config['asset'] = asset_data
+    app.config['tx_id'] = ''
 # end init_system
 
 
 def record_data(bdb_conn, data, metadata, keypair, tx_id):
     fulfilled_tx = None
     if tx_id != '':
+        logger.debug('Transfer tx!')
         creation_tx = bdb_conn.transactions.retrieve(tx_id)
         if 'id' in creation_tx['asset']:
             asset_id = creation_tx['asset']['id']
@@ -108,6 +112,7 @@ def record_data(bdb_conn, data, metadata, keypair, tx_id):
         )
         bdb_conn.transactions.send(fulfilled_tx)
     else:
+        logger.debug('Create tx!')
         prepared_creation_tx = bdb_conn.transactions.prepare(
             operation='CREATE',
             signers=keypair['public_key'],
@@ -162,6 +167,7 @@ def send_data_to_bdb(telemetry_data):
 
     # record data to bigchain
     tx_id = record_data(bdb, asset_data, asset_metadata, keypair, tx_id)
+    logger.debug('tx_id: ' + tx_id)
     current_app.config['tx_id'] = tx_id
 # end send_data_to_bdb
 
@@ -180,7 +186,7 @@ if __name__ == '__main__':
                            help='api service private key')
     args = parser.parse_args()
     # set up logging
-    logger = getLogger('update_client')
+    logger = getLogger('telemetry_service')
     logger.setLevel(DEBUG)
     # local syslog
     local_formatter = Formatter(
