@@ -9,11 +9,22 @@ def index():
 
 
 @app.route('/tomtom', methods=['POST'])
-def tomtom_data():
+def post_tomtom_data():
     if not request.json:
         abort(404)
     print(request.json)
     return jsonify({'ok': 1})
+
+
+@app.route('/pubkey', methods=['POST'])
+def post_pubkey():
+    device_id = request.form.get('device_id', None)
+    pubkey = request.form.get('pubkey', None)
+    if not pubkey or not device_id:
+        return jsonify({'error': 'invalid request'}), 404
+
+    print(device_id, pubkey)
+    return make_response(jsonify({'ok': 1}))
 
 
 @app.errorhandler(404)
