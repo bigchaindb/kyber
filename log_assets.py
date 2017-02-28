@@ -39,7 +39,6 @@ def init_system(bosun_ip, bosun_port, bdb_ip, bdb_port):
         # record data to bigchain
         tx_id = record_data(asset_data, keypair, tx_id, bdb_ip, bdb_port)
         time.sleep(5)
-        init_done = True
         # end while
 
 
