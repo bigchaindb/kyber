@@ -5,6 +5,7 @@ from logging.handlers import SysLogHandler
 from bigchaindb_driver import BigchainDB
 from bigchaindb_driver.exceptions import NotFoundError
 from time import sleep, strftime, gmtime
+from transactions import create_asset, create_transfer
 
 app = Flask(__name__)
 
@@ -49,7 +50,9 @@ def handle_telemetry_data():
     # should be signed req
     # can't be mangled here
     # send it to bdb as is (?!)
-    send_data_to_bdb(request.json)
+    json_data = request.json
+    vehicle_id = request.json.pop('vehicleId')
+    send_data_to_bdb(json_data, vehicle_id)
     # TODO - bubble up any errors
     return make_response(jsonify({'ok': 1}))
 # end handle_telemetry_data
@@ -72,58 +75,31 @@ def init_system(app, bdb_ip, bdb_port, pub_key, pr_key):
     app.config['bdb'] = bdb
     app.config['keypair'] = keypair
     app.config['asset'] = asset_data
-    app.config['tx_id'] = ''
+    app.config['txids'] = {}
 # end init_system
 
 
-def record_data(bdb_conn, data, metadata, keypair, tx_id):
+def record_data(bdb_conn, data, metadata, keypair, tx_id, vehicle_id):
     fulfilled_tx = None
     if tx_id != '':
         logger.debug('Transfer tx!')
-        creation_tx = bdb_conn.transactions.retrieve(tx_id)
-        if 'id' in creation_tx['asset']:
-            asset_id = creation_tx['asset']['id']
+        previous_tx = bdb_conn.transactions.retrieve(tx_id)
+        if 'id' in previous_tx['asset']:
+            asset_id = previous_tx['asset']['id']
         else:
-            asset_id = creation_tx['id']
-        # end if
-        transfer_asset = {
-            'id': asset_id
-        }
-        output_index = 0
-        output = creation_tx['outputs'][output_index]
-        transfer_input = {
-            'fulfillment': output['condition']['details'],
-            'fulfills': {
-                'output': output_index,
-                'txid': creation_tx['id']
-            },
-            'owners_before': output['public_keys']
-        }
-        prepared_transfer_tx = bdb_conn.transactions.prepare(
-            operation='TRANSFER',
-            asset=transfer_asset,
-            inputs=transfer_input,
-            recipients=keypair['public_key'],
-            metadata=metadata
-        )
-        fulfilled_tx = bdb_conn.transactions.fulfill(
-            prepared_transfer_tx,
-            private_keys=keypair['private_key']
-        )
-        bdb_conn.transactions.send(fulfilled_tx)
+            asset_id = previous_tx['id']
+
+        transfer_tx = create_transfer(previous_tx, keypair['private_key'],
+                                      keypair['public_key'], vehicle_id,
+                                      metadata, asset_id)
+        bdb_conn.transactions.send(transfer_tx.to_dict())
+        fulfilled_tx = transfer_tx.to_dict()
     else:
         logger.debug('Create tx!')
-        prepared_creation_tx = bdb_conn.transactions.prepare(
-            operation='CREATE',
-            signers=keypair['public_key'],
-            asset=data,
-            metadata=metadata
-        )
-        fulfilled_tx = bdb_conn.transactions.fulfill(
-            prepared_creation_tx,
-            private_keys=keypair['private_key']
-        )
-        bdb_conn.transactions.send(fulfilled_tx)
+        create_tx = create_asset(keypair['private_key'], keypair['public_key'],
+                                 vehicle_id, data, metadata)
+        bdb_conn.transactions.send(create_tx.to_dict())
+        fulfilled_tx = create_tx.to_dict()
     # end if
 
     # verify if the tx was registered in the bigchain
@@ -149,10 +125,10 @@ def record_data(bdb_conn, data, metadata, keypair, tx_id):
 # end record_data
 
 
-def send_data_to_bdb(telemetry_data):
+def send_data_to_bdb(telemetry_data, vehicle_id):
     bdb = current_app.config['bdb']
     keypair = current_app.config['keypair']
-    tx_id = current_app.config['tx_id']
+    tx_id = current_app.config['txids'].get(vehicle_id, '')
     asset_data = current_app.config['asset']
 
     asset_metadata = {
@@ -166,9 +142,9 @@ def send_data_to_bdb(telemetry_data):
     }
 
     # record data to bigchain
-    tx_id = record_data(bdb, asset_data, asset_metadata, keypair, tx_id)
+    tx_id = record_data(bdb, asset_data, asset_metadata, keypair, tx_id, vehicle_id)
     logger.debug('tx_id: ' + tx_id)
-    current_app.config['tx_id'] = tx_id
+    current_app.config['txids'].update({vehicle_id: tx_id})
 # end send_data_to_bdb
 
 
