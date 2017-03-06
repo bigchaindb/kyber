@@ -70,6 +70,7 @@ install_requires = [
     'logstats>=0.2.1',
     'flask>=0.10.1',
     'flask-restful~=0.3.0',
+    'flask-cors==2.1.2',
     'requests~=2.9',
     'gunicorn~=19.0',
     'multipipes~=0.1.0',
