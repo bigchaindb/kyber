@@ -40,7 +40,7 @@ const Assets = React.createClass({
         };
 
         const metadata = {
-            'mesage': value
+            'message': value
         };
 
         const transaction = makeCreateTransaction(

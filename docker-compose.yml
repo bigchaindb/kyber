@@ -42,7 +42,7 @@ services:
       BIGCHAINDB_KEYPAIR_PUBLIC: GW1nrdZm4mbVC8ePeiGWz6DqHexqewqy5teURVHi3RG4
       BIGCHAINDB_KEYPAIR_PRIVATE: 2kQgBtQnHoauw8QchKM7xYvEBW1QDoHzhBsCL9Vi1AzB
     ports:
-      - "9984"
+      - "49984:9984"
     command: bigchaindb start
 
   bdb-server-kyber:

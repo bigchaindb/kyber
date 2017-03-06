@@ -1,7 +1,6 @@
 import { safeMerge } from 'js-utility-belt/es6';
 import alt from '../alt';
 
-import parseEscrowData from '../../utils/cryptoconditions/parse_escrow_data';
 import {
     getStatus,
     getTransaction,
@@ -11,6 +10,11 @@ import {
 } from 'js-bigchaindb-quickstart';
 
 import { API_PATH } from '../../constants/application_constants';
+import parseEscrowData from '../../utils/cryptoconditions/parse_escrow_data';
+
+import {
+    getAssetIdFromTransaction
+} from '../../utils/bigchaindb/transactions';
 
 import TransactionActions from '../actions/transaction_actions';
 import TransactionSource from '../sources/transaction_source';
@@ -19,7 +23,7 @@ class TransactionStore {
     constructor() {
         this.transaction = null;
         this.transactionList = {};
-        this.outputList = [];
+        this.unspentTransactions = {};
         this.transactionMeta = {
             asset_id: null,
             err: null,
@@ -127,16 +131,26 @@ class TransactionStore {
     }
 
     onFetchOutputList({public_key, unspent}) {
-        this.transactionMeta.public_key = public_key;
-        this.transactionMeta.unspent = unspent;
-        this.getInstance().lookupOutputList();
+        if (!this.transactionMeta.isFetchingList) {
+            this.transactionMeta.isFetchingList = true;
+            this.transactionMeta.public_key = public_key;
+            this.transactionMeta.unspent = unspent;
+            this.getInstance().lookupOutputList();
+        }
     }
 
     onSuccessFetchOutputList(outputList) {
         if (outputList) {
-            this.outputList = outputList;
-            this.outputList.map((output) => {
-                this.postProcessOutput(output);
+            const {public_key} = this.transactionMeta;
+            this.unspentTransactions[public_key] = [];
+            outputList.map((output) => {
+                // fetch the transaction for each output
+                const txId = output.split("/")[2];
+                getTransaction(txId, API_PATH).then((transaction) => {
+                    this.unspentTransactions[public_key].push(transaction);
+                    // async changes, need to update state
+                    this.emitChange();
+                })
             });
             this.transactionMeta.err = null;
             this.transactionMeta.public_key = null;
@@ -145,31 +159,6 @@ class TransactionStore {
             this.transactionMeta.err = new Error('Problem fetching the transaction list');
         }
         this.transactionMeta.isFetchingList = false;
-    }
-
-    postProcessOutput(output) {
-        getTransaction(output.split("/")[2], API_PATH)
-            .then((tx) => {
-                const asset_id = this.getAssetIdFromTransaction(tx);
-                if (asset_id) {
-                    listTransactions({ asset_id }, API_PATH)
-                        .then((transactions) => {
-                            this.transactionList[asset_id] = transactions;
-                        })
-                }
-            })
-    }
-
-    getAssetIdFromTransaction(transaction){
-        let asset_id;
-        if (transaction && transaction.asset) {
-            if (transaction.asset.id) {
-                asset_id = transaction.asset.id;
-            } else {
-                asset_id = transaction.id;
-            }
-        }
-        return asset_id;
     }
 
 }

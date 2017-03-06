@@ -61,28 +61,6 @@ class AccountStore {
         processedAccount.ledger = connectToBigchainDBLedger(account);
         processedAccount.api = `http://${account.ledger.api}/api`;
 
-        // connectors
-        // try {
-        //     processedAccount.ledger.getConnectors()
-        //         .then((res) => {
-        //             processedAccount.connectors = res.connectors;
-        //             processedAccount.isConnector =
-        //                 res.connectors.filter((connector) => connector.vk === account.vk).length > 0;
-        //         });
-        // } catch (e) {
-        //     console.error(e);
-        // }
-        // assets
-        console.log('fetching transactions for account', account.vk);
-        // AssetActions.fetchAssetList.defer({
-        //     account: processedAccount
-        // });
-
-        TransactionActions.fetchOutputList.defer({
-            public_key: processedAccount.vk,
-            unspent: true
-        });
-
         return processedAccount;
     }
 

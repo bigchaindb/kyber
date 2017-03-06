@@ -1,0 +1,26 @@
+@import "variables";
+
+
+.transaction-container {
+    border: 1px solid #DDD;
+    padding: 1em;
+    margin: 0.5em;
+}
+
+.transaction-container-actions {
+    margin-top: 1em
+}
+
+.transaction-row-label,
+.transaction-row-value {
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+}
+
+.transaction-collapsible-container {
+    cursor: pointer;
+}
+
+.monospace {
+    font-family: "monospace";
+}

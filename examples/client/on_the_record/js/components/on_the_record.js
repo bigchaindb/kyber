@@ -4,6 +4,8 @@ import { Navbar } from 'react-bootstrap/lib';
 
 import Scroll from 'react-scroll';
 
+import { safeInvoke } from 'js-utility-belt/es6';
+
 import AccountList from '../../../js/react/components/account_list';
 import AccountDetail from '../../../js/react/components/account_detail';
 
@@ -14,15 +16,24 @@ import TransactionActions from '../../../js/react/actions/transaction_actions';
 import AssetActions from '../../../js/react/actions/asset_actions';
 
 import BigchainDBConnection from '../../../js/react/components/bigchaindb_connection';
+import TransactionDetail from '../../../js/react/components/transactions/transaction_detail';
+import TransactionList from '../../../js/react/components/transactions/transaction_list';
+
+import {
+    outputListContains
+} from '../../../js/utils/bigchaindb/transactions';
 
 
 const OnTheRecord = React.createClass({
     propTypes: {
         // Injected through BigchainDBConnection
         activeAccount: React.PropTypes.object,
+        activeAsset: React.PropTypes.string,
         assetList: React.PropTypes.object,
         assetMeta: React.PropTypes.object,
-        handleAccountChange: React.PropTypes.func
+        handleAccountChange: React.PropTypes.func,
+        handleAssetChange: React.PropTypes.func,
+        unspentTransactions: React.PropTypes.object
     },
 
     getInitialState() {
@@ -51,11 +62,11 @@ const OnTheRecord = React.createClass({
         }
     },
 
-    fetchTransactionList({ account, search }) {
+    fetchWallet({ account, search }) {
         if (account) {
             TransactionActions.fetchOutputList({
                 public_key: account.vk,
-                unspent: false
+                unspent: true
             });
             Scroll.animateScroll.scrollToBottom();
         }
@@ -63,7 +74,12 @@ const OnTheRecord = React.createClass({
 
     handleAccountChangeAndScroll(account) {
         this.props.handleAccountChange(account);
+        this.fetchWallet({ account });
         Scroll.animateScroll.scrollToBottom();
+    },
+
+    handleAssetChange(asset) {
+        this.props.handleAssetChange(asset);
     },
 
     handleSearch(query) {
@@ -82,14 +98,32 @@ const OnTheRecord = React.createClass({
     render() {
         const {
             activeAccount,
+            activeAsset,
             assetList,
             assetMeta,
-            transactionList
+            transactionList,
+            unspentTransactions
         } = this.props;
 
         const assetListForAccount = (
             assetList && activeAccount && Array.isArray(assetList[activeAccount.vk])) ?
             assetList[activeAccount.vk] : null;
+
+        const transactionListForAsset =
+            (transactionList && activeAsset && Array.isArray(transactionList[activeAsset])) ?
+                transactionList[activeAsset] : null;
+
+        if (transactionListForAsset && transactionListForAsset[0]){
+            console.log(transactionListForAsset[0], activeAccount.vk)
+            console.log(outputListContains(transactionListForAsset[0].outputs, 'public_keys', activeAccount.vk))
+        }
+
+        const unspentTransactionsForAccount = (
+            unspentTransactions && activeAccount &&
+            Array.isArray(unspentTransactions[activeAccount.vk])) ? unspentTransactions[activeAccount.vk] : null;
+
+        console.log('unspentTransactionsForAccount',unspentTransactionsForAccount)
+
         return (
             <div>
                 <Navbar fixedTop inverse>
@@ -104,6 +138,7 @@ const OnTheRecord = React.createClass({
                             <AccountList
                                 activeAccount={activeAccount}
                                 appName="ontherecord"
+                                assetList={Object.keys(transactionList)}
                                 handleAccountClick={this.handleAccountChangeAndScroll}>
                                 <AccountDetail />
                             </AccountList>
@@ -111,16 +146,13 @@ const OnTheRecord = React.createClass({
                     </div>
                     <div id="page-content-wrapper">
                         <div className="page-content">
-                            {
-                                Object.keys(transactionList).map((assetId) => {
-                                    return (
-                                        <div key={assetId}>{assetId}</div>
-                                    )
-                                })
-                            }
-                            {/*<Assets*/}
-                                {/*activeAccount={activeAccount}*/}
-                                {/*assetList={assetListForAccount} />*/}
+                            <TransactionList
+                                transactionList={unspentTransactionsForAccount}>
+                                <TransactionDetail />
+                            </TransactionList>
+                            <Assets
+                                activeAccount={activeAccount}
+                                assetList={assetListForAccount} />
                         </div>
                     </div>
                 </div>

@@ -73,13 +73,13 @@ docker-compose ps
 ```
        Name                Command          State                              Ports                             
 ----------------------------------------------------------------------------------------------------------------
-kyber_bdb-server_1   bigchaindb start       Up      0.0.0.0:32773->9984/tcp                                      
+kyber_bdb-server_1   bigchaindb start       Up      0.0.0.0:49984->9984/tcp                                      
 kyber_rdb_1          rethinkdb --bind all   Up      0.0.0.0:32772->28015/tcp, 29015/tcp, 0.0.0.0:58585->8080/tcp 
 ...
 ```
 
 Which means that the internal docker port for the API is `9984` 
-and the external one is `32773`.
+and the external one is `49984`.
 
 The external ports might change, so for the following use the ports as indicated by `docker-compose ps`.
 
@@ -154,7 +154,7 @@ cd tutorials/
 
 Run each tutorial as a module. The tutorials require a `BDB_SERVER_URL`. 
 If you are running the server locally with docker we needed to remember the external port `<external-docker-port>` of the API in docker (run `docker-compose ps` in the repo root).
-In our case the `BDB_SERVER_URL` was `http://localhost:32773`.
+In our case the `BDB_SERVER_URL` was `http://localhost:49984`.
 
 For example:
 
@@ -201,7 +201,7 @@ We can now build the JavaScript bundles using `npm`.
 Make sure you are in the `tutorials` directory first.
 
 The tutorials require a `BDB_SERVER_URL`. If you are running the server locally with docker we needed to remember the external port `<external-docker-port>` of the API in docker (run `docker-compose ps` in the repo root).
-In our case the `BDB_SERVER_URL` was `http://localhost:32773`.
+In our case the `BDB_SERVER_URL` was `http://localhost:49984`.
 
 ```bash
 BDB_SERVER_URL=<bigchaindb_server_url> npm install
