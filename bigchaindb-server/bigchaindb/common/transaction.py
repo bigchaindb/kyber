@@ -693,8 +693,8 @@ class Transaction(object):
             tx_partial = Transaction(self.operation, self.asset, [input_],
                                      self.outputs, self.metadata,
                                      self.version)
+
             tx_partial_dict = tx_partial.to_dict()
-            tx_partial_dict['id'] = self.id
             tx_partial_dict = Transaction._remove_signatures(tx_partial_dict)
             tx_serialized = Transaction._to_str(tx_partial_dict)
             self._sign_input(input_, index, tx_serialized, key_pairs)
@@ -855,7 +855,6 @@ class Transaction(object):
             tx = Transaction(self.operation, self.asset, [input_],
                              self.outputs, self.metadata, self.version)
             tx_dict = tx.to_dict()
-            tx_dict['id'] = self.id
             tx_dict = Transaction._remove_signatures(tx_dict)
             tx_serialized = Transaction._to_str(tx_dict)
 

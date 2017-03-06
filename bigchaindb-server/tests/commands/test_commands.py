@@ -132,8 +132,9 @@ def test_bigchain_export_my_pubkey_when_pubkey_set(capsys, monkeypatch):
     _, _ = capsys.readouterr()  # has the effect of clearing capsys
     run_export_my_pubkey(args)
     out, err = capsys.readouterr()
-    assert out == config['keypair']['public'] + '\n'
-    assert out == 'Charlie_Bucket\n'
+    lines = out.splitlines()
+    assert config['keypair']['public'] in lines
+    assert 'Charlie_Bucket' in lines
 
 
 def test_bigchain_export_my_pubkey_when_pubkey_not_set(monkeypatch):
@@ -302,6 +303,64 @@ def test_allow_temp_keypair_doesnt_override_if_keypair_found(mock_gen_keypair,
     assert bigchaindb.config['keypair']['public'] == original_public_key
 
 
+def test_run_start_when_db_already_exists(mocker, monkeypatch, run_start_args):
+    from bigchaindb.commands.bigchain import run_start
+    from bigchaindb.common.exceptions import DatabaseAlreadyExists
+    mocked_start = mocker.patch('bigchaindb.processes.start')
+
+    def mock_run_init():
+        raise DatabaseAlreadyExists()
+
+    monkeypatch.setattr(
+        'bigchaindb.commands.bigchain._run_init', mock_run_init)
+    run_start(run_start_args)
+    assert mocked_start.called
+
+
+def test_run_start_when_keypair_not_found(mocker, monkeypatch, run_start_args):
+    from bigchaindb.commands.bigchain import run_start
+    from bigchaindb.commands.messages import CANNOT_START_KEYPAIR_NOT_FOUND
+    from bigchaindb.common.exceptions import KeypairNotFoundException
+    mocked_start = mocker.patch('bigchaindb.processes.start')
+
+    def mock_run_init():
+        raise KeypairNotFoundException()
+
+    monkeypatch.setattr(
+        'bigchaindb.commands.bigchain._run_init', mock_run_init)
+
+    with pytest.raises(SystemExit) as exc:
+        run_start(run_start_args)
+
+    assert len(exc.value.args) == 1
+    assert exc.value.args[0] == CANNOT_START_KEYPAIR_NOT_FOUND
+    assert not mocked_start.called
+
+
+def test_run_start_when_start_rethinkdb_fails(mocker,
+                                              monkeypatch,
+                                              run_start_args):
+    from bigchaindb.commands.bigchain import run_start
+    from bigchaindb.commands.messages import RETHINKDB_STARTUP_ERROR
+    from bigchaindb.common.exceptions import StartupError
+    run_start_args.start_rethinkdb = True
+    mocked_start = mocker.patch('bigchaindb.processes.start')
+    err_msg = 'Error starting rethinkdb.'
+
+    def mock_start_rethinkdb():
+        raise StartupError(err_msg)
+
+    monkeypatch.setattr(
+        'bigchaindb.commands.utils.start_rethinkdb', mock_start_rethinkdb)
+
+    with pytest.raises(SystemExit) as exc:
+        run_start(run_start_args)
+
+    assert len(exc.value.args) == 1
+    assert exc.value.args[0] == RETHINKDB_STARTUP_ERROR.format(err_msg)
+    assert not mocked_start.called
+
+
 @patch('argparse.ArgumentParser.parse_args')
 @patch('bigchaindb.commands.utils.base_parser')
 @patch('bigchaindb.commands.utils.start')
@@ -395,14 +454,18 @@ def test_run_add_replicas(mock_add_replicas):
     mock_add_replicas.reset_mock()
 
     # test add_replicas with `OperationError`
-    mock_add_replicas.side_effect = OperationError()
-    assert run_add_replicas(args) is None
+    mock_add_replicas.side_effect = OperationError('err')
+    with pytest.raises(SystemExit) as exc:
+        run_add_replicas(args)
+    assert exc.value.args == ('err',)
     assert mock_add_replicas.call_count == 1
     mock_add_replicas.reset_mock()
 
     # test add_replicas with `NotImplementedError`
-    mock_add_replicas.side_effect = NotImplementedError()
-    assert run_add_replicas(args) is None
+    mock_add_replicas.side_effect = NotImplementedError('err')
+    with pytest.raises(SystemExit) as exc:
+        run_add_replicas(args)
+    assert exc.value.args == ('err',)
     assert mock_add_replicas.call_count == 1
     mock_add_replicas.reset_mock()
 
@@ -422,14 +485,18 @@ def test_run_remove_replicas(mock_remove_replicas):
     mock_remove_replicas.reset_mock()
 
     # test add_replicas with `OperationError`
-    mock_remove_replicas.side_effect = OperationError()
-    assert run_remove_replicas(args) is None
+    mock_remove_replicas.side_effect = OperationError('err')
+    with pytest.raises(SystemExit) as exc:
+        run_remove_replicas(args)
+    assert exc.value.args == ('err',)
     assert mock_remove_replicas.call_count == 1
     mock_remove_replicas.reset_mock()
 
     # test add_replicas with `NotImplementedError`
-    mock_remove_replicas.side_effect = NotImplementedError()
-    assert run_remove_replicas(args) is None
+    mock_remove_replicas.side_effect = NotImplementedError('err')
+    with pytest.raises(SystemExit) as exc:
+        run_remove_replicas(args)
+    assert exc.value.args == ('err',)
     assert mock_remove_replicas.call_count == 1
     mock_remove_replicas.reset_mock()
 

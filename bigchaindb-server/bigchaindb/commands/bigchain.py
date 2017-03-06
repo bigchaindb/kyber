@@ -26,6 +26,10 @@ from bigchaindb.backend.admin import (set_replicas, set_shards, add_replicas,
                                       remove_replicas)
 from bigchaindb.backend.exceptions import OperationError
 from bigchaindb.commands import utils
+from bigchaindb.commands.messages import (
+    CANNOT_START_KEYPAIR_NOT_FOUND,
+    RETHINKDB_STARTUP_ERROR,
+)
 from bigchaindb import processes
 
 
@@ -122,7 +126,6 @@ def run_configure(args, skip_if_exists=False):
 def run_export_my_pubkey(args):
     """Export this node's public key to standard output
     """
-    logger.debug('bigchaindb args = {}'.format(args))
     bigchaindb.config_utils.autoconfigure(filename=args.config, force=True)
     pubkey = bigchaindb.config['keypair']['public']
     if pubkey is not None:
@@ -141,9 +144,8 @@ def _run_init():
 
     schema.init_database(connection=b.connection)
 
-    logger.info('Create genesis block.')
     b.create_genesis_block()
-    logger.info('Done, have fun!')
+    logger.info('Genesis block created.')
 
 
 def run_init(args):
@@ -176,8 +178,7 @@ def run_drop(args):
 
 def run_start(args):
     """Start the processes to run the node"""
-    logger.info('BigchainDB Version {}'.format(bigchaindb.__version__))
-
+    logger.info('BigchainDB Version %s', bigchaindb.__version__)
     bigchaindb.config_utils.autoconfigure(filename=args.config, force=True)
 
     if args.allow_temp_keypair:
@@ -194,7 +195,7 @@ def run_start(args):
         try:
             proc = utils.start_rethinkdb()
         except StartupError as e:
-            sys.exit('Error starting RethinkDB, reason is: {}'.format(e))
+            sys.exit(RETHINKDB_STARTUP_ERROR.format(e))
         logger.info('RethinkDB started with PID %s' % proc.pid)
 
     try:
@@ -202,8 +203,7 @@ def run_start(args):
     except DatabaseAlreadyExists:
         pass
     except KeypairNotFoundException:
-        sys.exit("Can't start BigchainDB, no keypair found. "
-                 'Did you run `bigchaindb configure`?')
+        sys.exit(CANNOT_START_KEYPAIR_NOT_FOUND)
 
     logger.info('Starting BigchainDB main process with public key %s',
                 bigchaindb.config['keypair']['public'])
@@ -248,7 +248,7 @@ def run_set_shards(args):
     try:
         set_shards(conn, shards=args.num_shards)
     except OperationError as e:
-        logger.warn(e)
+        sys.exit(str(e))
 
 
 def run_set_replicas(args):
@@ -256,7 +256,7 @@ def run_set_replicas(args):
     try:
         set_replicas(conn, replicas=args.num_replicas)
     except OperationError as e:
-        logger.warn(e)
+        sys.exit(str(e))
 
 
 def run_add_replicas(args):
@@ -267,9 +267,9 @@ def run_add_replicas(args):
     try:
         add_replicas(conn, args.replicas)
     except (OperationError, NotImplementedError) as e:
-        logger.warn(e)
+        sys.exit(str(e))
     else:
-        logger.info('Added {} to the replicaset.'.format(args.replicas))
+        print('Added {} to the replicaset.'.format(args.replicas))
 
 
 def run_remove_replicas(args):
@@ -280,9 +280,9 @@ def run_remove_replicas(args):
     try:
         remove_replicas(conn, args.replicas)
     except (OperationError, NotImplementedError) as e:
-        logger.warn(e)
+        sys.exit(str(e))
     else:
-        logger.info('Removed {} from the replicaset.'.format(args.replicas))
+        print('Removed {} from the replicaset.'.format(args.replicas))
 
 
 def create_parser():
