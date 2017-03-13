@@ -2,38 +2,26 @@ import React from 'react';
 
 import { Navbar } from 'react-bootstrap/lib';
 
-import Scroll from 'react-scroll';
-
 import { safeInvoke } from 'js-utility-belt/es6';
 
 import AccountList from '../../../js/react/components/account_list';
 import AccountDetail from '../../../js/react/components/account_detail';
 
-import Assets from './assets';
+import InputTransaction from './input_transaction';
 import Search from '../../../js/react/components/search';
 
 import TransactionActions from '../../../js/react/actions/transaction_actions';
-import AssetActions from '../../../js/react/actions/asset_actions';
 
 import BigchainDBConnection from '../../../js/react/components/bigchaindb_connection';
 import TransactionDetail from '../../../js/react/components/transactions/transaction_detail';
 import TransactionList from '../../../js/react/components/transactions/transaction_list';
 
-import {
-    outputListContains
-} from '../../../js/utils/bigchaindb/transactions';
-
-
 const OnTheRecord = React.createClass({
     propTypes: {
         // Injected through BigchainDBConnection
         activeAccount: React.PropTypes.object,
-        activeAsset: React.PropTypes.string,
-        assetList: React.PropTypes.object,
-        assetMeta: React.PropTypes.object,
         handleAccountChange: React.PropTypes.func,
-        handleAssetChange: React.PropTypes.func,
-        unspentTransactions: React.PropTypes.object
+        wallets: React.PropTypes.object
     },
 
     getInitialState() {
@@ -42,44 +30,31 @@ const OnTheRecord = React.createClass({
         };
     },
 
-    fetchAssetList({ account, search }) {
-        if (account) {
-            AssetActions.fetchAssetList({
-                account,
-                search,
-                blockWhenFetching: true
-            });
-            Scroll.animateScroll.scrollToBottom();
-        }
-    },
-
-    fetchChat(account){
-        if (account) {
-            TransactionActions.fetchOutputList({
-                public_key: account.vk,
-                unspent: false
+    fetchTransactionListForAsset(assetId) {
+        if (assetId) {
+            console.log('assetId', assetId)
+            TransactionActions.fetchTransactionList({
+                assetId
             })
         }
     },
 
-    fetchWallet({ account, search }) {
+    fetchUnspents(account) {
         if (account) {
             TransactionActions.fetchOutputList({
                 public_key: account.vk,
                 unspent: true
             });
-            Scroll.animateScroll.scrollToBottom();
         }
     },
 
-    handleAccountChangeAndScroll(account) {
+    handleAccountChange(account) {
         this.props.handleAccountChange(account);
-        this.fetchWallet({ account });
-        Scroll.animateScroll.scrollToBottom();
+        this.fetchUnspents(account);
     },
 
-    handleAssetChange(asset) {
-        this.props.handleAssetChange(asset);
+    handleAssetClick(assetId) {
+        this.fetchTransactionListForAsset(assetId)
     },
 
     handleSearch(query) {
@@ -88,41 +63,19 @@ const OnTheRecord = React.createClass({
         this.setState({
             search: query
         });
-
-        this.fetchAssetList({
-            account: activeAccount,
-            search: query
-        });
     },
 
     render() {
         const {
             activeAccount,
-            activeAsset,
-            assetList,
-            assetMeta,
-            transactionList,
-            unspentTransactions
+            wallets
         } = this.props;
 
-        const assetListForAccount = (
-            assetList && activeAccount && Array.isArray(assetList[activeAccount.vk])) ?
-            assetList[activeAccount.vk] : null;
+        const walletForAccount = (wallets && activeAccount && wallets[activeAccount.vk]) ?
+            wallets[activeAccount.vk] : null;
 
-        const transactionListForAsset =
-            (transactionList && activeAsset && Array.isArray(transactionList[activeAsset])) ?
-                transactionList[activeAsset] : null;
-
-        if (transactionListForAsset && transactionListForAsset[0]){
-            console.log(transactionListForAsset[0], activeAccount.vk)
-            console.log(outputListContains(transactionListForAsset[0].outputs, 'public_keys', activeAccount.vk))
-        }
-
-        const unspentTransactionsForAccount = (
-            unspentTransactions && activeAccount &&
-            Array.isArray(unspentTransactions[activeAccount.vk])) ? unspentTransactions[activeAccount.vk] : null;
-
-        console.log('unspentTransactionsForAccount',unspentTransactionsForAccount)
+        const unspentsForAccount = (walletForAccount && Array.isArray(walletForAccount.unspents)) ?
+            walletForAccount.unspents : null;
 
         return (
             <div>
@@ -134,25 +87,23 @@ const OnTheRecord = React.createClass({
                         <div className="sidebar-nav">
                             <Search
                                 handleSearch={this.handleSearch}
-                                initialQuery={assetMeta.search} />
+                                initialQuery="" />
                             <AccountList
                                 activeAccount={activeAccount}
                                 appName="ontherecord"
-                                assetList={Object.keys(transactionList)}
-                                handleAccountClick={this.handleAccountChangeAndScroll}>
+                                handleAccountClick={this.handleAccountChange}>
                                 <AccountDetail />
                             </AccountList>
                         </div>
                     </div>
                     <div id="page-content-wrapper">
+                        <InputTransaction activeAccount={activeAccount} />
                         <div className="page-content">
                             <TransactionList
-                                transactionList={unspentTransactionsForAccount}>
+                                transactionList={unspentsForAccount}
+                                handleAssetClick={this.handleAssetClick}>
                                 <TransactionDetail />
                             </TransactionList>
-                            <Assets
-                                activeAccount={activeAccount}
-                                assetList={assetListForAccount} />
                         </div>
                     </div>
                 </div>

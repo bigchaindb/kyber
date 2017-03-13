@@ -2,7 +2,6 @@ import React from 'react';
 
 import { safeInvoke, safeMerge } from 'js-utility-belt/es6';
 
-import AssetStore from '../stores/asset_store';
 import AccountStore from '../stores/account_store';
 import TransactionStore from '../stores/transaction_store';
 
@@ -13,29 +12,24 @@ export default function BigchainDBConnection(Component) {
 
         getInitialState() {
             const accountStore = AccountStore.getState();
-            const assetStore = AssetStore.getState();
             const transactionStore = TransactionStore.getState();
 
             return safeMerge(
                 {
-                    activeAccount: null,
-                    activeAsset: null
+                    activeAccount: null
                 },
                 accountStore,
-                assetStore,
                 transactionStore
             );
         },
 
         componentDidMount() {
             AccountStore.listen(this.onAccountStoreChange);
-            AssetStore.listen(this.onChange);
             TransactionStore.listen(this.onChange);
         },
 
         componentWillUnmount() {
             AccountStore.unlisten(this.onAccountStoreChange);
-            AssetStore.unlisten(this.onChange);
             TransactionStore.unlisten(this.onChange)
         },
 
@@ -77,12 +71,6 @@ export default function BigchainDBConnection(Component) {
             }
         },
 
-        handleAssetChange(asset) {
-            this.setState({
-                activeAsset: asset
-            });
-        },
-
         resetActiveAccount() {
             this.handleAccountChange(null);
         },
@@ -93,7 +81,6 @@ export default function BigchainDBConnection(Component) {
                     ref="component"
                     {...this.state}
                     handleAccountChange={this.handleAccountChange}
-                    handleAssetChange={this.handleAssetChange}
                     resetActiveAccount={this.resetActiveAccount} />
             );
         }

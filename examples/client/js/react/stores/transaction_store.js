@@ -23,7 +23,8 @@ class TransactionStore {
     constructor() {
         this.transaction = null;
         this.transactionList = {};
-        this.unspentTransactions = {};
+        this.assets = {};
+        this.wallets = {};
         this.transactionMeta = {
             asset_id: null,
             err: null,
@@ -37,10 +38,10 @@ class TransactionStore {
         this.registerAsync(TransactionSource);
     }
 
-    onFetchTransactionList({ asset_id, operation, search, blockWhenFetching }) {
+    onFetchTransactionList({ assetId, operation, search, blockWhenFetching }) {
         if (!blockWhenFetching ||
             (blockWhenFetching && !this.transactionMeta.isFetchingList)) {
-            this.transactionMeta.asset_id = asset_id;
+            this.transactionMeta.asset_id = assetId;
             this.transactionMeta.operation = operation;
             this.transactionMeta.search = search;
             this.transactionMeta.isFetchingList = true;
@@ -50,8 +51,10 @@ class TransactionStore {
 
     onSuccessFetchTransactionList(transactionList) {
         if (transactionList) {
-            console.log('onSuccessFetchTransactionList', transactionList)
-            // this.transactionList[asset_id] = ...
+            if (this.transactionMeta.asset_id) {
+                this.assets[this.transactionMeta.asset_id] = transactionList
+            }
+            this.transactionList = transactionList;
             this.transactionMeta.err = null;
             this.transactionMeta.asset_id = null;
             this.transactionMeta.operation = null;
@@ -142,14 +145,24 @@ class TransactionStore {
     onSuccessFetchOutputList(outputList) {
         if (outputList) {
             const {public_key} = this.transactionMeta;
-            this.unspentTransactions[public_key] = [];
+            let wallets = {};
+            wallets[public_key] = {};
+            wallets[public_key].unspents = [];
+            wallets[public_key].assets = [];
+
+            let counter = 0;
             outputList.map((output) => {
                 // fetch the transaction for each output
                 const txId = output.split("/")[2];
                 getTransaction(txId, API_PATH).then((transaction) => {
-                    this.unspentTransactions[public_key].push(transaction);
+                    wallets[public_key].unspents.push(transaction);
+                    wallets[public_key].assets.push(getAssetIdFromTransaction(transaction));
                     // async changes, need to update state
-                    this.emitChange();
+                    counter++;
+                    if (counter == outputList.length){
+                        this.wallets = wallets;
+                        this.emitChange();
+                    }
                 })
             });
             this.transactionMeta.err = null;

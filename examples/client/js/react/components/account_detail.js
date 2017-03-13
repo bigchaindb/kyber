@@ -6,7 +6,6 @@ import { Row } from 'react-bootstrap/lib';
 
 const AccountDetail = ({
         account,
-        assetList,
         isActive,
         handleClick
     }) => {
@@ -20,17 +19,6 @@ const AccountDetail = ({
             <div className="list-row-detail">
                 {account.vk}
             </div>
-            <div>
-                {
-                    assetList.map((assetId) => {
-                        return (
-                            <AssetItem
-                                key={assetId}
-                                asset={assetId}/>
-                        )
-                    })
-                }
-            </div>
         </Row>
     );
 };
@@ -43,28 +31,3 @@ AccountDetail.propTypes = {
 };
 
 export default AccountDetail;
-
-const AssetItem = React.createClass({
-    propTypes: {
-        asset: React.PropTypes.string,
-        // children: React.PropTypes.node,
-        handleClick: React.PropTypes.func,
-        // isActive: React.PropTypes.bool
-    },
-
-    handleClick() {
-        const { asset, handleClick } = this.props;
-        safeInvoke(handleClick, asset);
-    },
-
-    render() {
-        const { asset } = this.props;
-        return (
-            <div className="asset"
-                key={asset}
-                onClick={this.handleClick}>
-                    {asset}
-            </div>
-       );
-   }
-});

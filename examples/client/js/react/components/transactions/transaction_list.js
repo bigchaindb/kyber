@@ -1,31 +1,31 @@
 import React from 'react';
 
+import { safeInvoke } from 'js-utility-belt/es6';
 
 const TransactionList = React.createClass({
     propTypes: {
         children: React.PropTypes.node,
         transactionList : React.PropTypes.array,
-        handleTransactionClick: React.PropTypes.func
+        handleAssetClick: React.PropTypes.func
     },
 
 
     render() {
         const {
             children,
-            handleTransactionClick,
+            handleAssetClick,
             transactionList
         } = this.props;
 
-        console.log(transactionList)
         if (!transactionList) return null;
         return (
-            <div>
+            <div className="transaction-list">
                 {
                     transactionList.map(transaction =>
                         <TransactionWrapper
                             key={transaction.id}
                             transaction={transaction}
-                            handleClick={handleTransactionClick}>
+                            handleAssetClick={handleAssetClick}>
                             {children}
                         </TransactionWrapper>
                     )
@@ -38,18 +38,14 @@ const TransactionList = React.createClass({
 const TransactionWrapper = React.createClass({
     propTypes: {
         children: React.PropTypes.node,
-        handleClick: React.PropTypes.func,
+        handleAssetClick: React.PropTypes.func,
         transaction: React.PropTypes.object
-    },
-
-    handleClick() {
-        const { account, handleClick } = this.props;
-        safeInvoke(handleClick, account);
     },
 
     render() {
         const {
             children,
+            handleAssetClick,
             transaction
         } = this.props;
 
@@ -59,7 +55,7 @@ const TransactionWrapper = React.createClass({
                     React.Children.map(children, (child) =>
                         React.cloneElement(child, {
                             transaction,
-                            handleClick: this.handleClick
+                            handleAssetClick: handleAssetClick
                         })
                     )
                 }

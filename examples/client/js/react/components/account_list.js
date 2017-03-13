@@ -10,7 +10,6 @@ import Spinner from './spinner';
 const AccountList = React.createClass({
     propTypes: {
         activeAccount: React.PropTypes.object,
-        assetList: React.PropTypes.array,
         appName: React.PropTypes.string,
         children: React.PropTypes.node,
         className: React.PropTypes.string,
@@ -43,7 +42,6 @@ const AccountList = React.createClass({
     render() {
         const {
             activeAccount,
-            assetList,
             children,
             className,
             handleAccountClick
@@ -64,7 +62,6 @@ const AccountList = React.createClass({
                             <AccountWrapper
                                 key={account.vk}
                                 account={account}
-                                assetList={assetList}
                                 isActive={activeAccount === account}
                                 handleClick={handleAccountClick}>
                                 {children}
@@ -85,7 +82,6 @@ const AccountList = React.createClass({
 const AccountWrapper = React.createClass({
     propTypes: {
         account: React.PropTypes.object,
-        assetList: React.PropTypes.array,
         children: React.PropTypes.node,
         handleClick: React.PropTypes.func,
         isActive: React.PropTypes.bool
@@ -99,7 +95,6 @@ const AccountWrapper = React.createClass({
     render() {
         const {
             account,
-            assetList,
             isActive,
             children
         } = this.props;
@@ -110,7 +105,6 @@ const AccountWrapper = React.createClass({
                     React.Children.map(children, (child) =>
                         React.cloneElement(child, {
                             account,
-                            assetList,
                             isActive,
                             handleClick: this.handleClick
                         })

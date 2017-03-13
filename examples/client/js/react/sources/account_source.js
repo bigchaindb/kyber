@@ -22,7 +22,7 @@ const mockAccounts = {
                 "id": 0,
                 "ws": "localhost:48888"
             },
-            "name": "Bob",
+            "name": "Bruce",
             "sk": "4HhPSKV9QGGJr2U6Mq5DoZRoqrCU38RfGK6gDtXKAn1L",
             "vk": "AkZUXyGrEygFF6R8vQveE2Wswkn4rSudEBuUSaV7Wiin"
         },
@@ -33,9 +33,20 @@ const mockAccounts = {
                 "id": 0,
                 "ws": "localhost:48888"
             },
-            "name": "Alice",
+            "name": "Albi",
             "sk": "GM5K9Nm6JbTJNKgfJZMCw87sgWgbxTF5ybju8DAReayW",
             "vk": "4NSFHRzjjQNJ6kpCkXfeUciGfCme6H1htVNLAgymJ7bu"
+        },
+        {
+            "id": "ab0890bd-dfe5-49fb-9398-09a85e0229ff",
+            "ledger": {
+                "api": "localhost:8000",
+                "id": 1,
+                "ws": "localhost:48888"
+            },
+            "name": "Dimi",
+            "sk": "2HhWSNirT4rG3WaZ88uL6eyx8p1RTNSCR2ZaCdJMiEt9",
+            "vk": "4hfGNaQAZkwBk4maYxeAYUcuBDjkb9euQTGCi1d8QdhG"
         }
     ]
 };

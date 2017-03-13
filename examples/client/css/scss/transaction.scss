@@ -5,6 +5,10 @@
     border: 1px solid #DDD;
     padding: 1em;
     margin: 0.5em;
+    &:hover {
+        background: white;
+        border: 1px solid $ascribe-pink;
+    }
 }
 
 .transaction-container-actions {

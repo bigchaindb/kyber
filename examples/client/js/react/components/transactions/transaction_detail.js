@@ -4,6 +4,8 @@ import { Row, Col, Glyphicon } from 'react-bootstrap/lib';
 import classnames from 'classnames';
 import moment from 'moment';
 
+import { safeInvoke } from 'js-utility-belt/es6';
+
 import {getAssetIdFromTransaction} from '../../../utils/bigchaindb/transactions';
 
 
@@ -11,39 +13,33 @@ const TransactionDetail = React.createClass({
     propTypes: {
         transaction: React.PropTypes.object,
         className: React.PropTypes.string,
-        onClick: React.PropTypes.func
+        handleAssetClick: React.PropTypes.func
     },
 
-    getTransactionContent() {
+    handleAssetClick() {
         const {
-            asset,
-            assetContent
+            handleAssetClick,
+            transaction
         } = this.props;
-
-        if (assetContent) {
-            return assetContent;
-        }
-        // TODO: Validate
-        const { data: { payload: { content } } = {} } = asset.transaction;
-        return content || '-';
+        safeInvoke(handleAssetClick, getAssetIdFromTransaction(transaction))
     },
-
-
 
     render() {
         const {
             transaction,
-            className,
-            onClick
+            className
         } = this.props;
         // const timestamp =
         //     moment(parseInt(asset.transaction.timestamp, 10) * 1000).toDate().toGMTString();
 
         return (
-            <div className={classnames('transaction-container', className)}>
+            <div className={classnames('transaction-container', className)} >
                 <div className="transaction-container-summary">
                     <TransactionRow label="ID" value={transaction.id} />
-                    <TransactionRow label="AssetID" value={getAssetIdFromTransaction(transaction)} />
+                    <TransactionRow
+                        label="AssetID"
+                        handleClick={this.handleAssetClick}
+                        value={getAssetIdFromTransaction(transaction)} />
                     <TransactionRow label="Operation" value={transaction.operation} />
                     <TransactionRow label="Version" value={transaction.version} />
                     <TransactionRow
@@ -54,11 +50,14 @@ const TransactionDetail = React.createClass({
                         value={JSON.stringify(transaction.asset, null, 4)}/>
                     <TransactionRowCollapsible
                         label="Meta Data"
-                        value={JSON.stringify(transaction.metadata, null, 4)}/>
+                        value={JSON.stringify(transaction.metadata, null, 4)}
+                        collapsed={false}/>
                     <TransactionRowCollapsible
-                        label="Inputs" value={JSON.stringify(transaction.inputs, null, 4)}/>
+                        label="Inputs"
+                        value={JSON.stringify(transaction.inputs, null, 4)}/>
                     <TransactionRowCollapsible
-                        label="Outputs" value={JSON.stringify(transaction.outputs, null, 4)}/>
+                        label="Outputs"
+                        value={JSON.stringify(transaction.outputs, null, 4)}/>
                 </div>
             </div>
         );
@@ -68,20 +67,20 @@ const TransactionDetail = React.createClass({
 const TransactionRow = React.createClass({
     propTypes: {
         label: React.PropTypes.string,
+        handleClick: React.PropTypes.func,
         value: React.PropTypes.string,
         className: React.PropTypes.string,
-        onClick: React.PropTypes.func
     },
 
     render() {
         const {
             label,
             value,
+            handleClick,
             className,
-            onClick
         } = this.props;
         return (
-            <Row>
+            <Row onClick={handleClick}>
                 <Col xs={2} sm={3} className="transaction-row-label">
                     {label}
                 </Col>
@@ -98,12 +97,18 @@ const TransactionRowCollapsible = React.createClass({
         label: React.PropTypes.string,
         value: React.PropTypes.string,
         className: React.PropTypes.string,
-        onClick: React.PropTypes.func
+        collapsed: React.PropTypes.bool
+    },
+
+    getDefaultProps() {
+        return {
+            collapsed: true
+        }
     },
 
     getInitialState() {
         return {
-            collapsed: true
+            collapsed: this.props.collapsed
         }
     },
 
@@ -118,7 +123,6 @@ const TransactionRowCollapsible = React.createClass({
             label,
             value,
             className,
-            onClick
         } = this.props;
 
         const {
