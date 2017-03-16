@@ -5,6 +5,9 @@
         font-size: smaller;
         background: white;
         padding: 4px;
+        border: none;
+        background: rgba(0,0,0,0);
+        color: darken(aquamarine, 50%);
     }
 
     .asset-container {
@@ -23,13 +26,32 @@
         padding-top: 1em;
     }
 
-    .input-content {
+    .input-content-fixed {
         position: fixed;
         background: white;
         z-index: 100;
     }
 
+    .input-content-panel{
+        border: 1px solid rgba(0,0,0,0);
+        background: lighten(aquamarine, 20%);
+        font-family: "Droid Sans Mono",Menlo,Monaco,Consolas,"Courier New",monospace;
+    }
+
     .transaction-list {
         margin-top: 60px;
+    }
+
+    .transaction-panel {
+        border-bottom: 1px solid darken(aquamarine, 40%);
+        border-left: 1px solid rgba(0,0,0,0);
+        border-right: 1px solid rgba(0,0,0,0);
+        border-top: 1px solid rgba(0,0,0,0);
+        &:hover {
+            background: white;
+            border: 1px solid darken(aquamarine, 40%);
+        }
+        margin-bottom: 1em;
+        max-width: 800px;
     }
 }

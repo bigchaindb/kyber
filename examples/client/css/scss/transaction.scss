@@ -2,17 +2,24 @@
 
 
 .transaction-container {
-    border: 1px solid #DDD;
-    padding: 1em;
-    margin: 0.5em;
-    &:hover {
-        background: white;
-        border: 1px solid $ascribe-pink;
-    }
+
 }
 
 .transaction-container-actions {
     margin-top: 1em
+}
+
+.transaction-header {
+    background: lighten(aquamarine, 20%);
+    border-bottom: 1px solid darken(aquamarine, 40%);
+    font-family: "Droid Sans Mono",Menlo,Monaco,Consolas,"Courier New",monospace;
+    margin-bottom: 1em;
+    padding: 0.4em 1em;
+}
+
+.transaction-body {
+    font-family: "Droid Sans Mono",Menlo,Monaco,Consolas,"Courier New",monospace;
+    padding: 0.4em 1em;
 }
 
 .transaction-row-label,
@@ -23,6 +30,34 @@
 
 .transaction-collapsible-container {
     cursor: pointer;
+}
+
+.transaction-flow-row {
+    margin: 1em;
+}
+
+.transaction-flow-col {
+    padding: 0;
+}
+
+.transaction-flow-col-left {
+}
+
+.transaction-flow-title {
+    margin-bottom: 1em;
+    text-align: center;
+}
+
+.transaction-flow-body {
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    font-family: "Droid Sans Mono",Menlo,Monaco,Consolas,"Courier New",monospace;
+    color: darken(aquamarine, 50%);
+}
+
+.transaction-flow-glyph-right {
+    position: absolute;
+    left: -15px;
 }
 
 .monospace {

@@ -4,9 +4,8 @@ import alt from '../alt';
 import {
     getStatus,
     getTransaction,
-    listTransactions,
-    listOutputs,
-    postTransaction,
+    listBlocks,
+    listVotes
 } from 'js-bigchaindb-quickstart';
 
 import { API_PATH } from '../../constants/application_constants';
@@ -25,6 +24,7 @@ class TransactionStore {
         this.transactionList = {};
         this.assets = {};
         this.wallets = {};
+        this.transactionContext = {};
         this.transactionMeta = {
             asset_id: null,
             err: null,
@@ -154,16 +154,33 @@ class TransactionStore {
             outputList.map((output) => {
                 // fetch the transaction for each output
                 const txId = output.split("/")[2];
-                getTransaction(txId, API_PATH).then((transaction) => {
-                    wallets[public_key].unspents.push(transaction);
-                    wallets[public_key].assets.push(getAssetIdFromTransaction(transaction));
-                    // async changes, need to update state
-                    counter++;
-                    if (counter == outputList.length){
-                        this.wallets = wallets;
-                        this.emitChange();
-                    }
-                })
+                getTransaction(txId, API_PATH)
+                    .then((transaction) => {
+                        wallets[public_key].unspents.push(transaction);
+                        wallets[public_key].assets.push(getAssetIdFromTransaction(transaction));
+
+                        this.transactionContext[txId] = {};
+                        getStatus(txId, API_PATH).then((status) => {
+                            this.transactionContext[txId].status = status;
+                            listBlocks({ tx_id: txId }, API_PATH)
+                                .then((blockList) => {
+                                    this.transactionContext[txId].blockList = blockList;
+                                    this.transactionContext[txId].votes = {};
+                                    blockList.map((blockId) => {
+                                        listVotes(blockId, API_PATH)
+                                            .then((voteList) => {
+                                                this.transactionContext[txId].votes[blockId] = voteList;
+                                            })
+                                    })
+                                });
+                        });
+                        // async changes, need to update state
+                        counter++;
+                        if (counter == outputList.length){
+                            this.wallets = wallets;
+                            this.emitChange();
+                        }
+                    })
             });
             this.transactionMeta.err = null;
             this.transactionMeta.public_key = null;

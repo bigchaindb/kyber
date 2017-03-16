@@ -1,16 +1,18 @@
 import React from 'react';
 
+import classnames from 'classnames';
+
 import {
-    Ed25519Keypair,
-    getStatus,
     makeCreateTransaction,
     makeTransferTransaction,
     makeOutput,
     makeEd25519Condition,
-    pollStatusAndFetchTransaction,
-    postTransaction,
-    signTransaction,
+    signTransaction
 } from 'js-bigchaindb-quickstart';
+
+import {
+    getAssetIdFromTransaction
+} from '../../../js/utils/bigchaindb/transactions';
 
 import TransactionActions from '../../../js/react/actions/transaction_actions';
 
@@ -19,6 +21,8 @@ const InputTransaction = React.createClass({
 
     propTypes: {
         activeAccount: React.PropTypes.object,
+        className: React.PropTypes.string,
+        inputTransaction: React.PropTypes.object
     },
 
     getInitialState() {
@@ -27,27 +31,54 @@ const InputTransaction = React.createClass({
 
     handleInputSubmit(event) {
         event.preventDefault();
-        const { activeAccount } = this.props;
+        const {
+            activeAccount,
+            inputTransaction
+        } = this.props;
         const { value } = this.state;
+
+        let transaction;
+        if (!inputTransaction) {
+            transaction = this.createTransaction(activeAccount, value);
+        }
+        else {
+            transaction = this.transferTransaction(activeAccount, inputTransaction, value);
+        }
+        const signedTransaction = signTransaction(transaction, activeAccount.sk);
+        TransactionActions.postTransaction(signedTransaction);
+
+        this.setState({ value: "" });
+    },
+
+    createTransaction(activeAccount, value) {
         const asset = {
-            'chat': ''
+            'chat': value
         };
 
         const metadata = {
             'message': value
         };
 
-        const transaction = makeCreateTransaction(
+        return makeCreateTransaction(
             asset,
             metadata,
             [makeOutput(makeEd25519Condition(activeAccount.vk))],
             activeAccount.vk
         );
-        const signedTransaction = signTransaction(transaction, activeAccount.sk);
-        TransactionActions.postTransaction(signedTransaction);
+    },
 
-        this.setState({ value: "" });
 
+    transferTransaction(activeAccount, inputTransaction, value) {
+        const metadata = {
+            'message': value
+        };
+
+        return makeTransferTransaction(
+            inputTransaction,
+            metadata,
+            [makeOutput(makeEd25519Condition(activeAccount.vk))],
+            0
+        );
     },
 
     handleInputChange(event) {
@@ -56,6 +87,7 @@ const InputTransaction = React.createClass({
 
     render() {
         const {
+            className,
             activeAccount,
         } = this.props;
 
@@ -73,7 +105,7 @@ const InputTransaction = React.createClass({
            <form onSubmit={this.handleInputSubmit}>
                 <input
                     autoFocus
-                    className="input-content"
+                    className={className}
                     onChange={this.handleInputChange}
                     placeholder="Type what you want to share on the blockchain"
                     value={value} />

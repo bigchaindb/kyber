@@ -21,14 +21,20 @@ const TransactionList = React.createClass({
         return (
             <div className="transaction-list">
                 {
-                    transactionList.map(transaction =>
-                        <TransactionWrapper
-                            key={transaction.id}
-                            transaction={transaction}
-                            handleAssetClick={handleAssetClick}>
-                            {children}
-                        </TransactionWrapper>
-                    )
+                    transactionList
+                        .sort((a, b) => {
+                            if (a.id < b.id) return -1;
+                            if (a.id > b.id) return 1;
+                            return 0;
+                        })
+                        .map(transaction =>
+                            <TransactionWrapper
+                                key={transaction.id}
+                                transaction={transaction}
+                                handleAssetClick={handleAssetClick}>
+                                {children}
+                            </TransactionWrapper>
+                        )
                 }
             </div>
         );

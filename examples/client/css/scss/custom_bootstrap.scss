@@ -90,3 +90,9 @@
   background-color: lighten($bg-color, 7%);
   border: 1px solid $fg-color;
 }
+
+.navbar-inverse {
+  border-color: darken(aquamarine, 30%);
+  color: darken(aquamarine, 30%);
+  background: white;
+}

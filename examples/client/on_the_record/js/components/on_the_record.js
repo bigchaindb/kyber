@@ -13,7 +13,7 @@ import Search from '../../../js/react/components/search';
 import TransactionActions from '../../../js/react/actions/transaction_actions';
 
 import BigchainDBConnection from '../../../js/react/components/bigchaindb_connection';
-import TransactionDetail from '../../../js/react/components/transactions/transaction_detail';
+import TransactionPanel from './transaction_panel';
 import TransactionList from '../../../js/react/components/transactions/transaction_list';
 
 const OnTheRecord = React.createClass({
@@ -32,7 +32,6 @@ const OnTheRecord = React.createClass({
 
     fetchTransactionListForAsset(assetId) {
         if (assetId) {
-            console.log('assetId', assetId)
             TransactionActions.fetchTransactionList({
                 assetId
             })
@@ -80,7 +79,7 @@ const OnTheRecord = React.createClass({
         return (
             <div>
                 <Navbar fixedTop inverse>
-                    <h1 style={{ textAlign: 'center', color: 'white' }}>"On the Record"</h1>
+                    <h1 style={{ textAlign: 'center'}}>BigchainDB Transaction Explorer</h1>
                 </Navbar>
                 <div id="wrapper">
                     <div id="sidebar-wrapper">
@@ -97,12 +96,15 @@ const OnTheRecord = React.createClass({
                         </div>
                     </div>
                     <div id="page-content-wrapper">
-                        <InputTransaction activeAccount={activeAccount} />
+                        <InputTransaction
+                            activeAccount={activeAccount}
+                            className="input-content-fixed"/>
                         <div className="page-content">
                             <TransactionList
                                 transactionList={unspentsForAccount}
                                 handleAssetClick={this.handleAssetClick}>
-                                <TransactionDetail />
+                                <TransactionPanel
+                                    activeAccount={activeAccount} />
                             </TransactionList>
                         </div>
                     </div>
