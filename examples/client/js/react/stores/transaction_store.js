@@ -21,7 +21,7 @@ import TransactionSource from '../sources/transaction_source';
 class TransactionStore {
     constructor() {
         this.transaction = null;
-        this.transactionList = {};
+        this.transactionList = null;
         this.assets = {};
         this.wallets = {};
         this.transactionContext = {};
@@ -81,7 +81,7 @@ class TransactionStore {
     }
 
     onFlushTransactionList() {
-        this.transactionList = [];
+        this.transactionList = null;
         this.transactionMeta.asset_id = null;
         this.transactionMeta.operation = null;
         this.transactionMeta.search = null;

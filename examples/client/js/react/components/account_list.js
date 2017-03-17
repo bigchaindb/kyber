@@ -100,7 +100,7 @@ const AccountWrapper = React.createClass({
         } = this.props;
 
         return (
-            <div>
+            <div className="account-wrapper">
                 {
                     React.Children.map(children, (child) =>
                         React.cloneElement(child, {

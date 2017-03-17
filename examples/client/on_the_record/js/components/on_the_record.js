@@ -1,20 +1,20 @@
 import React from 'react';
 
-import { Navbar } from 'react-bootstrap/lib';
+import { Navbar, Glyphicon } from 'react-bootstrap/lib';
 
 import { safeInvoke } from 'js-utility-belt/es6';
 
 import AccountList from '../../../js/react/components/account_list';
 import AccountDetail from '../../../js/react/components/account_detail';
 
-import InputTransaction from './input_transaction';
-import Search from '../../../js/react/components/search';
+import BigchainDBConnection from '../../../js/react/components/bigchaindb_connection';
 
 import TransactionActions from '../../../js/react/actions/transaction_actions';
-
-import BigchainDBConnection from '../../../js/react/components/bigchaindb_connection';
-import TransactionPanel from './transaction_panel';
 import TransactionList from '../../../js/react/components/transactions/transaction_list';
+import TransactionDetail from '../../../js/react/components/transactions/transaction_detail';
+
+import InputTransaction from './input_transaction';
+import TransactionPanel from './transaction_panel';
 
 const OnTheRecord = React.createClass({
     propTypes: {
@@ -26,7 +26,7 @@ const OnTheRecord = React.createClass({
 
     getInitialState() {
         return {
-            search: null
+            showHistory: false
         };
     },
 
@@ -53,22 +53,22 @@ const OnTheRecord = React.createClass({
     },
 
     handleAssetClick(assetId) {
-        this.fetchTransactionListForAsset(assetId)
+        this.fetchTransactionListForAsset(assetId);
+        this.setState({showHistory: true});
     },
 
-    handleSearch(query) {
-        const { activeAccount } = this.props;
-
-        this.setState({
-            search: query
-        });
+    handleHistoryClose() {
+        this.setState({showHistory: false});
     },
 
     render() {
         const {
             activeAccount,
+            transactionList,
             wallets
         } = this.props;
+
+        const { showHistory } = this.state;
 
         const walletForAccount = (wallets && activeAccount && wallets[activeAccount.vk]) ?
             wallets[activeAccount.vk] : null;
@@ -84,9 +84,6 @@ const OnTheRecord = React.createClass({
                 <div id="wrapper">
                     <div id="sidebar-wrapper">
                         <div className="sidebar-nav">
-                            <Search
-                                handleSearch={this.handleSearch}
-                                initialQuery="" />
                             <AccountList
                                 activeAccount={activeAccount}
                                 appName="ontherecord"
@@ -98,7 +95,8 @@ const OnTheRecord = React.createClass({
                     <div id="page-content-wrapper">
                         <InputTransaction
                             activeAccount={activeAccount}
-                            className="input-content-fixed"/>
+                            className="input-asset-fixed"
+                            placeHolder="CREATE a new asset by typing"/>
                         <div className="page-content">
                             <TransactionList
                                 transactionList={unspentsForAccount}
@@ -108,6 +106,22 @@ const OnTheRecord = React.createClass({
                             </TransactionList>
                         </div>
                     </div>
+                    {
+                        showHistory ?
+                            <div id="transaction-history-wrapper">
+                                <div className="transaction-history">
+                                    <div
+                                        onClick={this.handleHistoryClose}
+                                        className="transaction-history-header">
+                                        [x] Close History
+                                    </div>
+                                    <TransactionList
+                                        transactionList={transactionList}>
+                                        <TransactionDetail />
+                                    </TransactionList>
+                                </div>
+                            </div> : null
+                    }
                 </div>
             </div>
         );

@@ -29,7 +29,8 @@ const TransactionPanel = React.createClass({
                 <InputTransaction
                     activeAccount={activeAccount}
                     className="input-content-panel"
-                    inputTransaction={transaction} />
+                    inputTransaction={transaction}
+                    placeHolder="TRANSFER the asset by typing (UPDATE)"/>
             </div>
         )
     }

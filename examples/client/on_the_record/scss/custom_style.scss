@@ -10,6 +10,11 @@
         color: darken(aquamarine, 50%);
     }
 
+    h1 {
+        color: #00B277;
+        font-family: "Droid Sans Mono",Menlo,Monaco,Consolas,"Courier New",monospace;
+    }
+
     .asset-container {
         background: lighten($fg-color, 95%);
         border: 1px solid lighten($fg-color, 50%);
@@ -21,22 +26,87 @@
         color: lighten($fg-color, 50%);
     }
 
+    #page-content-wrapper {
+        max-width: 840px;
+    }
+
     .page-content {
         padding-bottom: 5em;
         padding-top: 1em;
     }
 
-    .input-content-fixed {
+    .input-asset-fixed {
         position: fixed;
-        background: white;
         z-index: 100;
+        width: 100%;
+        border-bottom: 2px solid darken(aquamarine, 40%) !important;
+        input {
+            background: lighten(aquamarine, 10%);
+        }
+        ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+            color: #109;
+        }
+        :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+            color: #109;
+            opacity: 1;
+        }
+        ::-moz-placeholder { /* Mozilla Firefox 19+ */
+            color: #109;
+            opacity: 1;
+        }
+        :-ms-input-placeholder { /* Internet Explorer 10-11 */
+            color: #109;
+        }
+        .inner-addon .glyphicon-input {
+            color: #109;
+        }
     }
 
-    .input-content-panel{
-        border: 1px solid rgba(0,0,0,0);
+    .input-content {
+        border: 1px solid rgba(0, 0, 0, 0);
         background: lighten(aquamarine, 20%);
-        font-family: "Droid Sans Mono",Menlo,Monaco,Consolas,"Courier New",monospace;
+        font-family: "Droid Sans Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
     }
+
+    .input-content-panel {
+        ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+            color: #109;
+        }
+        :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+            color: #109;
+            opacity: 1;
+        }
+        ::-moz-placeholder { /* Mozilla Firefox 19+ */
+            color: #109;
+            opacity: 1;
+        }
+        :-ms-input-placeholder { /* Internet Explorer 10-11 */
+            color: #109;
+        }
+        .inner-addon .glyphicon-input {
+            color: #109;
+        }
+    }
+
+    /* enable absolute positioning */
+    .inner-addon {
+        position: relative;
+    }
+
+    /* style icon */
+    .inner-addon .glyphicon-input {
+        position: absolute;
+        padding: 1em;
+        pointer-events: none;
+    }
+
+    /* align icon */
+    .left-addon .glyphicon-input  { left:  0;}
+    .right-addon .glyphicon-input { right: 0;}
+
+    /* add padding  */
+    .left-addon input  { padding-left:  3em; }
+    .right-addon input { padding-right: 3em; }
 
     .transaction-list {
         margin-top: 60px;
@@ -54,4 +124,43 @@
         margin-bottom: 1em;
         max-width: 800px;
     }
+
+    #transaction-history-wrapper {
+        height: 100%;
+        overflow-y: auto;
+    }
+
+    .transaction-history {
+        position: fixed;
+        right: 0;
+        top: 0;
+        height: 100vh;
+        background: white;
+        z-index: 1000;
+        padding: 1em;
+        overflow-y: auto;
+        border-left: 1px solid darken(aquamarine, 40%);
+        .transaction-list {
+            margin-top: 3em;
+            .transaction-body-asset-id:hover {
+                text-decoration: none !important;
+                cursor: default;
+            }
+        }
+        margin-top: 60px;
+    }
+
+    .transaction-history-header {
+        font-family: "Droid Sans Mono",Menlo,Monaco,Consolas,"Courier New",monospace;
+        color: darken(aquamarine, 40%);
+        padding: 0.5em 0 1em;
+        position: fixed;
+        background: white;
+        width: 100%;
+        &:hover {
+            cursor: pointer;
+            color: #109;
+        }
+    }
+
 }

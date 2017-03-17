@@ -12,14 +12,22 @@
 .transaction-header {
     background: lighten(aquamarine, 20%);
     border-bottom: 1px solid darken(aquamarine, 40%);
-    font-family: "Droid Sans Mono",Menlo,Monaco,Consolas,"Courier New",monospace;
+    border-top: 1px solid darken(aquamarine, 40%);
     margin-bottom: 1em;
-    padding: 0.4em 1em;
 }
 
+.transaction-header,
 .transaction-body {
     font-family: "Droid Sans Mono",Menlo,Monaco,Consolas,"Courier New",monospace;
     padding: 0.4em 1em;
+    color: #109;
+}
+
+.transaction-body-asset-id {
+    cursor: pointer;
+    &:hover {
+        text-decoration: underline;
+    }
 }
 
 .transaction-row-label,
@@ -28,19 +36,12 @@
     overflow-x: hidden;
 }
 
-.transaction-collapsible-container {
-    cursor: pointer;
-}
-
 .transaction-flow-row {
     margin: 1em;
 }
 
 .transaction-flow-col {
     padding: 0;
-}
-
-.transaction-flow-col-left {
 }
 
 .transaction-flow-title {
@@ -53,6 +54,7 @@
     overflow-x: hidden;
     font-family: "Droid Sans Mono",Menlo,Monaco,Consolas,"Courier New",monospace;
     color: darken(aquamarine, 50%);
+    padding-right: 2em
 }
 
 .transaction-flow-glyph-right {

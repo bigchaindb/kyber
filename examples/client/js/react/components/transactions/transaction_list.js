@@ -2,6 +2,10 @@ import React from 'react';
 
 import { safeInvoke } from 'js-utility-belt/es6';
 
+import {
+    getAssetIdFromTransaction
+} from '../../../utils/bigchaindb/transactions';
+
 const TransactionList = React.createClass({
     propTypes: {
         children: React.PropTypes.node,
@@ -23,8 +27,8 @@ const TransactionList = React.createClass({
                 {
                     transactionList
                         .sort((a, b) => {
-                            if (a.id < b.id) return -1;
-                            if (a.id > b.id) return 1;
+                            if (getAssetIdFromTransaction(a) < getAssetIdFromTransaction(b)) return -1;
+                            if (getAssetIdFromTransaction(a) > getAssetIdFromTransaction(b)) return 1;
                             return 0;
                         })
                         .map(transaction =>

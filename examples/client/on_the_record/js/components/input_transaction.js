@@ -1,6 +1,7 @@
 import React from 'react';
 
 import classnames from 'classnames';
+import { Glyphicon } from 'react-bootstrap/lib';
 
 import {
     makeCreateTransaction,
@@ -10,10 +11,6 @@ import {
     signTransaction
 } from 'js-bigchaindb-quickstart';
 
-import {
-    getAssetIdFromTransaction
-} from '../../../js/utils/bigchaindb/transactions';
-
 import TransactionActions from '../../../js/react/actions/transaction_actions';
 
 
@@ -22,7 +19,14 @@ const InputTransaction = React.createClass({
     propTypes: {
         activeAccount: React.PropTypes.object,
         className: React.PropTypes.string,
-        inputTransaction: React.PropTypes.object
+        inputTransaction: React.PropTypes.object,
+        placeHolder: React.PropTypes.string
+    },
+
+    getDefaultProps() {
+        return {
+            placeHolder: "Type what you want to share on the blockchain"
+        }
     },
 
     getInitialState() {
@@ -55,13 +59,9 @@ const InputTransaction = React.createClass({
             'chat': value
         };
 
-        const metadata = {
-            'message': value
-        };
-
         return makeCreateTransaction(
             asset,
-            metadata,
+            null,
             [makeOutput(makeEd25519Condition(activeAccount.vk))],
             activeAccount.vk
         );
@@ -89,6 +89,7 @@ const InputTransaction = React.createClass({
         const {
             className,
             activeAccount,
+            placeHolder
         } = this.props;
 
         const { value } = this.state;
@@ -102,13 +103,17 @@ const InputTransaction = React.createClass({
         }
 
         return (
-           <form onSubmit={this.handleInputSubmit}>
-                <input
-                    autoFocus
-                    className={className}
-                    onChange={this.handleInputChange}
-                    placeholder="Type what you want to share on the blockchain"
-                    value={value} />
+            <form
+                className={className}
+                onSubmit={this.handleInputSubmit}>
+                <div className="inner-addon left-addon">
+                    <Glyphicon glyph="console" className="glyphicon-input"/>
+                    <input
+                        className="input-content"
+                        onChange={this.handleInputChange}
+                        placeholder={placeHolder}
+                        value={value} />
+                 </div>
             </form>
         );
     }
