@@ -6,13 +6,28 @@
         background: white;
         padding: 4px;
         border: none;
-        background: rgba(0,0,0,0);
+        background: rgba(0, 0, 0, 0);
         color: darken(aquamarine, 50%);
     }
 
     h1 {
         color: #00B277;
-        font-family: "Droid Sans Mono",Menlo,Monaco,Consolas,"Courier New",monospace;
+        font-family: "Droid Sans Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
+    }
+
+    .blink {
+        animation: blink-animation 1.5s steps(5, start) infinite;
+        -webkit-animation: blink-animation 1.5s steps(5, start) infinite;
+    }
+    @keyframes blink-animation {
+        to {
+            visibility: hidden;
+        }
+    }
+    @-webkit-keyframes blink-animation {
+        to {
+            visibility: hidden;
+        }
     }
 
     .asset-container {
@@ -28,6 +43,8 @@
 
     #page-content-wrapper {
         max-width: 840px;
+        color: #00B277;
+        font-family: "Droid Sans Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
     }
 
     .page-content {
@@ -44,21 +61,21 @@
             background: lighten(aquamarine, 10%);
         }
         ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
-            color: #109;
+            color: lighten(#109, 20%);
         }
         :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-            color: #109;
+            color: lighten(#109, 20%);
             opacity: 1;
         }
         ::-moz-placeholder { /* Mozilla Firefox 19+ */
-            color: #109;
+            color: lighten(#109, 20%);
             opacity: 1;
         }
         :-ms-input-placeholder { /* Internet Explorer 10-11 */
-            color: #109;
+            color: lighten(#109, 20%);
         }
         .inner-addon .glyphicon-input {
-            color: #109;
+            color: lighten(#109, 20%);
         }
     }
 
@@ -70,21 +87,21 @@
 
     .input-content-panel {
         ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
-            color: #109;
+            color: lighten(#109, 20%);
         }
         :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-            color: #109;
+            color: lighten(#109, 20%);
             opacity: 1;
         }
         ::-moz-placeholder { /* Mozilla Firefox 19+ */
-            color: #109;
+            color: lighten(#109, 20%);
             opacity: 1;
         }
         :-ms-input-placeholder { /* Internet Explorer 10-11 */
-            color: #109;
+            color: lighten(#109, 20%);
         }
         .inner-addon .glyphicon-input {
-            color: #109;
+            color: lighten(#109, 20%);
         }
     }
 
@@ -101,22 +118,35 @@
     }
 
     /* align icon */
-    .left-addon .glyphicon-input  { left:  0;}
-    .right-addon .glyphicon-input { right: 0;}
+    .left-addon .glyphicon-input {
+        left: 0;
+    }
+    .right-addon .glyphicon-input {
+        right: 0;
+    }
 
     /* add padding  */
-    .left-addon input  { padding-left:  3em; }
-    .right-addon input { padding-right: 3em; }
+    .left-addon input {
+        padding-left: 3em;
+    }
+    .right-addon input {
+        padding-right: 3em;
+    }
 
     .transaction-list {
         margin-top: 60px;
     }
 
+    .transaction-list-null {
+        margin-top: 60px;
+        text-align: center;
+    }
+
     .transaction-panel {
         border-bottom: 1px solid darken(aquamarine, 40%);
-        border-left: 1px solid rgba(0,0,0,0);
-        border-right: 1px solid rgba(0,0,0,0);
-        border-top: 1px solid rgba(0,0,0,0);
+        border-left: 1px solid rgba(0, 0, 0, 0);
+        border-right: 1px solid rgba(0, 0, 0, 0);
+        border-top: 1px solid rgba(0, 0, 0, 0);
         &:hover {
             background: white;
             border: 1px solid darken(aquamarine, 40%);
@@ -136,10 +166,11 @@
         top: 0;
         height: 100vh;
         background: white;
-        z-index: 1000;
+        z-index: 2000;
         padding: 1em;
         overflow-y: auto;
         border-left: 1px solid darken(aquamarine, 40%);
+        border-top: 1px solid #00b276;
         .transaction-list {
             margin-top: 3em;
             .transaction-body-asset-id:hover {
@@ -151,7 +182,7 @@
     }
 
     .transaction-history-header {
-        font-family: "Droid Sans Mono",Menlo,Monaco,Consolas,"Courier New",monospace;
+        font-family: "Droid Sans Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
         color: darken(aquamarine, 40%);
         padding: 0.5em 0 1em;
         position: fixed;

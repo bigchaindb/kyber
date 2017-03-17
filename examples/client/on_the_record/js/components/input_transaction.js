@@ -18,6 +18,7 @@ const InputTransaction = React.createClass({
 
     propTypes: {
         activeAccount: React.PropTypes.object,
+        accountList: React.PropTypes.array,
         className: React.PropTypes.string,
         inputTransaction: React.PropTypes.object,
         placeHolder: React.PropTypes.string
@@ -33,12 +34,45 @@ const InputTransaction = React.createClass({
         return { value: "" };
     },
 
+    getToAccountFromValue(value) {
+        const {
+            activeAccount,
+            accountList,
+        } = this.props;
+
+        let toAccount = activeAccount;
+
+        if (accountList) {
+            const matchHandles = value
+                .match(/(?:^|\s)(?:@)([a-zA-Z\d]+)/gm);
+
+            if (matchHandles) {
+                const matchHandlesClean = matchHandles
+                .map((match) => match
+                    .replace(/ /g,'')
+                    .replace(/@/g,'')
+                    .toLowerCase())
+                .filter((v, i, a) => a.indexOf(v) === i);
+
+                const matchedAccounts = accountList.map((account) => {
+                    if (matchHandlesClean.indexOf(account.name.toLowerCase()) > -1) {
+                        return account;
+                    }
+                }).filter((v) => typeof v === 'object');
+                if (matchedAccounts.length) toAccount = matchedAccounts[0];
+            }
+        }
+        return toAccount;
+    },
+
     handleInputSubmit(event) {
         event.preventDefault();
+
         const {
             activeAccount,
             inputTransaction
         } = this.props;
+
         const { value } = this.state;
 
         let transaction;
@@ -46,7 +80,8 @@ const InputTransaction = React.createClass({
             transaction = this.createTransaction(activeAccount, value);
         }
         else {
-            transaction = this.transferTransaction(activeAccount, inputTransaction, value);
+            const toAccount = this.getToAccountFromValue(value);
+            transaction = this.transferTransaction(toAccount, inputTransaction, value);
         }
         const signedTransaction = signTransaction(transaction, activeAccount.sk);
         TransactionActions.postTransaction(signedTransaction);
@@ -56,7 +91,7 @@ const InputTransaction = React.createClass({
 
     createTransaction(activeAccount, value) {
         const asset = {
-            'chat': value
+            'definition': value
         };
 
         return makeCreateTransaction(
@@ -68,7 +103,7 @@ const InputTransaction = React.createClass({
     },
 
 
-    transferTransaction(activeAccount, inputTransaction, value) {
+    transferTransaction(toAccount, inputTransaction, value) {
         const metadata = {
             'message': value
         };
@@ -76,7 +111,7 @@ const InputTransaction = React.createClass({
         return makeTransferTransaction(
             inputTransaction,
             metadata,
-            [makeOutput(makeEd25519Condition(activeAccount.vk))],
+            [makeOutput(makeEd25519Condition(toAccount.vk))],
             0
         );
     },
@@ -107,7 +142,7 @@ const InputTransaction = React.createClass({
                 className={className}
                 onSubmit={this.handleInputSubmit}>
                 <div className="inner-addon left-addon">
-                    <Glyphicon glyph="console" className="glyphicon-input"/>
+                    <Glyphicon glyph="console" className="glyphicon-input blink"/>
                     <input
                         className="input-content"
                         onChange={this.handleInputChange}

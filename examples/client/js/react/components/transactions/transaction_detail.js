@@ -11,6 +11,7 @@ import {getAssetIdFromTransaction} from '../../../utils/bigchaindb/transactions'
 const TransactionDetail = React.createClass({
     propTypes: {
         transaction: React.PropTypes.object,
+        transactionContext: React.PropTypes.object,
         className: React.PropTypes.string,
         handleAssetClick: React.PropTypes.func
     },
@@ -49,7 +50,7 @@ const TransactionDetail = React.createClass({
                     <div
                         onClick={() => safeInvoke(handleAssetClick, transaction.asset.id)}
                         className="transaction-body-title transaction-body-asset-id">
-                        ASSET: {transaction.asset.id}
+                        ASSET: {transaction.asset.id} { !!handleAssetClick && <span>[<Glyphicon glyph="share-alt" />]</span> }
                     </div>
                 </div>
             )
@@ -62,18 +63,44 @@ const TransactionDetail = React.createClass({
         if (transaction.metadata) {
             return (
                 <div className="transaction-body">
-                    <div className="transaction-body-title">METADATA</div>
-                    <div className="transaction-body-body">
-                        <pre>
-                            {JSON.stringify(transaction.metadata, null, 4)}
-                        </pre>
+                    <div className="transaction-body-title">
+                        METADATA:
                     </div>
+                    <div className="transaction-body-body">
+                    <pre>
+                        {JSON.stringify(transaction.metadata, null, 4)}
+                    </pre>
+                </div>
                 </div>
             )
         }
         return null;
     },
 
+    getBlockHTML() {
+        const {
+            transaction,
+            transactionContext
+        } = this.props;
+
+        if (transactionContext
+            && transactionContext.hasOwnProperty(transaction.id)
+            && transactionContext[transaction.id].status) {
+            console.log(transactionContext[transaction.id])
+            console.log(transactionContext[transaction.id].blockList)
+            console.log(transactionContext[transaction.id].status)
+            console.log(transactionContext[transaction.id].votes)
+            const context = transactionContext[transaction.id];
+            // return (
+            //     <div className="transaction-body">
+            //         <div className="transaction-body-title">
+            //             BLOCK:
+            //         </div>
+            //     </div>
+            // )
+        }
+        return null;
+    },
 
     render() {
         const {
@@ -86,13 +113,14 @@ const TransactionDetail = React.createClass({
                 <div className="transaction-container-summary">
                     <div className="transaction-header">
                         <span>
-                            {transaction.id}
+                            ID: {transaction.id}
                         </span>
                         <span className="pull-right">
                             {transaction.operation} - V{transaction.version}
                         </span>
                     </div>
                     { this.getAssetHTML() }
+                    { this.getBlockHTML() }
                     { this.getMetadataHTML() }
                     <TransactionFlow transaction={transaction}/>
                 </div>

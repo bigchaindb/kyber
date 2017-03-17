@@ -9,6 +9,8 @@ import AccountDetail from '../../../js/react/components/account_detail';
 
 import BigchainDBConnection from '../../../js/react/components/bigchaindb_connection';
 
+import { getAssetIdFromTransaction } from '../../../js/utils/bigchaindb/transactions';
+
 import TransactionActions from '../../../js/react/actions/transaction_actions';
 import TransactionList from '../../../js/react/components/transactions/transaction_list';
 import TransactionDetail from '../../../js/react/components/transactions/transaction_detail';
@@ -49,6 +51,7 @@ const OnTheRecord = React.createClass({
 
     handleAccountChange(account) {
         this.props.handleAccountChange(account);
+        console.log('handle', account)
         this.fetchUnspents(account);
     },
 
@@ -64,7 +67,9 @@ const OnTheRecord = React.createClass({
     render() {
         const {
             activeAccount,
+            accountList,
             transactionList,
+            transactionContext,
             wallets
         } = this.props;
 
@@ -76,6 +81,7 @@ const OnTheRecord = React.createClass({
         const unspentsForAccount = (walletForAccount && Array.isArray(walletForAccount.unspents)) ?
             walletForAccount.unspents : null;
 
+        console.log('render', unspentsForAccount)
         return (
             <div>
                 <Navbar fixedTop inverse>
@@ -100,23 +106,26 @@ const OnTheRecord = React.createClass({
                         <div className="page-content">
                             <TransactionList
                                 transactionList={unspentsForAccount}
+                                transactionContext={transactionContext}
                                 handleAssetClick={this.handleAssetClick}>
                                 <TransactionPanel
-                                    activeAccount={activeAccount} />
+                                    activeAccount={activeAccount}
+                                    accountList={accountList}/>
                             </TransactionList>
                         </div>
                     </div>
                     {
-                        showHistory ?
+                        showHistory && transactionList ?
                             <div id="transaction-history-wrapper">
                                 <div className="transaction-history">
                                     <div
                                         onClick={this.handleHistoryClose}
                                         className="transaction-history-header">
-                                        [x] Close History
+                                        [x] Close History for Asset {getAssetIdFromTransaction(transactionList[0])}
                                     </div>
                                     <TransactionList
-                                        transactionList={transactionList}>
+                                        transactionList={transactionList}
+                                        transactionContext={transactionContext}>
                                         <TransactionDetail />
                                     </TransactionList>
                                 </div>

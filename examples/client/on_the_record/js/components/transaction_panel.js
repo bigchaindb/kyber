@@ -7,7 +7,9 @@ import InputTransaction from './input_transaction';
 const TransactionPanel = React.createClass({
     propTypes: {
         activeAccount: React.PropTypes.object,
+        accountList: React.PropTypes.array,
         transaction: React.PropTypes.object,
+        transactionContext: React.PropTypes.object,
         className: React.PropTypes.string,
         handleAssetClick: React.PropTypes.func
     },
@@ -15,7 +17,9 @@ const TransactionPanel = React.createClass({
     render() {
         const {
             activeAccount,
+            accountList,
             transaction,
+            transactionContext,
             className,
             handleAssetClick
         } = this.props;
@@ -24,13 +28,15 @@ const TransactionPanel = React.createClass({
             <div className="transaction-panel">
                 <TransactionDetail
                     transaction={transaction}
+                    transactionContext={transactionContext}
                     className={className}
                     handleAssetClick={handleAssetClick} />
                 <InputTransaction
                     activeAccount={activeAccount}
+                    accountList={accountList}
                     className="input-content-panel"
                     inputTransaction={transaction}
-                    placeHolder="TRANSFER the asset by typing (UPDATE)"/>
+                    placeHolder="TRANSFER the asset by typing: <msg> <@user:optional>"/>
             </div>
         )
     }
