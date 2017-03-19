@@ -4,6 +4,7 @@ import alt from '../alt';
 import {
     getStatus,
     getTransaction,
+    pollStatusAndFetchTransaction,
     listBlocks,
     listVotes
 } from 'js-bigchaindb-quickstart';
@@ -21,9 +22,9 @@ import TransactionSource from '../sources/transaction_source';
 class TransactionStore {
     constructor() {
         this.transaction = null;
-        this.transactionList = null;
-        this.assets = {};
-        this.wallets = {};
+        this.transactionList = [];
+        this.transactionMap = {};
+        this.unspentOutputs = {};
         this.transactionContext = {};
         this.transactionMeta = {
             asset_id: null,
@@ -51,9 +52,6 @@ class TransactionStore {
 
     onSuccessFetchTransactionList(transactionList) {
         if (transactionList) {
-            if (this.transactionMeta.asset_id) {
-                this.assets[this.transactionMeta.asset_id] = transactionList
-            }
             this.transactionList = transactionList;
             this.transactionMeta.err = null;
             this.transactionMeta.asset_id = null;
@@ -95,9 +93,10 @@ class TransactionStore {
 
     onSuccessPostTransaction(transaction) {
         if (transaction) {
-            this.transaction = transaction;
+            this.transaction = null;
             this.transactionMeta.err = null;
             this.transactionMeta.transaction = null;
+            this.transactionMeta.public_key = null;
         } else {
             this.transactionMeta.err = new Error('Problem posting the transaction');
         }
@@ -141,49 +140,61 @@ class TransactionStore {
     }
 
     onSuccessFetchOutputList(outputList) {
-        if (outputList) {
-            const {public_key} = this.transactionMeta;
-            let wallets = {};
-            wallets[public_key] = {};
-            wallets[public_key].unspents = [];
-            wallets[public_key].assets = [];
+        if (outputList && outputList.length) {
+            const unspentOutputs =
+                outputList.map((output) => output.split("/")[2]);
+
+            const transactionsToFetch = unspentOutputs.filter(
+                (transactionId) => Object.keys(this.transactionMap).indexOf(transactionId) == -1
+            );
+
+            getTransaction(unspentOutputs[0], API_PATH)
+                .then((tx) => {
+                    const public_key = tx.outputs[0].public_keys[0];
+                    this.unspentOutputs[public_key] = unspentOutputs;
+                    this.emitChange();
+                });
 
             let counter = 0;
-            if (outputList.length == 0) {
-                this.wallets[public_key] = wallets[public_key];
-            } else {
-                outputList.map((output) => {
-                    // fetch the transaction for each output
-                    const txId = output.split("/")[2];
-                    getTransaction(txId, API_PATH)
-                        .then((transaction) => {
-                            wallets[public_key].unspents.push(transaction);
-                            wallets[public_key].assets.push(getAssetIdFromTransaction(transaction));
+            transactionsToFetch.forEach((transactionId) => {
+                getTransaction(transactionId, API_PATH)
+                    .then((transaction) => {
+                        this.transactionMap[transaction.id] = transaction;
 
-                            this.transactionContext[txId] = {};
-                            getStatus(txId, API_PATH).then((status) => {
-                                this.transactionContext[txId].status = status;
-                                listBlocks({tx_id: txId}, API_PATH)
-                                    .then((blockList) => {
-                                        this.transactionContext[txId].blockList = blockList;
-                                        this.transactionContext[txId].votes = {};
-                                        blockList.map((blockId) => {
-                                            listVotes(blockId, API_PATH)
-                                                .then((voteList) => {
-                                                    this.transactionContext[txId].votes[blockId] = voteList;
-                                                })
-                                        })
-                                    });
-                            });
+                        counter ++;
+                        if (counter == transactionsToFetch.length) {
+                            this.emitChange();
+                        }
+                    });
+            });
+
+                            // wallets[public_key].unspents.push(transaction);
+                            // wallets[public_key].assets.push(getAssetIdFromTransaction(transaction));
+                            //
+                            // this.transactionContext[txId] = {};
+                            // getStatus(txId, API_PATH).then((status) => {
+                            //     this.transactionContext[txId].status = status;
+                            //     listBlocks({tx_id: txId}, API_PATH)
+                            //         .then((blockList) => {
+                            //             this.transactionContext[txId].blockList = blockList;
+                            //             this.transactionContext[txId].votes = {};
+                            //             blockList.map((blockId) => {
+                            //                 listVotes(blockId, API_PATH)
+                            //                     .then((voteList) => {
+                            //                         this.transactionContext[txId].votes[blockId] = voteList;
+                            //                     })
+                            //             })
+                            //         });
+                            // });
                             // async changes, need to update state
-                            counter++;
-                            if (counter == outputList.length) {
-                                this.wallets[public_key] = wallets[public_key];
-                                this.emitChange();
-                            }
-                        })
-                });
-            }
+            //                 counter++;
+            //                 if (counter == outputList.length) {
+            //                     this.wallets[public_key] = wallets[public_key];
+            //                     this.emitChange();
+            //                 }
+            //             })
+            //     });
+            // }
             this.transactionMeta.err = null;
             this.transactionMeta.public_key = null;
             this.transactionMeta.unspent = null;

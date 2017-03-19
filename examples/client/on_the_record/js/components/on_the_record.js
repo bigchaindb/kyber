@@ -23,7 +23,8 @@ const OnTheRecord = React.createClass({
         // Injected through BigchainDBConnection
         activeAccount: React.PropTypes.object,
         handleAccountChange: React.PropTypes.func,
-        wallets: React.PropTypes.object
+        transactionMap: React.PropTypes.object,
+        unspentOutputs: React.PropTypes.object
     },
 
     getInitialState() {
@@ -52,7 +53,7 @@ const OnTheRecord = React.createClass({
     handleAccountChange(account) {
         this.props.handleAccountChange(account);
         console.log('handle', account)
-        this.fetchUnspents(account);
+        new Promise((resolve, reject) => this.fetchUnspents(account));
     },
 
     handleAssetClick(assetId) {
@@ -68,20 +69,25 @@ const OnTheRecord = React.createClass({
         const {
             activeAccount,
             accountList,
-            transactionList,
             transactionContext,
-            wallets
+            transactionList,
+            transactionMap,
+            unspentOutputs
         } = this.props;
 
         const { showHistory } = this.state;
 
-        const walletForAccount = (wallets && activeAccount && wallets[activeAccount.vk]) ?
-            wallets[activeAccount.vk] : null;
+        const unspentsForAccount = (
+            unspentOutputs
+            && activeAccount
+            && unspentOutputs[activeAccount.vk]
+        ) ? unspentOutputs[activeAccount.vk] : [];
 
-        const unspentsForAccount = (walletForAccount && Array.isArray(walletForAccount.unspents)) ?
-            walletForAccount.unspents : null;
+        const transactionsForAccount =
+            unspentsForAccount.map((transactionId) => {
+                return transactionMap[transactionId];
+            });
 
-        console.log('render', unspentsForAccount)
         return (
             <div>
                 <Navbar fixedTop inverse>
@@ -105,7 +111,7 @@ const OnTheRecord = React.createClass({
                             placeHolder="CREATE a new asset by typing"/>
                         <div className="page-content">
                             <TransactionList
-                                transactionList={unspentsForAccount}
+                                transactionList={transactionsForAccount}
                                 transactionContext={transactionContext}
                                 handleAssetClick={this.handleAssetClick}>
                                 <TransactionPanel

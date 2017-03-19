@@ -65,7 +65,7 @@ export default function BigchainDBConnection(Component) {
                 } = this.state;
 
                 const account = accountList.filter((account) => account.vk === changes.client)[0];
-                safeInvoke(this.refs.component.fetchUnspents, account);
+                // safeInvoke(this.refs.component.fetchUnspents, account);
             }
         },
 

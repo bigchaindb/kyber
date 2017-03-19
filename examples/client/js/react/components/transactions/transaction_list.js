@@ -23,8 +23,6 @@ const TransactionList = React.createClass({
             transactionList
         } = this.props;
 
-        console.log('render', transactionList)
-
         if (!transactionList || transactionList.length == 0) return (
             <div className="transaction-list-null">
                 No transactions found...

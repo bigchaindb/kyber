@@ -8,8 +8,11 @@ import {
     makeTransferTransaction,
     makeOutput,
     makeEd25519Condition,
-    signTransaction
+    signTransaction,
+    pollStatusAndFetchTransaction
 } from 'js-bigchaindb-quickstart';
+
+import { API_PATH } from '../../../js/constants/application_constants';
 
 import TransactionActions from '../../../js/react/actions/transaction_actions';
 
@@ -75,16 +78,35 @@ const InputTransaction = React.createClass({
 
         const { value } = this.state;
 
+        let toAccount = activeAccount;
         let transaction;
+
         if (!inputTransaction) {
-            transaction = this.createTransaction(activeAccount, value);
+            transaction = this.createTransaction(toAccount, value);
         }
         else {
-            const toAccount = this.getToAccountFromValue(value);
+            toAccount = this.getToAccountFromValue(value);
             transaction = this.transferTransaction(toAccount, inputTransaction, value);
         }
         const signedTransaction = signTransaction(transaction, activeAccount.sk);
+
         TransactionActions.postTransaction(signedTransaction);
+
+        setTimeout(() => {
+            pollStatusAndFetchTransaction(signedTransaction.id, API_PATH)
+                .then(() => {
+                    TransactionActions.fetchOutputList({
+                        public_key: activeAccount.vk,
+                        unspent: true
+                    });
+                    if (toAccount !== activeAccount) {
+                        TransactionActions.fetchOutputList({
+                            public_key: toAccount.vk,
+                            unspent: true
+                        });
+                    }
+                })
+        }, 1000);
 
         this.setState({ value: "" });
     },
