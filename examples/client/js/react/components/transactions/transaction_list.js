@@ -9,8 +9,9 @@ import {
 const TransactionList = React.createClass({
     propTypes: {
         children: React.PropTypes.node,
-        transactionList : React.PropTypes.array,
-        transactionContext: React.PropTypes.object,
+        transactionList: React.PropTypes.array,
+        transactionMeta: React.PropTypes.object,
+        transactionStatuses: React.PropTypes.object,
         handleAssetClick: React.PropTypes.func
     },
 
@@ -19,15 +20,25 @@ const TransactionList = React.createClass({
         const {
             children,
             handleAssetClick,
-            transactionContext,
-            transactionList
+            transactionList,
+            transactionMeta,
+            transactionStatuses,
         } = this.props;
 
-        if (!transactionList || transactionList.length == 0) return (
-            <div className="transaction-list-null">
-                No transactions found...
-            </div>
-        );
+        if (!transactionList || transactionList.length == 0) {
+            if (transactionMeta && transactionMeta.isFetchingList) {
+                return (
+                    <div className="transaction-list-null">
+                        Fetching transactions...
+                    </div>
+                )
+            }
+            return (
+                <div className="transaction-list-null">
+                    No transactions found...
+                </div>
+            );
+        }
 
         return (
             <div className="transaction-list">
@@ -42,7 +53,7 @@ const TransactionList = React.createClass({
                             <TransactionWrapper
                                 key={transaction.id}
                                 transaction={transaction}
-                                transactionContext={transactionContext}
+                                transactionStatuses={transactionStatuses}
                                 handleAssetClick={handleAssetClick}>
                                 {children}
                             </TransactionWrapper>
@@ -58,7 +69,7 @@ const TransactionWrapper = React.createClass({
         children: React.PropTypes.node,
         handleAssetClick: React.PropTypes.func,
         transaction: React.PropTypes.object,
-        transactionContext: React.PropTypes.object
+        transactionStatuses: React.PropTypes.object
     },
 
     render() {
@@ -66,7 +77,7 @@ const TransactionWrapper = React.createClass({
             children,
             handleAssetClick,
             transaction,
-            transactionContext
+            transactionStatuses
         } = this.props;
 
         return (
@@ -75,7 +86,7 @@ const TransactionWrapper = React.createClass({
                     React.Children.map(children, (child) =>
                         React.cloneElement(child, {
                             transaction,
-                            transactionContext,
+                            transactionStatuses,
                             handleAssetClick
                         })
                     )

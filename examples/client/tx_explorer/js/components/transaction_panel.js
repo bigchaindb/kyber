@@ -9,7 +9,7 @@ const TransactionPanel = React.createClass({
         activeAccount: React.PropTypes.object,
         accountList: React.PropTypes.array,
         transaction: React.PropTypes.object,
-        transactionContext: React.PropTypes.object,
+        transactionStatuses: React.PropTypes.object,
         className: React.PropTypes.string,
         handleAssetClick: React.PropTypes.func
     },
@@ -19,7 +19,7 @@ const TransactionPanel = React.createClass({
             activeAccount,
             accountList,
             transaction,
-            transactionContext,
+            transactionStatuses,
             className,
             handleAssetClick
         } = this.props;
@@ -28,7 +28,7 @@ const TransactionPanel = React.createClass({
             <div className="transaction-panel">
                 <TransactionDetail
                     transaction={transaction}
-                    transactionContext={transactionContext}
+                    transactionStatuses={transactionStatuses}
                     className={className}
                     handleAssetClick={handleAssetClick} />
                 <InputTransaction

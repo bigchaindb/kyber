@@ -16,7 +16,7 @@ const VoteSource = {
         },
 
         success: VoteActions.successFetchVoteList,
-        error: VoteActions.errorVote
+        error: VoteActions.errorVoteList
     }
 };
 

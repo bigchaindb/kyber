@@ -1,5 +1,5 @@
 
-.on-the-record {
+.tx-explorer {
 
     pre {
         font-size: smaller;
@@ -167,13 +167,13 @@
         height: 100vh;
         background: white;
         z-index: 2000;
-        padding: 1em;
+        padding: 0 1em 5em;
         overflow-y: auto;
         border-left: 1px solid darken(aquamarine, 40%);
         border-top: 1px solid #00b276;
         .transaction-list {
             margin-top: 3em;
-            .transaction-body-asset-id:hover {
+            .transaction-link:hover {
                 text-decoration: none !important;
                 cursor: default;
             }
@@ -188,6 +188,7 @@
         position: fixed;
         background: white;
         width: 100%;
+        z-index: 2001;
         &:hover {
             cursor: pointer;
             color: #109;

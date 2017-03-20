@@ -2,18 +2,47 @@ import React from 'react';
 
 import { Row, Col, Glyphicon } from 'react-bootstrap/lib';
 import classnames from 'classnames';
+import moment from 'moment';
 
-import { safeInvoke } from 'js-utility-belt/es6';
+import { safeInvoke, safeMerge } from 'js-utility-belt/es6';
 
-import {getAssetIdFromTransaction} from '../../../utils/bigchaindb/transactions';
+import { getAssetIdFromTransaction } from '../../../utils/bigchaindb/transactions';
 
+import BlockActions from '../../actions/block_actions';
+import BlockStore from '../../stores/block_store';
+
+import VoteActions from '../../actions/vote_actions';
+import VoteStore from '../../stores/vote_store';
 
 const TransactionDetail = React.createClass({
     propTypes: {
         transaction: React.PropTypes.object,
-        transactionContext: React.PropTypes.object,
+        transactionStatuses: React.PropTypes.object,
         className: React.PropTypes.string,
         handleAssetClick: React.PropTypes.func
+    },
+    
+    getInitialState() {
+        const blockStore = BlockStore.getState();
+
+        return safeMerge(
+            {
+                statusCollapsed: false
+            },
+            blockStore
+        );
+    },
+
+    componentDidMount() {
+        BlockStore.listen(this.onChange);
+    },
+
+    componentWillUnmount() {
+        BlockStore.unlisten(this.onChange)
+    },
+
+    onChange(state) {
+        this.setState(state);
     },
 
     handleAssetClick() {
@@ -49,8 +78,11 @@ const TransactionDetail = React.createClass({
                 <div className="transaction-body">
                     <div
                         onClick={() => safeInvoke(handleAssetClick, transaction.asset.id)}
-                        className="transaction-body-title transaction-body-asset-id">
-                        ASSET: {transaction.asset.id} { !!handleAssetClick && <span>[<Glyphicon glyph="share-alt" />]</span> }
+                        className="transaction-body-title transaction-link">
+                        ASSET: {transaction.asset.id} { 
+                            !!handleAssetClick && 
+                            <span>[<Glyphicon glyph="share-alt" />]</span> 
+                        }
                     </div>
                 </div>
             )
@@ -77,29 +109,62 @@ const TransactionDetail = React.createClass({
         return null;
     },
 
-    getBlockHTML() {
+    getStatusHTML() {
         const {
             transaction,
-            transactionContext
+            transactionStatuses
         } = this.props;
 
-        if (transactionContext
-            && transactionContext.hasOwnProperty(transaction.id)
-            && transactionContext[transaction.id].status) {
-            console.log(transactionContext[transaction.id])
-            console.log(transactionContext[transaction.id].blockList)
-            console.log(transactionContext[transaction.id].status)
-            console.log(transactionContext[transaction.id].votes)
-            const context = transactionContext[transaction.id];
-            // return (
-            //     <div className="transaction-body">
-            //         <div className="transaction-body-title">
-            //             BLOCK:
-            //         </div>
-            //     </div>
-            // )
+        const { statusCollapsed } = this.state;
+
+        if (transactionStatuses
+            && transactionStatuses.hasOwnProperty(transaction.id)
+            && transactionStatuses[transaction.id].status) {
+            return (
+                <div className="transaction-body">
+                    <div onClick={this.handleStatusToggle}
+                        className="transaction-body-title transaction-link">
+                        STATUS:&nbsp;
+                        {
+                            transactionStatuses[transaction.id].status.toUpperCase()
+                        } [
+                        <Glyphicon glyph={statusCollapsed ? "triangle-top" : "triangle-bottom"} />]
+                    </div>
+                </div>
+            )
         }
         return null;
+    },
+
+    getBlockHTML() {
+        const {
+            statusCollapsed,
+            blockMap
+        } = this.state;
+
+        const { transaction } = this.props;
+
+        if (statusCollapsed
+            && blockMap
+            && blockMap.hasOwnProperty(transaction.id)
+            && Array.isArray(blockMap[transaction.id])) {
+            return (
+                <BlockList blockList={blockMap[transaction.id]}/>
+            )
+        }
+        return null;
+    },
+
+    handleStatusToggle() {
+        const {
+            transaction
+        } = this.props;
+
+        BlockActions.fetchBlockList({ txId: transaction.id });
+
+        this.setState({
+            statusCollapsed: !this.state.statusCollapsed
+        })
     },
 
     render() {
@@ -120,6 +185,7 @@ const TransactionDetail = React.createClass({
                         </span>
                     </div>
                     { this.getAssetHTML() }
+                    { this.getStatusHTML() }
                     { this.getBlockHTML() }
                     { this.getMetadataHTML() }
                     <TransactionFlow transaction={transaction}/>
@@ -176,5 +242,132 @@ const TransactionFlow = React.createClass({
     }
 });
 
+const BlockList = React.createClass({
+    propTypes : {
+        blockList: React.PropTypes.array
+    },
+
+    render() {
+        const { blockList } = this.props;
+
+        if (Array.isArray(blockList)) {
+            return (
+                <div>
+                    {
+                        blockList.map((blockId) => <BlockDetail key={blockId} blockId={blockId} />)
+                    }
+                </div>
+            )
+        }
+        return null;
+    }
+});
+
+const BlockDetail = React.createClass({
+    propTypes: {
+        blockId: React.PropTypes.string
+    },
+    
+    getInitialState() {
+        const voteStore = VoteStore.getState();
+
+        return safeMerge(
+            {
+                collapsed: false
+            },
+            voteStore
+        );
+    },
+
+    componentDidMount() {
+        VoteStore.listen(this.onChange);
+    },
+
+    componentWillUnmount() {
+        VoteStore.unlisten(this.onChange)
+    },
+
+    onChange(state) {
+        this.setState(state);
+    },
+    
+    handleToggle() {
+        const { blockId } = this.props;
+
+        this.setState({ 
+            collapsed: !this.state.collapsed
+        });
+
+        VoteActions.fetchVoteList(blockId);
+    },
+    
+    render() {
+        const {
+            collapsed,
+            voteMap
+        } = this.state;
+
+        const { blockId } = this.props;
+
+        return (
+            <div>
+                <div className="transaction-body">
+                    <div onClick={this.handleToggle}
+                        className="transaction-body-title transaction-link">
+                        BLOCK: {blockId} [<Glyphicon glyph={collapsed ? "triangle-top" : "triangle-bottom"} />]
+                    </div>
+                </div>
+                {
+                    collapsed
+                    && voteMap
+                    && voteMap.hasOwnProperty(blockId)
+                    && Array.isArray(voteMap[blockId]) ?
+                        <VoteList voteList={voteMap[blockId]} /> : null
+                }
+            </div>
+        )
+    }
+});
+
+const VoteList = React.createClass({
+    propTypes: {
+        voteList: React.PropTypes.array
+    },
+
+    render() {
+        const { voteList } = this.props;
+
+        return (
+            <div>
+                {
+                    voteList.map((vote) => <VoteDetail vote={vote} key={vote.signature} />)
+                }
+            </div>
+        )
+    }
+});
+
+const VoteDetail = React.createClass({
+    propTypes: {
+        vote: React.PropTypes.object
+    },
+
+    render() {
+        const { vote } = this.props;
+        const timestamp =
+            moment(parseInt(vote.vote.timestamp, 10) * 1000).toDate().toGMTString();
+        const valid = vote.vote.is_block_valid;
+
+        return (
+            <div className="transaction-body">
+                <div className="transaction-body-title">
+                    {valid ? <Glyphicon glyph="ok" /> : <Glyphicon glyph="remove" />} {vote.node_pubkey} ({ timestamp })
+                </div>
+            </div>
+        )
+
+    }
+});
 
 export default TransactionDetail;
+

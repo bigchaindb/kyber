@@ -24,12 +24,12 @@ export default function BigchainDBConnection(Component) {
         },
 
         componentDidMount() {
-            AccountStore.listen(this.onAccountStoreChange);
+            AccountStore.listen(this.onChange);
             TransactionStore.listen(this.onChange);
         },
 
         componentWillUnmount() {
-            AccountStore.unlisten(this.onAccountStoreChange);
+            AccountStore.unlisten(this.onChange);
             TransactionStore.unlisten(this.onChange)
         },
 
@@ -37,36 +37,10 @@ export default function BigchainDBConnection(Component) {
             this.setState(state);
         },
 
-        onAccountStoreChange(state) {
-            const { oldAccountList } = this.state;
-            state.accountList.forEach((account) => {
-                if (account.ledger &&
-                    (!oldAccountList ||
-                     (oldAccountList && oldAccountList.indexOf(account) === -1))) {
-                    account.ledger.on('incoming', this.handleLedgerChanges);
-                }
-            });
-
-            this.setState(state);
-        },
-
         handleAccountChange(activeAccount) {
             this.setState({
                 activeAccount
             });
-        },
-
-        handleLedgerChanges(changes) {
-            console.log('incoming: ', changes);
-
-            if (changes && changes.client && this.refs.component) {
-                const {
-                    accountList
-                } = this.state;
-
-                const account = accountList.filter((account) => account.vk === changes.client)[0];
-                // safeInvoke(this.refs.component.fetchUnspents, account);
-            }
         },
 
         resetActiveAccount() {

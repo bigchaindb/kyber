@@ -7,7 +7,7 @@ import BlockSource from '../sources/block_source';
 class BlockStore {
     constructor() {
         this.block = null;
-        this.blockList = {};
+        this.blockMap = {};
         this.blockMeta = {
             block_id: null,
             err: null,
@@ -26,17 +26,19 @@ class BlockStore {
 
     onSuccessFetchBlockList(blockList) {
         if (blockList) {
-            this.blockList = blockList;
+            const { tx_id } = this.blockMeta;
+            this.blockMap[tx_id] = blockList;
             this.blockMeta.err = null;
             this.blockMeta.tx_id = null;
             this.blockMeta.status = null;
+            return new Promise((resolve, reject) => resolve(this))
         } else {
             this.blockMeta.err = new Error('Problem fetching the block list');
         }
     }
 
     onFlushBlockList() {
-        this.blockList = [];
+        this.blockMap = {};
         this.blockMeta.tx_id = null;
         this.blockMeta.status = null;
     }

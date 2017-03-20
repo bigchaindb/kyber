@@ -6,14 +6,14 @@ import 'isomorphic-fetch';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import OnTheRecord from './components/on_the_record';
+import TxExplorer from './components/tx_explorer';
 
 import '../../css/scss/main.scss';
 
 
 const App = () => (
-    <div className="app on-the-record">
-        <OnTheRecord />
+    <div className="app tx-explorer">
+        <TxExplorer />
     </div>
 );
 

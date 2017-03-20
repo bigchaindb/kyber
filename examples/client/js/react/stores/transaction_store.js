@@ -4,17 +4,10 @@ import alt from '../alt';
 import {
     getStatus,
     getTransaction,
-    pollStatusAndFetchTransaction,
-    listBlocks,
-    listVotes
 } from 'js-bigchaindb-quickstart';
 
 import { API_PATH } from '../../constants/application_constants';
 import parseEscrowData from '../../utils/cryptoconditions/parse_escrow_data';
-
-import {
-    getAssetIdFromTransaction
-} from '../../utils/bigchaindb/transactions';
 
 import TransactionActions from '../actions/transaction_actions';
 import TransactionSource from '../sources/transaction_source';
@@ -25,7 +18,7 @@ class TransactionStore {
         this.transactionList = [];
         this.transactionMap = {};
         this.unspentOutputs = {};
-        this.transactionContext = {};
+        this.transactionStatuses = {};
         this.transactionMeta = {
             asset_id: null,
             err: null,
@@ -60,22 +53,6 @@ class TransactionStore {
             this.transactionMeta.err = new Error('Problem fetching the transaction list');
         }
         this.transactionMeta.isFetchingList = false;
-    }
-
-    postProcessTransaction(transaction) {
-        const condition = transaction.transaction.conditions[0].condition;
-
-        if (Array.isArray(condition.details.subfulfillments)) {
-            transaction.type = 'multi-owner';
-            return safeMerge(
-                transaction,
-                parseEscrowData(condition.details)
-            );
-        } else {
-            transaction.type = 'single-owner';
-        }
-
-        return transaction;
     }
 
     onFlushTransactionList() {
@@ -161,47 +138,24 @@ class TransactionStore {
                     .then((transaction) => {
                         this.transactionMap[transaction.id] = transaction;
 
-                        counter ++;
-                        if (counter == transactionsToFetch.length) {
-                            this.emitChange();
-                        }
+                        getStatus(transaction.id, API_PATH)
+                            .then((status) => {
+                                this.transactionStatuses[transaction.id] = status;
+                                counter ++;
+                                if (counter == transactionsToFetch.length) {
+                                    this.transactionMeta.isFetchingList = false;
+                                    this.emitChange();
+                                }
+                            });
                     });
             });
 
-                            // wallets[public_key].unspents.push(transaction);
-                            // wallets[public_key].assets.push(getAssetIdFromTransaction(transaction));
-                            //
-                            // this.transactionContext[txId] = {};
-                            // getStatus(txId, API_PATH).then((status) => {
-                            //     this.transactionContext[txId].status = status;
-                            //     listBlocks({tx_id: txId}, API_PATH)
-                            //         .then((blockList) => {
-                            //             this.transactionContext[txId].blockList = blockList;
-                            //             this.transactionContext[txId].votes = {};
-                            //             blockList.map((blockId) => {
-                            //                 listVotes(blockId, API_PATH)
-                            //                     .then((voteList) => {
-                            //                         this.transactionContext[txId].votes[blockId] = voteList;
-                            //                     })
-                            //             })
-                            //         });
-                            // });
-                            // async changes, need to update state
-            //                 counter++;
-            //                 if (counter == outputList.length) {
-            //                     this.wallets[public_key] = wallets[public_key];
-            //                     this.emitChange();
-            //                 }
-            //             })
-            //     });
-            // }
             this.transactionMeta.err = null;
             this.transactionMeta.public_key = null;
             this.transactionMeta.unspent = null;
         } else {
             this.transactionMeta.err = new Error('Problem fetching the transaction list');
         }
-        this.transactionMeta.isFetchingList = false;
     }
 
 }

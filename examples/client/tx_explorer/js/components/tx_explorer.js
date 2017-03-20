@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Navbar, Glyphicon } from 'react-bootstrap/lib';
+import { Navbar } from 'react-bootstrap/lib';
 
 import { safeInvoke } from 'js-utility-belt/es6';
 
@@ -18,7 +18,8 @@ import TransactionDetail from '../../../js/react/components/transactions/transac
 import InputTransaction from './input_transaction';
 import TransactionPanel from './transaction_panel';
 
-const OnTheRecord = React.createClass({
+
+const TxExplorer = React.createClass({
     propTypes: {
         // Injected through BigchainDBConnection
         activeAccount: React.PropTypes.object,
@@ -52,8 +53,7 @@ const OnTheRecord = React.createClass({
 
     handleAccountChange(account) {
         this.props.handleAccountChange(account);
-        console.log('handle', account)
-        new Promise((resolve, reject) => this.fetchUnspents(account));
+        this.fetchUnspents(account);
     },
 
     handleAssetClick(assetId) {
@@ -69,9 +69,10 @@ const OnTheRecord = React.createClass({
         const {
             activeAccount,
             accountList,
-            transactionContext,
             transactionList,
             transactionMap,
+            transactionMeta,
+            transactionStatuses,
             unspentOutputs
         } = this.props;
 
@@ -98,7 +99,7 @@ const OnTheRecord = React.createClass({
                         <div className="sidebar-nav">
                             <AccountList
                                 activeAccount={activeAccount}
-                                appName="ontherecord"
+                                appName="txexplorer"
                                 handleAccountClick={this.handleAccountChange}>
                                 <AccountDetail />
                             </AccountList>
@@ -112,7 +113,8 @@ const OnTheRecord = React.createClass({
                         <div className="page-content">
                             <TransactionList
                                 transactionList={transactionsForAccount}
-                                transactionContext={transactionContext}
+                                transactionMeta={transactionMeta}
+                                transactionStatuses={transactionStatuses}
                                 handleAssetClick={this.handleAssetClick}>
                                 <TransactionPanel
                                     activeAccount={activeAccount}
@@ -131,7 +133,7 @@ const OnTheRecord = React.createClass({
                                     </div>
                                     <TransactionList
                                         transactionList={transactionList}
-                                        transactionContext={transactionContext}>
+                                        transactionStatuses={transactionStatuses}>
                                         <TransactionDetail />
                                     </TransactionList>
                                 </div>
@@ -144,4 +146,4 @@ const OnTheRecord = React.createClass({
 });
 
 
-export default BigchainDBConnection(OnTheRecord);
+export default BigchainDBConnection(TxExplorer);

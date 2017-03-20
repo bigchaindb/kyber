@@ -3,16 +3,11 @@ import alt from '../alt';
 import AccountActions from '../actions/account_actions';
 import AccountSource from '../sources/account_source';
 
-import AssetActions from '../actions/asset_actions';
-import TransactionActions from '../actions/transaction_actions';
-
-import connectToBigchainDBLedger from '../../plugins/ledger_utils';
-
 
 class AccountStore {
     constructor() {
         this.account = null;
-        this.accountList = null;
+        this.accountList = [];
         this.accountMeta = {
             err: null,
             payloadToPost: null,
@@ -46,22 +41,12 @@ class AccountStore {
 
     onSuccessFetchAccountList(accountList) {
         if (accountList) {
-            this.accountList = accountList.accounts.map((account) => this.postProcessAccount(account));
+            this.accountList = accountList.accounts; // accountList.accounts.map((account) => this.postProcessAccount(account));
             this.accountMeta.err = null;
             this.accountMeta.app = null;
         } else {
             this.accountMeta.err = new Error('Problem fetching the account list');
         }
-    }
-
-    postProcessAccount(account) {
-        const processedAccount = Object.assign({}, account);
-
-        // ledger bindings
-        processedAccount.ledger = connectToBigchainDBLedger(account);
-        processedAccount.api = `http://${account.ledger.api}/api`;
-
-        return processedAccount;
     }
 
     onPostAccount(payloadToPost) {
@@ -89,7 +74,7 @@ class AccountStore {
     }
 
     onFlushAccountList() {
-        this.accountList = null;
+        this.accountList = [];
         this.accountMeta.err = null;
         this.accountMeta.app = null;
     }

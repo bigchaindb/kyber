@@ -6,7 +6,7 @@ import VoteSource from '../sources/vote_source';
 
 class VoteStore {
     constructor() {
-        this.voteList = {};
+        this.voteMap = {};
         this.voteMeta = {
             block_id: null,
             err: null,
@@ -22,7 +22,8 @@ class VoteStore {
 
     onSuccessFetchVoteList(voteList) {
         if (voteList) {
-            this.voteList = voteList;
+            const { block_id } = this.voteMeta;
+            this.voteMap[block_id] = voteList;
             this.voteMeta.err = null;
             this.voteMeta.block_id = null;
         } else {
@@ -31,16 +32,12 @@ class VoteStore {
     }
 
     onFlushVoteList() {
-        this.voteList = [];
+        this.voteMap = [];
         this.voteMeta.block_id = null;
     }
 
-    onFetchVote(vote_id) {
-        this.voteMeta.vote_id = vote_id;
-        this.getInstance().lookupVote();
-    }
 
-    onErrorVote(err) {
+    onErrorVoteList(err) {
         this.voteMeta.err = err;
     }
 }

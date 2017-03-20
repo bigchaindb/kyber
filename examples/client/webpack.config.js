@@ -16,7 +16,7 @@ const PRODUCTION = process.env.NODE_ENV === 'production';
 const EXTRACT = process.env.NODE_ENV === 'extract';
 
 const PATHS = {
-    ON_THE_RECORD: path.resolve(__dirname, 'on_the_record/js/app.js'),
+    TX_EXPLORER: path.resolve(__dirname, 'tx_explorer/js/app.js'),
     SHARE_TRADER: path.resolve(__dirname, 'share_trader/js/app.js'),
     INTERLEDGER: path.resolve(__dirname, 'interledger/js/app.js'),
 
@@ -29,13 +29,13 @@ const PATHS = {
 /** ENTRY POINTS **/
 const ENTRY = {
     // Use one entry per app
-    ontherecord: PATHS.ON_THE_RECORD,
+    tx_explorer: PATHS.TX_EXPLORER,
     // sharetrader: PATHS.SHARE_TRADER,
     // interledger: PATHS.INTERLEDGER,
 };
 
 const ENTRY_NAMES = {
-    ontherecord: 'On the Record',
+    tx_explorer: 'Transaction Explorer',
     sharetrader: 'Share Trader',
     interledger: 'Interledger',
 };
