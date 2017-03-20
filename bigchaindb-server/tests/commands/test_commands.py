@@ -1,6 +1,6 @@
 import json
 from unittest.mock import Mock, patch
-from argparse import Namespace, ArgumentTypeError
+from argparse import Namespace
 import copy
 
 import pytest
@@ -21,45 +21,8 @@ def test_make_sure_we_dont_remove_any_command():
     assert parser.parse_args(['start']).command
     assert parser.parse_args(['set-shards', '1']).command
     assert parser.parse_args(['set-replicas', '1']).command
-    assert parser.parse_args(['load']).command
     assert parser.parse_args(['add-replicas', 'localhost:27017']).command
     assert parser.parse_args(['remove-replicas', 'localhost:27017']).command
-
-
-def test_start_raises_if_command_not_implemented():
-    from bigchaindb.commands.bigchain import utils
-    from bigchaindb.commands.bigchain import create_parser
-
-    parser = create_parser()
-
-    with pytest.raises(NotImplementedError):
-        # Will raise because `scope`, the third parameter,
-        # doesn't contain the function `run_start`
-        utils.start(parser, ['start'], {})
-
-
-def test_start_raises_if_no_arguments_given():
-    from bigchaindb.commands.bigchain import utils
-    from bigchaindb.commands.bigchain import create_parser
-
-    parser = create_parser()
-
-    with pytest.raises(SystemExit):
-        utils.start(parser, [], {})
-
-
-@patch('multiprocessing.cpu_count', return_value=42)
-def test_start_sets_multiprocess_var_based_on_cli_args(mock_cpu_count):
-    from bigchaindb.commands.bigchain import utils
-    from bigchaindb.commands.bigchain import create_parser
-
-    def run_load(args):
-        return args
-
-    parser = create_parser()
-
-    assert utils.start(parser, ['load'], {'run_load': run_load}).multiprocess == 1
-    assert utils.start(parser, ['load', '--multiprocess'], {'run_load': run_load}).multiprocess == 42
 
 
 @patch('bigchaindb.commands.utils.start')
@@ -70,15 +33,20 @@ def test_main_entrypoint(mock_start):
     assert mock_start.called
 
 
-def test_bigchain_run_start(mock_run_configure, mock_processes_start, mock_db_init_with_existing_db):
+def test_bigchain_run_start(mock_run_configure,
+                            mock_processes_start,
+                            mock_db_init_with_existing_db,
+                            mocked_setup_logging):
     from bigchaindb.commands.bigchain import run_start
     args = Namespace(start_rethinkdb=False, allow_temp_keypair=False, config=None, yes=True)
     run_start(args)
+    mocked_setup_logging.assert_called_once_with()
 
 
 @pytest.mark.skipif(reason="BigchainDB doesn't support the automatic creation of a config file anymore")
-def test_bigchain_run_start_assume_yes_create_default_config(monkeypatch, mock_processes_start,
-                                                             mock_generate_key_pair, mock_db_init_with_existing_db):
+def test_bigchain_run_start_assume_yes_create_default_config(
+        monkeypatch, mock_processes_start, mock_generate_key_pair,
+        mock_db_init_with_existing_db, mocked_setup_logging):
     import bigchaindb
     from bigchaindb.commands.bigchain import run_start
     from bigchaindb import config_utils
@@ -98,6 +66,7 @@ def test_bigchain_run_start_assume_yes_create_default_config(monkeypatch, mock_p
     args = Namespace(config=None, yes=True)
     run_start(args)
 
+    mocked_setup_logging.assert_called_once_with()
     assert value['return'] == expected_config
 
 
@@ -131,7 +100,7 @@ def test_bigchain_export_my_pubkey_when_pubkey_set(capsys, monkeypatch):
     monkeypatch.setitem(config['keypair'], 'public', 'Charlie_Bucket')
     _, _ = capsys.readouterr()  # has the effect of clearing capsys
     run_export_my_pubkey(args)
-    out, err = capsys.readouterr()
+    out, _ = capsys.readouterr()
     lines = out.splitlines()
     assert config['keypair']['public'] in lines
     assert 'Charlie_Bucket' in lines
@@ -265,9 +234,9 @@ def test_run_configure_with_backend(backend, monkeypatch, mock_write_config):
 @patch('bigchaindb.common.crypto.generate_key_pair',
        return_value=('private_key', 'public_key'))
 @pytest.mark.usefixtures('ignore_local_config_file')
-def test_allow_temp_keypair_generates_one_on_the_fly(mock_gen_keypair,
-                                                     mock_processes_start,
-                                                     mock_db_init_with_existing_db):
+def test_allow_temp_keypair_generates_one_on_the_fly(
+        mock_gen_keypair, mock_processes_start,
+        mock_db_init_with_existing_db, mocked_setup_logging):
     import bigchaindb
     from bigchaindb.commands.bigchain import run_start
 
@@ -276,6 +245,7 @@ def test_allow_temp_keypair_generates_one_on_the_fly(mock_gen_keypair,
     args = Namespace(allow_temp_keypair=True, start_rethinkdb=False, config=None, yes=True)
     run_start(args)
 
+    mocked_setup_logging.assert_called_once_with()
     assert bigchaindb.config['keypair']['private'] == 'private_key'
     assert bigchaindb.config['keypair']['public'] == 'public_key'
 
@@ -285,7 +255,8 @@ def test_allow_temp_keypair_generates_one_on_the_fly(mock_gen_keypair,
 @pytest.mark.usefixtures('ignore_local_config_file')
 def test_allow_temp_keypair_doesnt_override_if_keypair_found(mock_gen_keypair,
                                                              mock_processes_start,
-                                                             mock_db_init_with_existing_db):
+                                                             mock_db_init_with_existing_db,
+                                                             mocked_setup_logging):
     import bigchaindb
     from bigchaindb.commands.bigchain import run_start
 
@@ -299,11 +270,15 @@ def test_allow_temp_keypair_doesnt_override_if_keypair_found(mock_gen_keypair,
     args = Namespace(allow_temp_keypair=True, start_rethinkdb=False, config=None, yes=True)
     run_start(args)
 
+    mocked_setup_logging.assert_called_once_with()
     assert bigchaindb.config['keypair']['private'] == original_private_key
     assert bigchaindb.config['keypair']['public'] == original_public_key
 
 
-def test_run_start_when_db_already_exists(mocker, monkeypatch, run_start_args):
+def test_run_start_when_db_already_exists(mocker,
+                                          monkeypatch,
+                                          run_start_args,
+                                          mocked_setup_logging):
     from bigchaindb.commands.bigchain import run_start
     from bigchaindb.common.exceptions import DatabaseAlreadyExists
     mocked_start = mocker.patch('bigchaindb.processes.start')
@@ -314,10 +289,14 @@ def test_run_start_when_db_already_exists(mocker, monkeypatch, run_start_args):
     monkeypatch.setattr(
         'bigchaindb.commands.bigchain._run_init', mock_run_init)
     run_start(run_start_args)
+    mocked_setup_logging.assert_called_once_with()
     assert mocked_start.called
 
 
-def test_run_start_when_keypair_not_found(mocker, monkeypatch, run_start_args):
+def test_run_start_when_keypair_not_found(mocker,
+                                          monkeypatch,
+                                          run_start_args,
+                                          mocked_setup_logging):
     from bigchaindb.commands.bigchain import run_start
     from bigchaindb.commands.messages import CANNOT_START_KEYPAIR_NOT_FOUND
     from bigchaindb.common.exceptions import KeypairNotFoundException
@@ -332,6 +311,7 @@ def test_run_start_when_keypair_not_found(mocker, monkeypatch, run_start_args):
     with pytest.raises(SystemExit) as exc:
         run_start(run_start_args)
 
+    mocked_setup_logging.assert_called_once_with()
     assert len(exc.value.args) == 1
     assert exc.value.args[0] == CANNOT_START_KEYPAIR_NOT_FOUND
     assert not mocked_start.called
@@ -339,7 +319,8 @@ def test_run_start_when_keypair_not_found(mocker, monkeypatch, run_start_args):
 
 def test_run_start_when_start_rethinkdb_fails(mocker,
                                               monkeypatch,
-                                              run_start_args):
+                                              run_start_args,
+                                              mocked_setup_logging):
     from bigchaindb.commands.bigchain import run_start
     from bigchaindb.commands.messages import RETHINKDB_STARTUP_ERROR
     from bigchaindb.common.exceptions import StartupError
@@ -356,6 +337,7 @@ def test_run_start_when_start_rethinkdb_fails(mocker,
     with pytest.raises(SystemExit) as exc:
         run_start(run_start_args)
 
+    mocked_setup_logging.assert_called_once_with()
     assert len(exc.value.args) == 1
     assert exc.value.args[0] == RETHINKDB_STARTUP_ERROR.format(err_msg)
     assert not mocked_start.called
@@ -379,11 +361,6 @@ def test_calling_main(start_mock, base_parser_mock, parse_args_mock,
     main()
 
     assert argparser_mock.called is True
-    assert parser.add_argument.called is True
-    parser.add_argument.assert_any_call('--dev-start-rethinkdb',
-                                        dest='start_rethinkdb',
-                                        action='store_true',
-                                        help='Run RethinkDB on start')
     parser.add_subparsers.assert_called_with(title='Commands',
                                              dest='command')
     subparsers.add_parser.assert_any_call('configure',
@@ -397,11 +374,19 @@ def test_calling_main(start_mock, base_parser_mock, parse_args_mock,
                                          'key')
     subparsers.add_parser.assert_any_call('init', help='Init the database')
     subparsers.add_parser.assert_any_call('drop', help='Drop the database')
+
     subparsers.add_parser.assert_any_call('start', help='Start BigchainDB')
+    subsubparsers.add_argument.assert_any_call('--dev-start-rethinkdb',
+                                               dest='start_rethinkdb',
+                                               action='store_true',
+                                               help='Run RethinkDB on start')
+    subsubparsers.add_argument.assert_any_call('--dev-allow-temp-keypair',
+                                               dest='allow_temp_keypair',
+                                               action='store_true',
+                                               help='Generate a random keypair on start')
 
     subparsers.add_parser.assert_any_call('set-shards',
                                           help='Configure number of shards')
-
     subsubparsers.add_argument.assert_any_call('num_shards',
                                                metavar='num_shards',
                                                type=int, default=1,
@@ -415,27 +400,6 @@ def test_calling_main(start_mock, base_parser_mock, parse_args_mock,
                                                help='Number of replicas (i.e. '
                                                'the replication factor)')
 
-    subparsers.add_parser.assert_any_call('load',
-                                          help='Write transactions to the '
-                                          'backlog')
-
-    subsubparsers.add_argument.assert_any_call('-m', '--multiprocess',
-                                               nargs='?', type=int,
-                                               default=False,
-                                               help='Spawn multiple processes '
-                                               'to run the command, if no '
-                                               'value is provided, the number '
-                                               'of processes is equal to the '
-                                               'number of cores of the host '
-                                               'machine')
-    subsubparsers.add_argument.assert_any_call('-c', '--count',
-                                               default=0,
-                                               type=int,
-                                               help='Number of transactions '
-                                               'to push. If the parameter -m '
-                                               'is set, the count is '
-                                               'distributed equally to all '
-                                               'the processes')
     assert start_mock.called is True
 
 
@@ -499,19 +463,3 @@ def test_run_remove_replicas(mock_remove_replicas):
     assert exc.value.args == ('err',)
     assert mock_remove_replicas.call_count == 1
     mock_remove_replicas.reset_mock()
-
-
-def test_mongodb_host_type():
-    from bigchaindb.commands.utils import mongodb_host
-
-    # bad port provided
-    with pytest.raises(ArgumentTypeError):
-        mongodb_host('localhost:11111111111')
-
-    # no port information provided
-    with pytest.raises(ArgumentTypeError):
-        mongodb_host('localhost')
-
-    # bad host provided
-    with pytest.raises(ArgumentTypeError):
-        mongodb_host(':27017')
