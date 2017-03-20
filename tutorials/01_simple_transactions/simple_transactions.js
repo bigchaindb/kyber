@@ -44,7 +44,7 @@ postTransaction(txCreateAliceSimpleSigned, API_PATH)
         getStatus(txCreateAliceSimpleSigned.id, API_PATH)
             .then((res) => console.log('Transaction status:', res.status));
         // poll the status every 0.5 seconds
-        return pollStatusAndFetchTransaction(txCreateAliceSimpleSigned, API_PATH)
+        return pollStatusAndFetchTransaction(txCreateAliceSimpleSigned.id, API_PATH)
     })
     .then((res) => {
         // the asset can now be transfered
@@ -67,5 +67,5 @@ postTransaction(txCreateAliceSimpleSigned, API_PATH)
     })
     .then((res) => {
         console.log('Response from BDB server:', res);
-        return pollStatusAndFetchTransaction(txTransferBobSigned, API_PATH);
+        return pollStatusAndFetchTransaction(txTransferBobSigned.id, API_PATH);
     });

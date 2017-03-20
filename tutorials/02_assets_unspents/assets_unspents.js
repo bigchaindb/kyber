@@ -41,7 +41,7 @@ console.log('Posting signed transaction: ', txCreateAliceSigned);
 postTransaction(txCreateAliceSigned, API_PATH)
     .then((res) => {
         console.log('Response from BDB server', res);
-        return pollStatusAndFetchTransaction(txCreateAliceSigned, API_PATH)
+        return pollStatusAndFetchTransaction(txCreateAliceSigned.id, API_PATH)
     })
     .then((res) => {
         const txTransferBob = makeTransferTransaction(
@@ -56,7 +56,7 @@ postTransaction(txCreateAliceSigned, API_PATH)
     })
     .then((res) => {
         console.log('Response from BDB server:', res);
-        return pollStatusAndFetchTransaction(txTransferBobSigned, API_PATH);
+        return pollStatusAndFetchTransaction(txTransferBobSigned.id, API_PATH);
     })
     .then((res) => {
         const txTransferBobDouble = makeTransferTransaction(
@@ -83,7 +83,7 @@ postTransaction(txCreateAliceSigned, API_PATH)
     })
     .then((res) => {
         console.log('Response from BDB server:', res);
-        return pollStatusAndFetchTransaction(txTransferCarlySigned, API_PATH);
+        return pollStatusAndFetchTransaction(txTransferCarlySigned.id, API_PATH);
     })
     .then((res) => {
         listTransactions({asset_id: assetId}, API_PATH)

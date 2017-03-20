@@ -124,14 +124,12 @@ Ok, so this goes well under LINUX, as most python devs know. OSX might be fine t
 
 If you want to run the Python tutorial with the experimental driver, 
 you'll need to install the local python driver and server of bigchaindb
- (in a `python3` virtual environment would be smart):
+ (in a `python3` virtual environment would be smart e.g. `virtualenv venv -p python3 && source venv/bin/activate`):
 
 ```bash
 cd drivers/python/
 pip install -e .
-cd ../../bigchaindb-server/ 
-pip install -e .
-cd ..
+cd ../../
 ```
 
 ### Run Tutorials
@@ -141,7 +139,7 @@ Here is a list of Python tutorials for a BigchainDB client:
  Prepare, sign and post basic `CREATE`, `TRANSFER` transactions
 - [assets_unspents.py](https://github.com/bigchaindb/kyber/blob/master/tutorials/02_assets_unspents/assets_unspents.py):
  Create, transfer and list assets, unspents, etc.
-- [divisible_transactions.py](https://github.com/bigchaindb/kyber/blob/master/tutorials/03_divisble_transactions/divisible_transactions.py):
+- [divisible_transactions.py](https://github.com/bigchaindb/kyber/blob/master/tutorials/03_divisible_transactions/divisible_transactions.py):
  Split and combine transactions with divisible assets
 - [cryptoconditions_transactions.py](https://github.com/bigchaindb/kyber/blob/master/tutorials/04_cryptoconditions_transactions/cryptoconditions_transactions.py):
  Create custom UTXO scripts using [py-crypto-conditions](https://github.com/bigchaindb/cryptoconditions)
@@ -152,14 +150,14 @@ Descend into the tutorials directory
 cd tutorials/
 ```
 
-Run each tutorial as a module. The tutorials require a `BDB_SERVER_URL`. 
+The tutorials require a `BDB_SERVER_URL`. 
 If you are running the server locally with docker we needed to remember the external port `<external-docker-port>` of the API in docker (run `docker-compose ps` in the repo root).
 In our case the `BDB_SERVER_URL` was `http://localhost:49984`.
 
 For example:
 
 ```bash
-BDB_SERVER_URL=<bigchaindb-server-url> python -m 01_simple_transactions.simple_transactions 
+PYTHONPATH=. BDB_SERVER_URL=<bigchaindb-server-url> python 01_simple_transactions/simple_transactions.py
 ```
 
 ## JavaScript Client Tutorials
@@ -211,14 +209,6 @@ A few more sips of :coffee: later...
 
 If all goes well, you'll see `webpack` spitting out the bundles. That's a good sign!
 
-Launch webpack in `watch` mode and wait for the bundles to be emitted:
-
-```bash
-BDB_SERVER_URL=<bigchaindb_server_url> webpack -w 
-```
-
-As long as the webpack watcher is running, every code change will be trigger a new build of the affected bundle(s).
-
 Once we have the bundles under `tutorials/build`, we're all set to inject them into a `html` file.
 There are some simple webpages in each tutorial that can be served under the `tutorials` directory.
 
@@ -240,9 +230,16 @@ You can access a (blank) page that will run the JavaScript in the background:
 The tutorials only use JavaScript without frontend visuals. (sorry for that, could go into the ideabox)
 However statements are printed in the dev console (`F12` in the browser, and `F5` to reload)
 
-## Example Applications (with ReactJS frontend)
+#### _[optional]_ 
+Launch webpack in `watch` mode and wait for the bundles to be emitted:
 
-__Disclaimer__: The examples are out of business for a short period due to maintenance
+```bash
+BDB_SERVER_URL=<bigchaindb_server_url> webpack -w 
+```
+
+As long as the webpack watcher is running, every code change will be trigger a new build of the affected bundle(s).
+
+## Example Applications (with ReactJS frontend)
 
 If you used the `make` approach, then examples should be running under the Docker container `examples-client-frontend`:
 

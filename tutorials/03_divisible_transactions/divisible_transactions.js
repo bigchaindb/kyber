@@ -40,7 +40,7 @@ console.log('Posting signed transaction: ', txCreateAliceDivisibleSigned);
 postTransaction(txCreateAliceDivisibleSigned, API_PATH)
     .then((res) => {
         console.log('Response from BDB server', res);
-        return pollStatusAndFetchTransaction(txCreateAliceDivisibleSigned, API_PATH)
+        return pollStatusAndFetchTransaction(txCreateAliceDivisibleSigned.id, API_PATH)
     })
     .then((res) => {
         // divide the coin of 4 into 3 outputs:
@@ -64,7 +64,7 @@ postTransaction(txCreateAliceDivisibleSigned, API_PATH)
     })
     .then((res) => {
         console.log('Response from BDB server:', res);
-        return pollStatusAndFetchTransaction(txTransferDivisibleSigned, API_PATH);
+        return pollStatusAndFetchTransaction(txTransferDivisibleSigned.id, API_PATH);
     })
     .then((res) => {
         // combine some coins:
@@ -91,7 +91,7 @@ postTransaction(txCreateAliceDivisibleSigned, API_PATH)
     })
     .then((res) => {
         console.log('Response from BDB server:', res);
-        return pollStatusAndFetchTransaction(txTransferDivisibleInputsSigned, API_PATH);
+        return pollStatusAndFetchTransaction(txTransferDivisibleInputsSigned.id, API_PATH);
     })
     .then((res) => {
         listTransactions({asset_id: assetId}, API_PATH)
