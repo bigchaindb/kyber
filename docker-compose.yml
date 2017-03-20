@@ -65,7 +65,7 @@ services:
     volumes:
       - ./examples/client/demo:/usr/src/app/examples/client/demo
       - ./examples/client/lib:/usr/src/app/examples/client/lib
-      - ./examples/client/on_the_record:/usr/src/app/examples/client/on_the_record
+      - ./examples/client/tx_explorer:/usr/src/app/examples/client/tx_explorer
       - ./examples/client/share_trader:/usr/src/app/examples/client/share_trader
       - ./examples/client/app_index_template.html:/usr/src/app/examples/client/app_index_template.html
       - ./examples/client/browserlist:/usr/src/app/examples/client/browserlist
@@ -74,6 +74,7 @@ services:
       - ./examples/client/webpack.config.js:/usr/src/app/examples/client/webpack.config.js
     environment:
       CLIENT_HOST: 0.0.0.0
+      BDB_SERVER_URL: "http://localhost:49984"
       FLASK_HOST: "${DOCKER_MACHINE_IP}"
       FLASK_PORT: 48000
     ports:

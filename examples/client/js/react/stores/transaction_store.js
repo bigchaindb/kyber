@@ -116,46 +116,53 @@ class TransactionStore {
         this.getInstance().lookupOutputList();
     }
 
-    onSuccessFetchOutputList(outputList) {
-        if (outputList && outputList.length) {
-            const unspentOutputs =
-                outputList.map((output) => output.split("/")[2]);
+    onSuccessFetchOutputList(response) {
+        // store state is unreliable in async concurrent, hence extract from url
+        const public_key = response.url.match(/public_key=([^&]*)/)[1];
+        response.json.then(jsonData => {
+            const outputList = jsonData;
+            if (outputList) {
+                if (outputList.length == 0) {
+                    this.unspentOutputs[public_key] = [];
+                    this.transactionMeta.isFetchingList = false;
+                } else {
+                    const unspentOutputs =
+                        outputList.map((output) => output.split("/")[2]);
 
-            const transactionsToFetch = unspentOutputs.filter(
-                (transactionId) => Object.keys(this.transactionMap).indexOf(transactionId) == -1
-            );
+                    const transactionsToFetch = unspentOutputs.filter(
+                        (transactionId) => Object.keys(this.transactionMap).indexOf(transactionId) == -1
+                    );
 
-            getTransaction(unspentOutputs[0], API_PATH)
-                .then((tx) => {
-                    const public_key = tx.outputs[0].public_keys[0];
                     this.unspentOutputs[public_key] = unspentOutputs;
-                    this.emitChange();
-                });
 
-            let counter = 0;
-            transactionsToFetch.forEach((transactionId) => {
-                getTransaction(transactionId, API_PATH)
-                    .then((transaction) => {
-                        this.transactionMap[transaction.id] = transaction;
+                    let counter = 0;
+                    transactionsToFetch.forEach((transactionId) => {
+                        getTransaction(transactionId, API_PATH)
+                            .then((transaction) => {
+                                this.transactionMap[transaction.id] = transaction;
 
-                        getStatus(transaction.id, API_PATH)
-                            .then((status) => {
-                                this.transactionStatuses[transaction.id] = status;
-                                counter ++;
-                                if (counter == transactionsToFetch.length) {
-                                    this.transactionMeta.isFetchingList = false;
-                                    this.emitChange();
-                                }
+                                getStatus(transaction.id, API_PATH)
+                                    .then((status) => {
+                                        this.transactionStatuses[transaction.id] = status;
+                                        counter++;
+                                        if (counter == transactionsToFetch.length) {
+                                            this.transactionMeta.isFetchingList = false;
+                                            this.emitChange();
+                                        }
+                                    });
                             });
                     });
-            });
+                }
 
-            this.transactionMeta.err = null;
-            this.transactionMeta.public_key = null;
-            this.transactionMeta.unspent = null;
-        } else {
-            this.transactionMeta.err = new Error('Problem fetching the transaction list');
-        }
+                this.transactionMeta.err = null;
+                this.transactionMeta.public_key = null;
+                this.transactionMeta.unspent = null;
+
+            } else {
+                this.transactionMeta.err = new Error('Problem fetching the transaction list');
+            }
+            this.emitChange();
+        });
     }
 
 }

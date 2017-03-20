@@ -57,7 +57,7 @@ const TransactionSource = {
     lookupOutputList: {
         remote(state) {
             const { public_key, unspent } = state.transactionMeta;
-            return listOutputs({public_key, unspent}, API_PATH)
+            return listOutputs({public_key, unspent}, API_PATH, false)
         },
 
             success: TransactionActions.successFetchOutputList,
