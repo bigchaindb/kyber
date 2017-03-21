@@ -32,10 +32,10 @@ All versions of the above:
 First things first. You'll need a BigchainDB server to get going with the API.
 If you want run the server locally follow these steps:
 
-Clone this repo
+Clone this repo (using submodules)
 
 ```bash
-git clone git@github.com:bigchaindb/kyber.git 
+git clone git@github.com:bigchaindb/kyber.git --recursive 
 ```
 
 and

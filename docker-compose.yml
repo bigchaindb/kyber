@@ -45,19 +45,6 @@ services:
       - "49984:9984"
     command: bigchaindb start
 
-  bdb-server-kyber:
-    build:
-      context: .
-      dockerfile: ./compose/bigchaindb-server-kyber-flask/Dockerfile
-    environment:
-      BIGCHAINDB_DATABASE_HOST: rdb
-      BIGCHAINDB_SERVER_BIND: 0.0.0.0:9985
-    ports:
-      - "9985"
-    volumes:
-      - ./bigchaindb-kyber:/usr/src/app/bigchaindb-kyber
-    command: python bigchaindb-kyber/web/server_flask.py
-
   examples-client-frontend:
     build:
       context: .
