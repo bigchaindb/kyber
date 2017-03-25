@@ -1,20 +1,6 @@
 
 .tx-explorer {
 
-    pre {
-        font-size: smaller;
-        background: white;
-        padding: 4px;
-        border: none;
-        background: rgba(0, 0, 0, 0);
-        color: darken(aquamarine, 50%);
-    }
-
-    h1 {
-        color: #00B277;
-        font-family: "Droid Sans Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
-    }
-
     .blink {
         animation: blink-animation 1.5s steps(5, start) infinite;
         -webkit-animation: blink-animation 1.5s steps(5, start) infinite;
@@ -41,118 +27,8 @@
         color: lighten($fg-color, 50%);
     }
 
-    #page-content-wrapper {
-        max-width: 840px;
-        color: #00B277;
-        font-family: "Droid Sans Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
-    }
-
-    .page-content {
-        padding-bottom: 5em;
-        padding-top: 1em;
-    }
-
-    .input-asset-fixed {
-        position: fixed;
-        z-index: 100;
-        width: 100%;
-        border-bottom: 2px solid darken(aquamarine, 40%) !important;
-        input {
-            background: lighten(aquamarine, 10%);
-        }
-        ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
-            color: lighten(#109, 20%);
-        }
-        :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-            color: lighten(#109, 20%);
-            opacity: 1;
-        }
-        ::-moz-placeholder { /* Mozilla Firefox 19+ */
-            color: lighten(#109, 20%);
-            opacity: 1;
-        }
-        :-ms-input-placeholder { /* Internet Explorer 10-11 */
-            color: lighten(#109, 20%);
-        }
-        .inner-addon .glyphicon-input {
-            color: lighten(#109, 20%);
-        }
-    }
-
-    .input-content {
-        border: 1px solid rgba(0, 0, 0, 0);
-        background: lighten(aquamarine, 20%);
-        font-family: "Droid Sans Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
-    }
-
-    .input-content-panel {
-        ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
-            color: lighten(#109, 20%);
-        }
-        :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-            color: lighten(#109, 20%);
-            opacity: 1;
-        }
-        ::-moz-placeholder { /* Mozilla Firefox 19+ */
-            color: lighten(#109, 20%);
-            opacity: 1;
-        }
-        :-ms-input-placeholder { /* Internet Explorer 10-11 */
-            color: lighten(#109, 20%);
-        }
-        .inner-addon .glyphicon-input {
-            color: lighten(#109, 20%);
-        }
-    }
-
-    /* enable absolute positioning */
-    .inner-addon {
-        position: relative;
-    }
-
-    /* style icon */
-    .inner-addon .glyphicon-input {
-        position: absolute;
-        padding: 1em;
-        pointer-events: none;
-    }
-
-    /* align icon */
-    .left-addon .glyphicon-input {
-        left: 0;
-    }
-    .right-addon .glyphicon-input {
-        right: 0;
-    }
-
-    /* add padding  */
-    .left-addon input {
-        padding-left: 3em;
-    }
-    .right-addon input {
-        padding-right: 3em;
-    }
-
     .transaction-list {
         margin-top: 60px;
-    }
-
-    .transaction-list-null {
-        margin-top: 60px;
-        text-align: center;
-    }
-
-    .transaction-panel {
-        border-bottom: 1px solid darken(aquamarine, 40%);
-        border-left: 1px solid rgba(0, 0, 0, 0);
-        border-right: 1px solid rgba(0, 0, 0, 0);
-        border-top: 1px solid rgba(0, 0, 0, 0);
-        &:hover {
-            background: white;
-            border: 1px solid darken(aquamarine, 40%);
-        }
-        margin-bottom: 1em;
-        max-width: 800px;
     }
 
     #transaction-history-wrapper {

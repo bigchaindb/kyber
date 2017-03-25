@@ -1,4 +1,3 @@
-import { safeMerge } from 'js-utility-belt/es6';
 import alt from '../alt';
 
 import {
@@ -7,7 +6,6 @@ import {
 } from 'js-bigchaindb-quickstart';
 
 import { API_PATH } from '../../constants/application_constants';
-import parseEscrowData from '../../utils/cryptoconditions/parse_escrow_data';
 
 import TransactionActions from '../actions/transaction_actions';
 import TransactionSource from '../sources/transaction_source';
@@ -152,6 +150,9 @@ class TransactionStore {
                                     });
                             });
                     });
+                    if (transactionsToFetch.length == 0) {
+                        this.transactionMeta.isFetchingList = false;
+                    }
                 }
 
                 this.transactionMeta.err = null;
