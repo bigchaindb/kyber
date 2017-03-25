@@ -1,0 +1,53 @@
+$color-button: #ED4E2B;
+$dark-transparent: rgba(#000000, .6);
+
+
+.audio-lock {
+
+    #page-content-wrapper {
+        max-width: 840px;
+        color: #00B277;
+        font-family: "Droid Sans Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
+    }
+
+    .page-content {
+        padding-bottom: 5em;
+        padding-top: 1em;
+    }
+
+    .frequency-col {
+        padding: 0;
+    }
+
+    .frequency-bar {
+        background: green;
+        height: 90px;
+        opacity: 0;
+        width: 100%;
+        &.target {
+            background: red;
+            border: 1px solid darken(red, 20%);
+            color: white;
+            text-align: center;
+            font-size: 2em;
+        }
+    }
+
+    .transaction-input .frequency-bar{
+        border-right: 1px solid darken(aquamarine, 50%);
+        border-bottom: 1px solid darken(aquamarine, 50%);
+        opacity: 1;
+        background: lighten(aquamarine, 10%);
+        height: 60px;
+        &.selected {
+            background: lighten(red, 20%);
+            color: white;
+            text-align: center;
+            font-size: 2em;
+        }
+        &:hover{
+            cursor: pointer;
+            background: lighten(red, 20%);
+        }
+    }
+}
