@@ -30,7 +30,7 @@ const PATHS = {
 /** ENTRY POINTS **/
 const ENTRY = {
     // Use one entry per app
-    // tx_explorer: PATHS.TX_EXPLORER,
+    tx_explorer: PATHS.TX_EXPLORER,
     audio_lock: PATHS.AUDIO_METER,
     // sharetrader: PATHS.SHARE_TRADER,
     // interledger: PATHS.INTERLEDGER,
