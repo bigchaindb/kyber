@@ -1,3 +1,6 @@
 [submodule "bigchaindb-server"]
 	path = bigchaindb-server
 	url = https://github.com/bigchaindb/bigchaindb/
+[submodule "plugins/bigchaindb-consensus-composition"]
+	path = plugins/bigchaindb-consensus-composition
+	url = /home/dimi/code_ascribe/plugins-bdb/bigchaindb-consensus-composition/
