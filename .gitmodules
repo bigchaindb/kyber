@@ -3,4 +3,4 @@
 	url = https://github.com/bigchaindb/bigchaindb/
 [submodule "plugins/bigchaindb-consensus-composition"]
 	path = plugins/bigchaindb-consensus-composition
-	url = /home/dimi/code_ascribe/plugins-bdb/bigchaindb-consensus-composition/
+	url = https://github.com/ascribe/bigchaindb-consensus-composition/
