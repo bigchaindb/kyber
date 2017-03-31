@@ -4,3 +4,6 @@
 [submodule "plugins/bigchaindb-consensus-composition"]
 	path = plugins/bigchaindb-consensus-composition
 	url = https://github.com/ascribe/bigchaindb-consensus-composition/
+[submodule "plugins/bigchaindb-consensus-policy"]
+	path = plugins/bigchaindb-consensus-policy
+	url = https://github.com/ascribe/bigchaindb-consensus-policy/
