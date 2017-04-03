@@ -1,16 +1,8 @@
 import React from 'react';
 
-import classnames from 'classnames';
 import { Glyphicon } from 'react-bootstrap/lib';
 
-import {
-    makeCreateTransaction,
-    makeTransferTransaction,
-    makeOutput,
-    makeEd25519Condition,
-    signTransaction,
-    pollStatusAndFetchTransaction
-} from 'js-bigchaindb-quickstart';
+import * as driver from 'js-bigchaindb-quickstart';
 
 import { API_PATH } from '../../../js/constants/application_constants';
 
@@ -88,12 +80,12 @@ const InputTransaction = React.createClass({
             toAccount = this.getToAccountFromValue(value);
             transaction = this.transferTransaction(toAccount, inputTransaction, value);
         }
-        const signedTransaction = signTransaction(transaction, activeAccount.sk);
+        const signedTransaction = driver.Transaction.signTransaction(transaction, activeAccount.sk);
 
         TransactionActions.postTransaction(signedTransaction);
 
         setTimeout(() => {
-            pollStatusAndFetchTransaction(signedTransaction.id, API_PATH)
+            driver.Connection.pollStatusAndFetchTransaction(signedTransaction.id, API_PATH)
                 .then(() => {
                     TransactionActions.fetchOutputList({
                         public_key: activeAccount.vk,
@@ -116,10 +108,10 @@ const InputTransaction = React.createClass({
             'definition': value
         };
 
-        return makeCreateTransaction(
+        return driver.Transaction.makeCreateTransaction(
             asset,
             null,
-            [makeOutput(makeEd25519Condition(activeAccount.vk))],
+            [driver.Transaction.makeOutput(driver.Transaction.makeEd25519Condition(activeAccount.vk))],
             activeAccount.vk
         );
     },
@@ -130,10 +122,10 @@ const InputTransaction = React.createClass({
             'message': value
         };
 
-        return makeTransferTransaction(
+        return driver.Transaction.makeTransferTransaction(
             inputTransaction,
             metadata,
-            [makeOutput(makeEd25519Condition(toAccount.vk))],
+            [driver.Transaction.makeOutput(driver.Transaction.makeEd25519Condition(toAccount.vk))],
             0
         );
     },

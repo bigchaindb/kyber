@@ -1,9 +1,6 @@
 import alt from '../alt';
 
-import {
-    getStatus,
-    getTransaction,
-} from 'js-bigchaindb-quickstart';
+import * as driver from 'js-bigchaindb-quickstart';
 
 import { API_PATH } from '../../constants/application_constants';
 
@@ -135,11 +132,13 @@ class TransactionStore {
 
                     let counter = 0;
                     transactionsToFetch.forEach((transactionId) => {
-                        getTransaction(transactionId, API_PATH)
+                        driver.Connection
+                            .getTransaction(transactionId, API_PATH)
                             .then((transaction) => {
                                 this.transactionMap[transaction.id] = transaction;
 
-                                getStatus(transaction.id, API_PATH)
+                                driver.Connection
+                                    .getStatus(transaction.id, API_PATH)
                                     .then((status) => {
                                         this.transactionStatuses[transaction.id] = status;
                                         counter++;
