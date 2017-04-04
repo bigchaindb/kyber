@@ -2,13 +2,7 @@ import React from 'react';
 
 import classnames from 'classnames';
 
-import {
-    makeTransferTransaction,
-    makeOutput,
-    makeEd25519Condition,
-    signTransaction,
-    pollStatusAndFetchTransaction
-} from 'js-bigchaindb-quickstart';
+import * as driver from 'js-bigchaindb-quickstart';
 
 import { API_PATH } from '../../../js/constants/application_constants';
 
@@ -57,19 +51,19 @@ const TransactionPanel = React.createClass({
             'message': value
         };
 
-        const transactionTransfer = makeTransferTransaction(
+        const transactionTransfer = driver.Transaction.makeTransferTransaction(
             transaction,
             metadata,
-            [makeOutput(makeEd25519Condition(toAccount.vk))],
+            [driver.Transaction.makeOutput(driver.Transaction.makeEd25519Condition(toAccount.vk))],
             0
         );
 
-        const signedTransaction = signTransaction(transactionTransfer, activeAccount.sk);
+        const signedTransaction = driver.Transaction.signTransaction(transactionTransfer, activeAccount.sk);
 
         TransactionActions.postTransaction(signedTransaction);
 
         setTimeout(() => {
-            pollStatusAndFetchTransaction(signedTransaction.id, API_PATH)
+            driver.Connection.pollStatusAndFetchTransaction(signedTransaction.id, API_PATH)
                 .then(() => {
                     TransactionActions.fetchOutputList({
                         public_key: activeAccount.vk,

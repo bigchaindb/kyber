@@ -5,13 +5,7 @@ import { Col, Row } from 'react-bootstrap/lib';
 
 import moment from 'moment';
 
-import {
-    makeCreateTransaction,
-    makeOutput,
-    makeEd25519Condition,
-    signTransaction,
-    pollStatusAndFetchTransaction
-} from 'js-bigchaindb-quickstart';
+import * as driver from 'js-bigchaindb-quickstart';
 
 import { API_PATH } from '../../../js/constants/application_constants';
 
@@ -54,12 +48,12 @@ const InputTransaction = React.createClass({
         else {
             transaction = this.transferTransaction(toAccount, inputTransaction, value);
         }
-        const signedTransaction = signTransaction(transaction, activeAccount.sk);
+        const signedTransaction = driver.Transaction.signTransaction(transaction, activeAccount.sk);
 
         TransactionActions.postTransaction(signedTransaction);
 
         setTimeout(() => {
-            pollStatusAndFetchTransaction(signedTransaction.id, API_PATH)
+            driver.Connection.pollStatusAndFetchTransaction(signedTransaction.id, API_PATH)
                 .then(() => {
                     TransactionActions.fetchOutputList({
                         public_key: activeAccount.vk,
@@ -83,10 +77,10 @@ const InputTransaction = React.createClass({
             'timestamp': moment().format('x')
         };
 
-        return makeCreateTransaction(
+        return driver.Transaction.makeCreateTransaction(
             asset,
             null,
-            [makeOutput(makeEd25519Condition(activeAccount.vk))],
+            [driver.Transaction.makeOutput(driver.Transaction.makeEd25519Condition(activeAccount.vk))],
             activeAccount.vk
         );
     },

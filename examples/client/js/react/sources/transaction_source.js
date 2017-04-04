@@ -1,10 +1,4 @@
-import {
-    getStatus,
-    getTransaction,
-    listTransactions,
-    listOutputs,
-    postTransaction,
-} from 'js-bigchaindb-quickstart';
+import * as driver from 'js-bigchaindb-quickstart';
 
 import { API_PATH } from '../../constants/application_constants';
 
@@ -16,7 +10,7 @@ const TransactionSource = {
         remote(state) {
             const {asset_id, operation} = state.transactionMeta;
             // fetch transactions for account
-            return listTransactions({asset_id, operation}, API_PATH);
+            return driver.Connection.listTransactions({asset_id, operation}, API_PATH);
         },
 
         success: TransactionActions.successFetchTransactionList,
@@ -26,7 +20,7 @@ const TransactionSource = {
     postTransaction: {
         remote(state) {
             const { transaction } = state.transactionMeta;
-            return postTransaction(transaction, API_PATH)
+            return driver.Connection.postTransaction(transaction, API_PATH)
         },
 
         success: TransactionActions.successPostTransaction,
@@ -36,7 +30,7 @@ const TransactionSource = {
     lookupTransaction: {
             remote(state) {
             const { tx_id } = state.transactionMeta;
-            return getTransaction(tx_id, API_PATH)
+            return driver.Connection.getTransaction(tx_id, API_PATH)
         },
 
         success: TransactionActions.successFetchTransaction,
@@ -47,7 +41,7 @@ const TransactionSource = {
     lookupStatus: {
         remote(state) {
                 const { tx_id } = state.transactionMeta;
-            return getStatus(tx_id, API_PATH)
+            return driver.Connection.getStatus(tx_id, API_PATH)
         },
 
         success: TransactionActions.successFetchStatus,
@@ -57,7 +51,7 @@ const TransactionSource = {
     lookupOutputList: {
         remote(state) {
             const { public_key, unspent } = state.transactionMeta;
-            return listOutputs({public_key, unspent}, API_PATH, false)
+            return driver.Connection.listOutputs({public_key, unspent}, API_PATH, false)
         },
 
             success: TransactionActions.successFetchOutputList,

@@ -41,7 +41,6 @@ services:
       BIGCHAINDB_SERVER_BIND: 0.0.0.0:9984
       BIGCHAINDB_KEYPAIR_PUBLIC: GW1nrdZm4mbVC8ePeiGWz6DqHexqewqy5teURVHi3RG4
       BIGCHAINDB_KEYPAIR_PRIVATE: 2kQgBtQnHoauw8QchKM7xYvEBW1QDoHzhBsCL9Vi1AzB
-      BIGCHAINDB_CONSENSUS_PLUGIN: bigchaindb/common/asset/consensus.py:AssetCompositionConsensusRules
     ports:
       - "49984:9984"
     command: bigchaindb start
