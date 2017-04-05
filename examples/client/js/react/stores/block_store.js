@@ -1,4 +1,3 @@
-import { safeMerge } from 'js-utility-belt/es6';
 import alt from '../alt';
 
 import BlockActions from '../actions/block_actions';

@@ -1,7 +1,4 @@
-import {
-    getBlock,
-    listBlocks
-} from 'js-bigchaindb-quickstart';
+import * as driver from 'js-bigchaindb-quickstart';
 
 import { API_PATH } from '../../constants/application_constants';
 
@@ -13,7 +10,7 @@ const BlockSource = {
         remote(state) {
             const {tx_id, status} = state.blockMeta;
             // fetch blocks for transaction
-            return listBlocks({tx_id, status}, API_PATH);
+            return driver.Connection.listBlocks({tx_id, status}, API_PATH);
         },
 
         success: BlockActions.successFetchBlockList,
@@ -23,7 +20,7 @@ const BlockSource = {
     lookupBlock: {
             remote(state) {
             const { block_id } = state.blockMeta;
-            return getBlock(block_id, API_PATH)
+            return driver.Connection.getBlock(block_id, API_PATH)
         },
 
         success: BlockActions.successFetchBlock,
