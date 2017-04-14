@@ -10,6 +10,7 @@ import Spinner from './spinner';
 const AccountList = React.createClass({
     propTypes: {
         activeAccount: React.PropTypes.object,
+        accountList: React.PropTypes.array,
         appName: React.PropTypes.string,
         children: React.PropTypes.node,
         className: React.PropTypes.string,
@@ -42,17 +43,22 @@ const AccountList = React.createClass({
     render() {
         const {
             activeAccount,
+            accountList,
             children,
             className,
             handleAccountClick
         } = this.props;
-        
-        const { accountList } = this.state;
 
-        if (accountList && accountList.length > 0) {
+        let accountListLocal = accountList;
+
+        if (!accountList) {
+            accountListLocal = this.state.accountList;
+        }
+
+        if (accountListLocal && accountListLocal.length > 0) {
             return (
                 <div className={classnames(className)}>
-                    {accountList
+                    {accountListLocal
                         .sort((a, b) => {
                             if (a.name < b.name) return -1;
                             if (a.name > b.name) return 1;

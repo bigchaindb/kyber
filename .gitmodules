@@ -7,3 +7,6 @@
 [submodule "plugins/bigchaindb-consensus-policy"]
 	path = plugins/bigchaindb-consensus-policy
 	url = https://github.com/ascribe/bigchaindb-consensus-policy/
+[submodule "examples/client/asset_composition"]
+	path = examples/client/asset_composition
+	url = git@github.com:ascribe/sicpa-client.git

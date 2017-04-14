@@ -46,6 +46,29 @@ services:
       - "49984:9984"
     command: bigchaindb start
 
+  bdb-server-plugins:
+    build:
+      context: .
+      dockerfile:  ./compose/bdb-server-plugins/Dockerfile
+    volumes:
+      - ./bigchaindb-server/bigchaindb:/usr/src/app/bigchaindb
+      - ./bigchaindb-server/tests:/usr/src/app/tests
+      - ./bigchaindb-server/docs:/usr/src/app/docs
+      - ./bigchaindb-server/setup.py:/usr/src/app/setup.py
+      - ./bigchaindb-server/setup.cfg:/usr/src/app/setup.cfg
+      - ./bigchaindb-server/pytest.ini:/usr/src/app/pytest.ini
+      - ./bigchaindb-server/tox.ini:/usr/src/app/tox.ini
+      - ./bigchaindb-server/Makefile:/usr/src/app/Makefile
+    environment:
+      BIGCHAINDB_DATABASE_HOST: rdb
+      BIGCHAINDB_SERVER_BIND: 0.0.0.0:9984
+      BIGCHAINDB_KEYPAIR_PUBLIC: GW1nrdZm4mbVC8ePeiGWz6DqHexqewqy5teURVHi3RG4
+      BIGCHAINDB_KEYPAIR_PRIVATE: 2kQgBtQnHoauw8QchKM7xYvEBW1QDoHzhBsCL9Vi1AzB
+      BIGCHAINDB_CONSENSUS_PLUGIN: consensus_asset_composition
+    ports:
+      - "49984:9984"
+    command: bigchaindb start
+
   examples-client-frontend:
     build:
       context: .

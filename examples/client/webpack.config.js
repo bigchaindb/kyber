@@ -18,6 +18,7 @@ const EXTRACT = process.env.NODE_ENV === 'extract';
 const PATHS = {
     TX_EXPLORER: path.resolve(__dirname, 'tx_explorer/js/app.js'),
     AUDIO_METER: path.resolve(__dirname, 'audio_lock/js/app.js'),
+    ASSET_COMPOSITION: path.resolve(__dirname, 'asset_composition/js/app.js'),
     SHARE_TRADER: path.resolve(__dirname, 'share_trader/js/app.js'),
     INTERLEDGER: path.resolve(__dirname, 'interledger/js/app.js'),
 
@@ -32,6 +33,7 @@ const ENTRY = {
     // Use one entry per app
     tx_explorer: PATHS.TX_EXPLORER,
     audio_lock: PATHS.AUDIO_METER,
+    asset_composition: PATHS.ASSET_COMPOSITION
     // sharetrader: PATHS.SHARE_TRADER,
     // interledger: PATHS.INTERLEDGER,
 };
@@ -39,6 +41,7 @@ const ENTRY = {
 const ENTRY_NAMES = {
     tx_explorer: 'Transaction Explorer',
     audio_lock: 'Audio Lock',
+    asset_composition: 'Asset Composition',
     sharetrader: 'Share Trader',
     interledger: 'Interledger',
 };
