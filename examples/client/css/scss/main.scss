@@ -2,7 +2,6 @@
 // TODO: this should be removed
 @import url(https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css);
 
-@import './style';
 $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 @import "~bootstrap-sass/assets/stylesheets/bootstrap";
 @import 'custom_bootstrap';
@@ -15,6 +14,7 @@ $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 @import 'spinner';
 @import 'style';
 @import 'transaction';
+@import 'timeline';
 @import '../../tx_explorer/scss/custom_style';
 @import '../../audio_lock/scss/custom_style';
 @import '../../share_trader/scss/custom_style';
