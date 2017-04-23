@@ -1,33 +1,39 @@
 @import "variables";
-
+@import "bigchaindb";
 
 .account-wrapper:first-child {
-    border-top: 1px solid darken(aquamarine, 40%);
+    border-top: 2px solid $brand-main-gray-lighter;
 }
 
 .list-row,
 .list-item {
-    font-family: "Droid Sans Mono",Menlo,Monaco,Consolas,"Courier New",monospace;
     font-size: .9em;
     text-transform: uppercase;
     padding: 1em;
-    background-color: $bg-color;
-    border-bottom: 1px solid darken(aquamarine, 40%);
-    color: lighten($fg-color, 30%);
+    background-color: $brand-main-gray;
+    border-bottom: 2px solid $brand-main-gray-lighter;
+    border-left: 2px solid $brand-main-gray-lighter;
+    border-right: 2px solid $brand-main-gray-lighter;
+    color: $brand-main-gray-lighter;
 }
 
 .list-row {
     &:hover {
-        background-color: lighten(aquamarine, 20%);
+        color: $brand-main-gray;
+        background-color: $brand-main-gray-lighter;
         cursor: pointer;
+        .list-row-name,
+        .list-row-detail {
+            color: $brand-main-gray;
+        }
     }
 }
 
 .list-row.active {
-    background: lighten(aquamarine, 10%);
+    background: $brand-main-gray-lighter;
     .list-row-name,
     .list-row-detail {
-        color: #109;
+        color: $brand-main-gray;
     }
 }
 
@@ -36,13 +42,13 @@
 }
 
 .list-row-detail {
+    font-family: "Droid Sans Mono",Menlo,Monaco,Consolas,"Courier New",monospace;
     font-size: 0.8em;
-    color: lighten($fg-color, 50%);
 }
 
 .list-row-name,
 .list-row-detail {
     text-overflow: ellipsis;
     overflow: hidden;
-    color: darken(aquamarine, 50%)
+    color: $brand-main-gray-lighter;
 }

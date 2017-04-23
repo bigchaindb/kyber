@@ -1,7 +1,9 @@
+@import "bigchaindb";
+
 .cd-container {
     /* this class is used to give a max-width to the element it is applied to, and center it horizontally when it reaches that max-width */
     width: 90%;
-    max-width: 1170px;
+    max-width: 1000px;
     margin: 0 auto;
 }
 
@@ -23,14 +25,14 @@
     /* this is the vertical line */
     content: '';
     position: absolute;
-    top: 0;
+    top: 2em;
     left: 18px;
     height: 100%;
     width: 4px;
-    background: #d7e4ed;
+    background: $brand-main-gray-lighter;
 }
 
-@media only screen and (min-width: 1170px) {
+@media only screen and (min-width: 1000px) {
     #cd-timeline {
         margin-top: 3em;
         margin-bottom: 3em;
@@ -60,7 +62,7 @@
     margin-bottom: 0;
 }
 
-@media only screen and (min-width: 1170px) {
+@media only screen and (min-width: 1000px) {
     .cd-timeline-block {
         margin: 4em 0;
     }
@@ -94,7 +96,7 @@
 }
 
 .cd-timeline-img.cd-picture {
-    background: #75ce66;
+    background: $brand-main-green;
 }
 
 .cd-timeline-img.cd-movie {
@@ -105,7 +107,7 @@
     background: #f0ca45;
 }
 
-@media only screen and (min-width: 1170px) {
+@media only screen and (min-width: 1000px) {
     .cd-timeline-img {
         width: 60px;
         height: 60px;
@@ -192,7 +194,7 @@
     background: white;
     border-radius: 0.25em;
     padding: 1em;
-    box-shadow: 0 3px 0 #d7e4ed;
+    box-shadow: 0 3px 0 $brand-main-gray-lighter;
 }
 
 .cd-timeline-content:after {
@@ -202,7 +204,7 @@
 }
 
 .cd-timeline-content h2 {
-    color: #303e49;
+    color: $brand-main-gray;
 }
 
 .cd-timeline-content p, .cd-timeline-content .cd-read-more, .cd-timeline-content .cd-date {
@@ -236,6 +238,10 @@
     opacity: .7;
 }
 
+.cd-date {
+    color: lighten($brand-main-green, 30%);
+}
+
 .cd-timeline-content::before {
     content: '';
     position: absolute;
@@ -258,7 +264,7 @@
     }
 }
 
-@media only screen and (min-width: 1170px) {
+@media only screen and (min-width: 1000px) {
     .cd-timeline-content {
         margin-left: 0;
         padding: 1.6em;
@@ -309,7 +315,7 @@
     }
 }
 
-@media only screen and (min-width: 1170px) {
+@media only screen and (min-width: 1000px) {
     /* inverse bounce effect on even content blocks */
     .cssanimations .cd-timeline-block:nth-child(even) .cd-timeline-content.bounce-in {
         -webkit-animation: cd-bounce-2-inverse 0.6s;

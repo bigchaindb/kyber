@@ -1,4 +1,5 @@
 @import "variables";
+@import "bigchaindb";
 
 /**
  * Colors and backgrounds
@@ -36,12 +37,11 @@ pre {
     padding: 4px;
     border: none;
     background: rgba(0, 0, 0, 0);
-    color: darken(aquamarine, 50%);
+    color: $brand-main-gray;
 }
 
 h1 {
-    color: #00B277;
-    font-family: "Droid Sans Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
+    color: $brand-main-gray-lighter;
 }
 
 
@@ -126,11 +126,18 @@ h1 {
     padding-right: 3em;
 }
 
+#wrapper {
+  //padding-left: $sidebar--wide;
+  //transition: all 0.4s ease 0s;
+  margin-top: $navbar-height;
+}
+
+
 #page-content-wrapper {
     width: 100%;
     max-width: 840px;
-    color: #00B277;
-    font-family: "Droid Sans Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
+    color: $brand-main-gray;
+    //font-family: "Droid Sans Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 .page-content {

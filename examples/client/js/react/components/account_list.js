@@ -68,7 +68,7 @@ const AccountList = React.createClass({
                             <AccountWrapper
                                 key={account.vk}
                                 account={account}
-                                isActive={activeAccount === account}
+                                isActive={!!activeAccount && activeAccount.vk === account.vk}
                                 handleClick={handleAccountClick}>
                                 {children}
                             </AccountWrapper>

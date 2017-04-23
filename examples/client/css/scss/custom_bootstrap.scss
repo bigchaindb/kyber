@@ -1,4 +1,5 @@
 @import "variables";
+@import "bigchaindb";
 
 .pagination {
   margin-right: 2em;
@@ -92,6 +93,10 @@
 }
 
 .navbar-inverse {
-  border-bottom: 2px solid darken(aquamarine, 40%);
-  background: white;
+  border-bottom: 0;
+  background: $brand-main-gray;
+}
+
+.label-success {
+  background-color: $brand-main-green;
 }
