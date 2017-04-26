@@ -1,12 +1,17 @@
-@import url(https://fonts.googleapis.com/css?family=Lato:300);
-// TODO: this should be removed
-@import url(https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css);
+@import '_normalize.css';
+@import 'variables';
 
-@import './style';
-$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap";
-@import 'custom_bootstrap';
-@import 'normalize.css';
+// TODO: remove bootstrap dependency
+//$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
+//@import "~bootstrap-sass/assets/stylesheets/bootstrap";
+//@import 'custom_bootstrap';
+
+
+//
+// Globals for all examples
+//
+@import 'typography';
+
 @import 'account';
 @import 'asset';
 @import 'card';
@@ -15,6 +20,11 @@ $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 @import 'spinner';
 @import 'style';
 @import 'transaction';
+
+
+//
+// Specific example app styles
+//
 @import '../tx_explorer/scss/custom_style';
 @import '../audio_lock/scss/custom_style';
 @import '../share_trader/scss/custom_style';
