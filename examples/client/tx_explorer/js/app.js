@@ -8,7 +8,7 @@ import ReactDOM from 'react-dom';
 
 import TxExplorer from './components/tx_explorer';
 
-import '../../css/scss/main.scss';
+import '../../scss/main.scss';
 
 
 const App = () => (

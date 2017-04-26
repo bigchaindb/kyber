@@ -8,7 +8,7 @@ import ReactDOM from 'react-dom';
 
 import Interledger from './components/interledger';
 
-import '../../css/scss/main.scss';
+import '../../scss/main.scss';
 
 
 const App = () => (

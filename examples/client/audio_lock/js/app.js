@@ -11,7 +11,7 @@ import ReactDOM from 'react-dom';
 
 import AudioLock from './components/audio_lock'
 
-import '../../css/scss/main.scss';
+import '../../scss/main.scss';
 
 
 const App = () => (
