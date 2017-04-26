@@ -1,18 +1,27 @@
+@import '../../css/scss/variables';
+@import '../../css/scss/bigchaindb';
+
 $color-button: #ED4E2B;
 $dark-transparent: rgba(#000000, .6);
 
-
 .audio-lock {
 
+    $input-height: 60px;
     #page-content-wrapper {
-        max-width: 840px;
-        color: #00B277;
-        font-family: "Droid Sans Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
+        background-color: $brand-main-gray-lighter;
     }
 
     .page-content {
         padding-bottom: 5em;
         padding-top: 1em;
+        max-width: 1000px;
+        margin: auto;
+    }
+
+    .frequency-row {
+        &:first-child {
+                border-left: 1px solid $brand-main-blue-dark;
+        }
     }
 
     .frequency-col {
@@ -33,21 +42,34 @@ $dark-transparent: rgba(#000000, .6);
         }
     }
 
+    .transaction-input {
+        position: fixed;
+        width: 100%;
+        max-width: 1000px;
+        left: 0;
+        right: 0;
+        margin-top: $navbar-height;
+    }
+
     .transaction-input .frequency-bar{
-        border-right: 1px solid darken(aquamarine, 50%);
-        border-bottom: 1px solid darken(aquamarine, 50%);
+        height: $input-height;
+        border-bottom: 1px solid $brand-main-blue-dark;
+        border-right: 1px solid $brand-main-blue-dark;
         opacity: 1;
-        background: lighten(aquamarine, 10%);
-        height: 60px;
+        background-color: $brand-main-gray-lighter;
         &.selected {
-            background: lighten(red, 20%);
+            background-color: $brand-main-blue-dark;
             color: white;
             text-align: center;
             font-size: 2em;
         }
         &:hover{
             cursor: pointer;
-            background: lighten(red, 20%);
+            background: $brand-main-blue-dark;
         }
+    }
+
+    .transaction-list {
+        margin-top: $navbar-height + $input-height + 10px;
     }
 }

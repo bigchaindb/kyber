@@ -4,11 +4,14 @@ import { Navbar } from 'react-bootstrap/lib';
 
 import AccountList from '../../../js/react/components/account_list';
 import AccountDetail from '../../../js/react/components/account_detail';
+import ButtonMenu from '../.././../js/react/components/button_menu';
 
 import BigchainDBConnection from '../../../js/react/components/bigchaindb_connection';
 
 import TransactionActions from '../../../js/react/actions/transaction_actions';
 import TransactionList from '../../../js/react/components/transactions/transaction_list';
+
+import LogoBigchainDB from '../../../img/logo_bigchaindb_negative.png';
 
 import TransactionPanel from './transaction_panel';
 import InputTransaction from './input_transaction';
@@ -89,19 +92,20 @@ const AudioLock = React.createClass({
         return (
             <div>
                 <Navbar fixedTop inverse>
-                    <h1 style={{ textAlign: 'center'}}>BigchainDB Audio Lock</h1>
+                    <img className="img-logo-bigchaindb" src={LogoBigchainDB} />
+                    <div className="navbar-title">Audio Locked Assets</div>
                 </Navbar>
                 <div id="wrapper">
-                    <div id="sidebar-wrapper">
-                        <div className="sidebar-nav">
+                    { accountList ?
+                        <ButtonMenu glyphIcon="user">
                             <AccountList
                                 activeAccount={activeAccount}
                                 appName="txexplorer"
                                 handleAccountClick={this.handleAccountChange}>
                                 <AccountDetail />
                             </AccountList>
-                        </div>
-                    </div>
+                        </ButtonMenu> : null
+                    }
                     <div id="page-content-wrapper">
                         <InputTransaction
                             activeAccount={activeAccount}
@@ -120,7 +124,6 @@ const AudioLock = React.createClass({
                                     frequencies={frequencies}/>
                             </TransactionList>
                         </div>
-
                     </div>
                 </div>
             </div>

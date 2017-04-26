@@ -32,7 +32,7 @@ const PATHS = {
 const ENTRY = {
     // Use one entry per app
     // tx_explorer: PATHS.TX_EXPLORER,
-    // audio_lock: PATHS.AUDIO_METER,
+    audio_lock: PATHS.AUDIO_METER,
     asset_composition: PATHS.ASSET_COMPOSITION
     // sharetrader: PATHS.SHARE_TRADER,
     // interledger: PATHS.INTERLEDGER,

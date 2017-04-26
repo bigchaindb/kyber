@@ -44,7 +44,6 @@ h1 {
     color: $brand-main-gray-lighter;
 }
 
-
 .input-asset-fixed {
     position: fixed;
     z-index: 100;
@@ -114,6 +113,7 @@ h1 {
 .left-addon .glyphicon-input {
     left: 0;
 }
+
 .right-addon .glyphicon-input {
     right: 0;
 }
@@ -122,22 +122,20 @@ h1 {
 .left-addon input {
     padding-left: 3em;
 }
+
 .right-addon input {
     padding-right: 3em;
 }
 
 #wrapper {
-  //padding-left: $sidebar--wide;
-  //transition: all 0.4s ease 0s;
-  margin-top: $navbar-height;
 }
-
 
 #page-content-wrapper {
     width: 100%;
-    max-width: 840px;
     color: $brand-main-gray;
-    //font-family: "Droid Sans Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
+    max-width: 100%;
+    height: 100vh;
+    font-family: $font-regular;
 }
 
 .page-content {
@@ -171,6 +169,15 @@ h1 {
         margin-left: 0;
     }
 }
+
+.navbar-title {
+        font-size: 1.2em;
+        margin: 0 2em 0 1.5em;
+        padding: 0.5em 0;
+        color: $brand-main-gray-lighter;
+        font-style: italic;
+    }
+
 
 /**
  * Layout
@@ -226,4 +233,32 @@ input {
     height: 70px;
     box-shadow: 0 2px 2px -2px rgba(0, 0, 0, .5);
     z-index: 1200;
+}
+
+.sidebar-button {
+    width: 30px;
+    height: 30px;
+    position: fixed;
+    top: 47px;
+    left: 6px;
+    margin-left: 1em;
+    padding-left: 8px;
+    padding-top: 7px;
+    font-size: 14px;
+    color: $brand-main-gray-lighter;
+    background: $brand-main-gray;
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px white, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);
+    z-index: 2000;
+    &:hover {
+        color: $brand-main-gray;
+        background: $brand-main-gray-lighter;
+    }
+}
+
+.img-logo-bigchaindb {
+    height: 46px;
+    position: absolute;
+    right: 1em;
 }
