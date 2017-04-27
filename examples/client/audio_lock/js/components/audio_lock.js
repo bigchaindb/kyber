@@ -9,6 +9,7 @@ import TransactionList from '../../../js/react/components/transactions/transacti
 import TransactionPanel from './transaction_panel';
 import InputTransaction from './input_transaction';
 
+import { IconLockLocked, IconLockUnlocked, IconShirt, IconDiamond, IconPicasso, IconDocument, IconSong, IconTruck, IconBitcoin, IconHouse, IconPackage } from '../../../js/react/components/icons';
 
 const AudioLock = React.createClass({
     propTypes: {
@@ -144,7 +145,7 @@ const StateSwitcher = React.createClass({
     handleAssetClick(asset) {
         this.setState({
             activeAsset: asset,
-            currentState: 'lock'
+            currentState: 'locked'
         })
     },
 
@@ -208,7 +209,7 @@ const AssetsList = React.createClass({
                                 <a className="asset" href="#"
                                     onClick={() => handleAssetClick(asset)}
                                     key={asset.id}>
-                                    Asset 1
+                                    <IconShirt /> <span className="asset__title">Asset 1</span>
                                 </a>
                             )
                         })
@@ -219,28 +220,6 @@ const AssetsList = React.createClass({
     }
 });
 
-
-const IconLockLocked = () => {
-    return (
-        <svg className="icon icon--lock icon--lock--locked" xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 18 24">
-            <circle cx="9" cy="15" r="1"/>
-            <path d="M9,15.5 L9,18.5" />
-            <rect width="17" height="14" x=".5" y="9.5"/>
-            <path d="M3.5,6 C3.5,2.962 5.962,0.5 9,0.5 C12.038,0.5 14.5,2.962 14.5,6 L14.5,9.5 L3.5,9.5 L3.5,6 Z"/>
-        </svg>
-    )
-};
-
-const IconLockUnlocked = () => {
-    return (
-        <svg className="icon icon--lock icon--lock--unlocked" xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 18 24">
-            <circle cx="9" cy="15" r="1"/>
-            <path d="M9,15.5 L9,18.5"/>
-            <rect width="17" height="14" x=".5" y="9.5"/>
-            <path d="M3.5,6 C3.5,2.962 5.962,0.5 9,0.5 C12.037,0.5 14.5,2.962 14.5,6 L14.5,9.5"/>
-        </svg>
-    )
-};
 
 const StatusLockedEmail = () => {
     return (

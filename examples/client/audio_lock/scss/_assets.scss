@@ -1,20 +1,37 @@
 .assets {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     border-right: 1px solid $brand-main-blue;
     border-top: 1px solid $brand-main-blue;
 }
 
 .asset {
-    flex: 0 1 (100% / 3);
+    flex: 0 0 100%;
     padding: $spacer;
-    background: $gray-light;
+    background: $brand-main-violet;
     color: #fff;
     border-left: 1px solid $brand-main-blue;
     border-bottom: 1px solid $brand-main-blue;
+    
+    @media ($screen-sm) {
+        flex: 0 1 (100% / 3);
+    }
     
     &:hover,
     &:active {
         background: $gray;
     }
+    
+    .icon {
+        stroke: #fff;
+        stroke-width: .75;
+        width: 3rem;
+        height: 3rem;
+        max-width: 100%;
+    }
+}
+
+.asset__title {
+    display: block;
 }
