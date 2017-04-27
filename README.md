@@ -1,20 +1,13 @@
-# Kyber: Tutorials, Examples and Experiments with BigchainDB
+# Kyber
+
+> Tutorials, Examples and Experiments with BigchainDB. Welcome to the BigchainDB application laboratory!
+
+![banner-kyber 2x](https://cloud.githubusercontent.com/assets/90316/25490941/bb123a3e-2b6e-11e7-9208-53127d336115.png)
 
 ## What?! ¯\\\_(ツ)_/¯
 
-### BigchainDB
+Kyber is a full suite of [BigchainDB](https://www.bigchaindb.com) repo's including:
 
-Getting started with BigchainDB? Have a look at our docs:
-
-- the [HTTP API](https://docs.bigchaindb.com/projects/server/en/latest/drivers-clients/http-client-server-api.html)
-- a [Python driver](https://docs.bigchaindb.com/projects/py-driver/en/latest/index.html)
-- a (minimal) [JavaScript driver](https://github.com/bigchaindb/kyber/tree/master/drivers/javascript) for creating transactions
-
-### Kyber 
-
-Welcome to the BigchainDB application laboratory!
-
-Kyber is a full suite of BigchainDB repo's including:
 - BigchainDB [server](https://github.com/bigchaindb/kyber#server-side-setup)
 - BigchainDB client Tutorials (
 [python](https://github.com/bigchaindb/kyber#python-client-tutorials), 
@@ -26,6 +19,13 @@ All versions of the above:
 - Are in sync with the master branch of each BigchainDB repo
 - Might have experimental features (watch out that you don't burn yourself ;-) )
 
+### BigchainDB
+
+Getting started with BigchainDB? Have a look at our docs:
+
+- the [HTTP API](https://docs.bigchaindb.com/projects/server/en/latest/drivers-clients/http-client-server-api.html)
+- a [Python driver](https://docs.bigchaindb.com/projects/py-driver/en/latest/index.html)
+- a (minimal) [JavaScript driver](https://github.com/bigchaindb/kyber/tree/master/drivers/javascript) for creating transactions
 
 ## Server-side setup
 
