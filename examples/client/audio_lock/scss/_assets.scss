@@ -1,0 +1,20 @@
+.assets {
+    display: flex;
+    flex-wrap: wrap;
+    border-right: 1px solid $brand-main-blue;
+    border-top: 1px solid $brand-main-blue;
+}
+
+.asset {
+    flex: 0 1 (100% / 3);
+    padding: $spacer;
+    background: $gray-light;
+    color: #fff;
+    border-left: 1px solid $brand-main-blue;
+    border-bottom: 1px solid $brand-main-blue;
+    
+    &:hover,
+    &:active {
+        background: $gray;
+    }
+}

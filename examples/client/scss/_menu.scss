@@ -1,7 +1,6 @@
 .menu {
     background: rgba($brand-main-blue-dark, .35);
     backdrop-filter: saturate(150%) blur(10px);
-    border-bottom: 1px solid rgba($brand-main-gray, .5);
     padding-left: 2rem;
     padding-right: 2rem;
     display: flex;
@@ -10,6 +9,7 @@
     
     position: fixed;
     width: 100%;
+    z-index: 1;
 }
 
 .menu__link {

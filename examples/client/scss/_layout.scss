@@ -15,13 +15,15 @@
 html,
 body,
 .app,
-.app > div {
+.app > div,
+.app > div > div,
+.app__content {
     margin: 0;
     padding: 0;
     height: 100%;
     width: 100%;
 }
 
-.app {
-    
+.app__content {
+    padding-top: $menu-height;
 }

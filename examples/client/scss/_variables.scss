@@ -72,9 +72,11 @@ $headings-color:            $brand-main-blue !default;
 $body-bg:                   $brand-main-gray-lighter !default;
 $text-color:                $brand-main-gray !default;
 
-$link-color:                inherit !default;
-$link-hover-color:          inherit !default;
+$link-color:                $brand-primary !default;
+$link-hover-color:          lighten($brand-primary, 10%) !default;
 $link-hover-bg:             rgba($brand-primary, .8) !default;
+
+$menu-height:               3rem !default;
 
 
 //

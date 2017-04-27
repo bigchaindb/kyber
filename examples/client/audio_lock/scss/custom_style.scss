@@ -1,53 +1,41 @@
-$color-button: #ED4E2B;
-$dark-transparent: rgba(#000000, .6);
-
-
 .app--audio_lock {
-
-    #page-content-wrapper {
-        max-width: 840px;
-        color: #00B277;
-        font-family: "Droid Sans Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
+    
+    // base layout redefinitions
+    .app__content {
+        max-width: 600px;
+        padding-left: $spacer * 2;
+        padding-right: $spacer * 2;
+        padding-top: $menu-height * 2;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
+    
+    // add components
+    @import 'assets';
+    @import 'audiobar';
+    
+    .icon--lock {
+        stroke-width: .5;
+        width: 10rem;
+        height: 10rem;
+        margin-top: $spacer * 3;
+        opacity: .5;
+    }
+    
+    .status {
+        margin-bottom: $spacer;
     }
 
-    .page-content {
-        padding-bottom: 5em;
-        padding-top: 1em;
+    .status__title {
+        font-size: $font-size-h3;
+        margin-top: $spacer;
+        margin-bottom: $spacer;
+        color: $brand-main-blue;
+        opacity: .5;
     }
 
-    .frequency-col {
-        padding: 0;
-    }
-
-    .frequency-bar {
-        background: green;
-        height: 90px;
-        opacity: 0;
-        width: 100%;
-        &.target {
-            background: red;
-            border: 1px solid darken(red, 20%);
-            color: white;
-            text-align: center;
-            font-size: 2em;
-        }
-    }
-
-    .transaction-input .frequency-bar{
-        border-right: 1px solid darken(aquamarine, 50%);
-        border-bottom: 1px solid darken(aquamarine, 50%);
-        opacity: 1;
-        background: lighten(aquamarine, 10%);
-        height: 60px;
-        &.selected {
-            background: lighten(red, 20%);
-            color: white;
-            text-align: center;
-            font-size: 2em;
-        }
-        &:hover{
-            cursor: pointer;
-            background: lighten(red, 20%);
-        }
+    .status__text {
+        
     }
 }

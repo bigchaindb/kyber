@@ -38,7 +38,6 @@ body {
 a {
     color: $link-color;
     text-decoration: none;
-    box-shadow: inset 0 -2px 0 $brand-primary;
     transition: .2s ease-out;
 
     &:hover,
