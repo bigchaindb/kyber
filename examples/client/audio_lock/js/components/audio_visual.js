@@ -3,8 +3,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { Row, Col } from 'react-bootstrap/lib';
-
 import classnames from 'classnames';
 
 
@@ -29,7 +27,6 @@ const AudioVisual = React.createClass({
     },
 
     getInitialState() {
-
         return {
             audioAnalyser: null,
             audioBuffer: null
