@@ -1,8 +1,6 @@
 import React from 'react';
 
-import AccountList from '../../../js/react/components/account_list';
-import AccountDetail from '../../../js/react/components/account_detail';
-
+import AccountActions from '../../../js/react/actions/account_actions';
 import BigchainDBConnection from '../../../js/react/components/bigchaindb_connection';
 
 import TransactionActions from '../../../js/react/actions/transaction_actions';
@@ -25,6 +23,11 @@ const AudioLock = React.createClass({
         return {
             showHistory: false
         };
+    },
+
+    componentDidMount() {
+        AccountActions.flushAccountList();
+        AccountActions.fetchAccountList();
     },
 
     fetchTransactionListForAsset(assetId) {
@@ -69,13 +72,19 @@ const AudioLock = React.createClass({
             unspentOutputs
         } = this.props;
 
-        const frequencies = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+        if (accountList && accountList.length == 0) {
+            return null;
+        }
+
+        const
+            frequencies = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+            assetAccount = accountList[0];
 
         const unspentsForAccount = (
             unspentOutputs
             && activeAccount
-            && unspentOutputs[activeAccount.vk]
-        ) ? unspentOutputs[activeAccount.vk] : [];
+            && unspentOutputs[assetAccount.vk]
+        ) ? unspentOutputs[assetAccount.vk] : [];
 
         const transactionsForAccount =
             unspentsForAccount
@@ -91,13 +100,15 @@ const AudioLock = React.createClass({
                     <h1 className="menu__title">BigchainDB Audio Lock</h1>
                 </nav>
                 <section className="app__content">
-                    <AssetsList />
-                    <IconLockLocked />
-                    <StatusLockedEmail />
-                    <StatusLocked />
-                    
-                    <IconLockUnlocked />
-                    <StatusUnlocked />
+                    {
+                        transactionsForAccount && transactionsForAccount.length > 0 ?
+                            <StateSwitcher
+                                assetList={ transactionsForAccount }/> :
+                            <div style={{ cursor: "pointer" }}
+                                onClick={ () => this.handleAccountChange(accountList[0]) }>
+                                <IconLockLocked />
+                            </div>
+                    }
                 </section>
             </div>
         );
@@ -106,28 +117,108 @@ const AudioLock = React.createClass({
 
 export default BigchainDBConnection(AudioLock);
 
+const StateSwitcher = React.createClass({
+    propTypes: {
+        assetList: React.PropTypes.array,
+        availableStates: React.PropTypes.array
+    },
+
+    getDefaultProps() {
+        return {
+            availableStates: [
+                'list',
+                'email',
+                'locked',
+                'unlocked'
+            ]
+        }
+    },
+
+    getInitialState() {
+        return {
+            activeAsset: null,
+            currentState: 'list'
+        }
+    },
+
+    handleAssetClick(asset) {
+        this.setState({
+            activeAsset: asset,
+            currentState: 'lock'
+        })
+    },
+
+    render() {
+        const {
+            activeAsset,
+            currentState
+        } = this.state;
+
+        const { assetList } = this.props;
+
+        return (
+            <div>
+                { (currentState === 'list') &&
+                    <AssetsList
+                        assetList={assetList}
+                        handleAssetClick={this.handleAssetClick}/>
+                }
+                { (currentState === 'email') &&
+                    <StatusLockedEmail />
+                }
+                { (currentState === 'locked') &&
+                    <div>
+                        <IconLockLocked />
+                        <StatusLocked />
+                    </div>
+                }
+                { (currentState === 'unlocked') &&
+                    <div>
+                        <IconLockUnlocked />
+                        <StatusUnlocked />
+                    </div>
+                }
+            </div>
+        )
+    }
+});
 
 //
 // Le components
 //
-const AssetsList = () => {
-    return (
-        <div className="assets-list">
-            <p>Please select an asset to unlock</p>
-            <div className="assets">
-                <a className="asset" href="">Asset 1</a>
-                <a className="asset" href="">Asset 2</a>
-                <a className="asset" href="">Asset 3</a>
-                <a className="asset" href="">Asset 4</a>
-                <a className="asset" href="">Asset 5</a>
-                <a className="asset" href="">Asset 6</a>
-                <a className="asset" href="">Asset 7</a>
-                <a className="asset" href="">Asset 8</a>
-                <a className="asset" href="">Asset 9</a>
+const AssetsList = React.createClass({
+    propTypes: {
+        assetList: React.PropTypes.array,
+        handleAssetClick: React.PropTypes.func
+    },
+
+    render() {
+        const {
+            assetList,
+            handleAssetClick
+        } = this.props;
+
+        return (
+            <div className="assets-list">
+                <p>Please select an asset to unlock</p>
+                <div className="assets">
+                    {
+                        assetList.map((asset) => {
+                            return (
+                                <a className="asset" href="#"
+                                    onClick={() => handleAssetClick(asset)}
+                                    key={asset.id}>
+                                    Asset 1
+                                </a>
+                            )
+                        })
+                    }
+                </div>
             </div>
-        </div>
-    )
-};
+        )
+    }
+});
+
 
 const IconLockLocked = () => {
     return (

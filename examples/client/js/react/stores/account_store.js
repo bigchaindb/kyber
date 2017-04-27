@@ -34,8 +34,7 @@ class AccountStore {
         }
     }
 
-    onFetchAccountList({ app }) {
-        this.accountMeta.app = app;
+    onFetchAccountList() {
         this.getInstance().lookupAccountList();
     }
 
