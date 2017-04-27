@@ -88,41 +88,13 @@ const AudioLock = React.createClass({
 
         return (
             <div>
-                <Navbar fixedTop inverse>
-                    <h1 style={{ textAlign: 'center'}}>BigchainDB Audio Lock</h1>
-                </Navbar>
-                <div id="wrapper">
-                    <div id="sidebar-wrapper">
-                        <div className="sidebar-nav">
-                            <AccountList
-                                activeAccount={activeAccount}
-                                appName="txexplorer"
-                                handleAccountClick={this.handleAccountChange}>
-                                <AccountDetail />
-                            </AccountList>
-                        </div>
-                    </div>
-                    <div id="page-content-wrapper">
-                        <InputTransaction
-                            activeAccount={activeAccount}
-                            className="input-asset-fixed"
-                            frequencies={frequencies}
-                            placeHolder="CREATE a new asset by typing"/>
-                        <div className="page-content">
-                            <TransactionList
-                                transactionList={transactionsForAccount}
-                                transactionMeta={transactionMeta}
-                                transactionStatuses={transactionStatuses}
-                                handleAssetClick={this.handleAssetClick}>
-                                <TransactionPanel
-                                    activeAccount={activeAccount}
-                                    accountList={accountList}
-                                    frequencies={frequencies}/>
-                            </TransactionList>
-                        </div>
-
-                    </div>
-                </div>
+                <nav className="menu">
+                    <a className="menu__link" href="../">Back to examples</a>
+                    <h1 className="menu__title">BigchainDB Audio Lock</h1>
+                </nav>
+                <section className="app__content">
+                    
+                </section>
             </div>
         );
     }

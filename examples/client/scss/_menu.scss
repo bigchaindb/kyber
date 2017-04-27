@@ -1,0 +1,32 @@
+.menu {
+    background: rgba($brand-main-blue-dark, .35);
+    backdrop-filter: saturate(150%) blur(10px);
+    border-bottom: 1px solid rgba($brand-main-gray, .5);
+    padding-left: 2rem;
+    padding-right: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    position: fixed;
+    width: 100%;
+}
+
+.menu__link {
+    color: $brand-main-gray-lighter;
+    box-shadow: none;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    display: inline-block;
+    transition: .2s ease-out;
+    opacity: .8;
+}
+
+.menu__link:hover {
+    opacity: 1;
+}
+
+.menu__title {
+    @extend .h4;
+    margin: 0;
+}

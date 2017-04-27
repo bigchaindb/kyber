@@ -12,9 +12,9 @@ import '../../scss/main.scss';
 
 
 const App = () => (
-    <div className="app interledger">
+    <div className="app--interledger">
         <Interledger />
     </div>
 );
 
-ReactDOM.render(<App />, document.getElementById('bigchaindb-example-app'));
+ReactDOM.render(<App />, document.getElementsByClassName('app')[0]);
