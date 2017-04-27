@@ -10,6 +10,7 @@ import TransactionList from '../../../js/react/components/transactions/transacti
 
 import TransactionPanel from './transaction_panel';
 import InputTransaction from './input_transaction';
+import AudioVisual from './audio_visual';
 
 import { IconLockLocked, IconLockUnlocked, IconShirt, IconDiamond, IconPicasso, IconDocument, IconSong, IconTruck, IconBitcoin, IconHouse, IconPackage } from '../../../js/react/components/icons';
 
@@ -96,6 +97,7 @@ const AudioLock = React.createClass({
                     <IconLockLocked />
                     <StatusLockedEmail />
                     <StatusLocked />
+                    <AudioVisual />
                     
                     <IconLockUnlocked />
                     <StatusUnlocked />

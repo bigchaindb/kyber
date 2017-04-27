@@ -83,13 +83,11 @@ const AudioVisual = React.createClass({
         } = this.props;
 
         return (
-            <div>
-                <FrequencyMeter
-                    audioSource={audioSource}
-                    targetFrequency={targetFrequency}
-                    handleFrequencyHit={handleFrequencyHit}
-                    frequencies={frequencies}/>
-            </div>
+            <FrequencyMeter
+                audioSource={audioSource}
+                targetFrequency={targetFrequency}
+                handleFrequencyHit={handleFrequencyHit}
+                frequencies={frequencies}/>
         )
     }
 });
@@ -200,25 +198,19 @@ const FrequencyMeter = React.createClass({
         const { isFrequencyHit } = this.state;
 
         return (
-            <div>
-                <Row className="frequency-row">
-                    {
-                        frequencies.map((frequency) => {
-                            return (
-                                <Col
-                                    className="frequency-col"
-                                    key={'note' + frequency}
-                                    xs={Math.floor(12 / frequencies.length)}>
-                                    <NoteNode
-                                        ref={'note' + frequency}
-                                        isTarget={targetFrequency == frequency || isFrequencyHit}
-                                        frequency={frequency}/>
-                                </Col>
-                            );
-                        })
-                    }
-                </Row>
-            </div>
+            <aside className="audiobar">
+                {
+                    frequencies.map((frequency) => {
+                        return (
+                            <NoteNode
+                                key={'note' + frequency}
+                                ref={'note' + frequency}
+                                isTarget={targetFrequency == frequency || isFrequencyHit}
+                                frequency={frequency}/>
+                        );
+                    })
+                }
+            </aside>
         );
     }
 });
@@ -233,7 +225,7 @@ const NoteNode = React.createClass({
         const { isTarget } = this.props;
 
         return (
-            <div className={classnames('frequency-bar', {'target': isTarget})}>
+            <div className={classnames('audiobar__step', {'target': isTarget})}>
             </div>
         )
     }
