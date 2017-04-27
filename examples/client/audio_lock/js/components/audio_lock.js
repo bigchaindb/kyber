@@ -8,6 +8,7 @@ import TransactionList from '../../../js/react/components/transactions/transacti
 
 import TransactionPanel from './transaction_panel';
 import InputTransaction from './input_transaction';
+import AudioVisual from './audio_visual';
 
 import { IconLockLocked, IconLockUnlocked, IconShirt, IconDiamond, IconPicasso, IconDocument, IconSong, IconTruck, IconBitcoin, IconHouse, IconPackage } from '../../../js/react/components/icons';
 
@@ -77,9 +78,7 @@ const AudioLock = React.createClass({
             return null;
         }
 
-        const
-            frequencies = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
-            assetAccount = accountList[0];
+        const assetAccount = accountList[0];
 
         const unspentsForAccount = (
             unspentOutputs
@@ -149,6 +148,10 @@ const StateSwitcher = React.createClass({
         })
     },
 
+    handleFrequencyHit() {
+        console.log('hit')
+    },
+
     render() {
         const {
             activeAsset,
@@ -170,7 +173,13 @@ const StateSwitcher = React.createClass({
                 { (currentState === 'locked') &&
                     <div>
                         <IconLockLocked />
-                        <StatusLocked />
+                        <div className="audio-container">
+                            <AudioVisual
+                                frequencies={[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]}
+                                onFrequencyHit={this.handleFrequencyHit}
+                                targetFrequency={3}/>
+                            <StatusLocked />
+                        </div>
                     </div>
                 }
                 { (currentState === 'unlocked') &&
@@ -209,7 +218,8 @@ const AssetsList = React.createClass({
                                 <a className="asset" href="#"
                                     onClick={() => handleAssetClick(asset)}
                                     key={asset.id}>
-                                    <IconShirt /> <span className="asset__title">Asset 1</span>
+                                    <IconShirt />
+                                    <span className="asset__title">Asset 1</span>
                                 </a>
                             )
                         })

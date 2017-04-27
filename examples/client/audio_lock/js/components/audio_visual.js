@@ -18,7 +18,7 @@ const AudioVisual = React.createClass({
         audioContext: React.PropTypes.object,
         frequencies: React.PropTypes.array,
         targetFrequency: React.PropTypes.number,
-        handleFrequencyHit: React.PropTypes.func
+        onFrequencyHit: React.PropTypes.func
     },
 
     getDefaultProps() {
@@ -79,7 +79,7 @@ const AudioVisual = React.createClass({
         const {
             frequencies,
             targetFrequency,
-            handleFrequencyHit
+            onFrequencyHit
         } = this.props;
 
         return (
@@ -87,7 +87,7 @@ const AudioVisual = React.createClass({
                 <FrequencyMeter
                     audioSource={audioSource}
                     targetFrequency={targetFrequency}
-                    handleFrequencyHit={handleFrequencyHit}
+                    onFrequencyHit={onFrequencyHit}
                     frequencies={frequencies}/>
             </div>
         )
@@ -105,7 +105,7 @@ const FrequencyMeter = React.createClass({
         smoothingTimeConstant: React.PropTypes.number,
         frequencies: React.PropTypes.array,
         targetFrequency: React.PropTypes.number,
-        handleFrequencyHit: React.PropTypes.func
+        onFrequencyHit: React.PropTypes.func
     },
 
     getDefaultProps() {
@@ -186,8 +186,8 @@ const FrequencyMeter = React.createClass({
         return playingInterval;
     },
 
-    handleFrequencyHit() {
-        this.props.handleFrequencyHit();
+    onFrequencyHit() {
+        this.props.onFrequencyHit();
         this.setState({ isFrequencyHit: true});
     },
 
@@ -268,7 +268,7 @@ function renderFrame(analyser) {
     }
 
     if (analyser.targetTimer > 300) {
-        this.handleFrequencyHit();
+        this.onFrequencyHit();
         analyser.targetTimer = 1;
     }
 }
