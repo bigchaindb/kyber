@@ -38,4 +38,19 @@
     .status__text {
         
     }
+    
+    
+    //
+    // Lock/unlock state
+    //
+    transition: .2s ease-out;
+    
+    // classes need to be on the direct children div of .app--audio_lock
+    .is-locked {
+        background: $brand-danger;
+    }
+    
+    .is-unlocked {
+        background: $brand-main-green;
+    }
 }
