@@ -1,0 +1,51 @@
+//
+// Logo
+// ---
+// bigchain.io
+//
+
+// default logo
+.logo {
+    fill: $brand-main-green;
+    color: $brand-main-blue; // the fill="currentColor" trick
+    width: 300px;
+    height: 60px;
+    display: block;
+}
+
+
+//
+// Color modifiers
+//
+.logo--white {
+    fill: #fff;
+    color: #fff;
+}
+
+.logo--white--green {
+    fill:$brand-main-green;
+    color: #fff;
+}
+
+
+//
+// size modifiers
+//
+.logo--sm {
+    width: 140px;
+    height: 30px;
+}
+
+.logo--full {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+
+//
+// color modifiers
+//
+.logo--dark {
+    fill: $brand-main-blue-dark;
+}

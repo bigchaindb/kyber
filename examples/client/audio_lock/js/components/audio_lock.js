@@ -15,7 +15,7 @@ import TransactionPanel from './transaction_panel';
 import InputTransaction from './input_transaction';
 import AudioVisual from './audio_visual';
 
-import { IconLockLocked, IconLockUnlocked, IconShirt, IconDiamond, IconPicasso, IconDocument, IconSong, IconTruck, IconBitcoin, IconHouse, IconPackage, IconAdd } from '../../../js/react/components/icons';
+import { IconLockLocked, IconLockUnlocked, IconShirt, IconDiamond, IconPicasso, IconDocument, IconSong, IconTruck, IconBitcoin, IconHouse, IconPackage, IconAdd, IconArrowLeft, Logo } from '../../../js/react/components/icons';
 
 const AudioLock = React.createClass({
     propTypes: {
@@ -104,7 +104,8 @@ const AudioLock = React.createClass({
         return (
             <div>
                 <nav className="menu">
-                    <a className="menu__link" href="../">Back to examples</a>
+                    <a className="menu__link" href="../"><IconArrowLeft /> Back to examples</a>
+                    <Logo />
                     <h1 className="menu__title">BigchainDB Audio Lock</h1>
                 </nav>
                 <section className="app__content">
