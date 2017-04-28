@@ -2,8 +2,6 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    border-right: 1px solid $brand-main-blue;
-    border-top: 1px solid $brand-main-blue;
 }
 
 .asset {
@@ -11,8 +9,7 @@
     padding: $spacer;
     background: $brand-main-violet;
     color: #fff;
-    border-left: 1px solid $brand-main-blue;
-    border-bottom: 1px solid $brand-main-blue;
+    border: 2px solid $body-bg;
     
     @media ($screen-sm) {
         flex: 0 1 (100% / 3);
@@ -32,8 +29,8 @@
     }
 }
 
-.asset__create {
-    background: $brand-main-gray-lighter;
+.asset--create {
+    background: #fff;
     color: $brand-main-green;
 
     &:hover,
@@ -52,5 +49,12 @@
 }
 
 .asset__title {
+    @extend .small;
     display: block;
+    
+    // truncate text
+    width: 130px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

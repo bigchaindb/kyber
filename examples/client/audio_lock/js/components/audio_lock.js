@@ -208,12 +208,12 @@ const StateSwitcher = React.createClass({
                 { (currentState === 'locked') &&
                     <div>
                         <IconLockLocked />
+                        <StatusLocked />
                         <div className="audio-container">
                             <AudioVisual
                                 frequencies={frequencyList}
                                 onFrequencyHit={this.handleFrequencyHit}
                                 targetFrequency={3}/>
-                            <StatusLocked />
                         </div>
                     </div>
                 }
@@ -286,7 +286,7 @@ const AssetsList = React.createClass({
 
         return (
             <div className="assets-list">
-                <p>Please select an asset to unlock</p>
+                <p>Please create & select an asset to unlock</p>
                 <div className="assets">
                     {
                         assetList.map((asset) => {
@@ -307,9 +307,8 @@ const AssetsList = React.createClass({
                                             { (item == 'sticker') && <IconPicasso /> }
                                             <span className="asset__title">
                                                 {
-                                                    // @kremalicious: overflow ellipsis would be better here
-                                                    asset.id.slice(0, 8)
-                                                }...
+                                                    asset.id
+                                                }
                                             </span>
                                         </a>
                                     )
@@ -318,13 +317,13 @@ const AssetsList = React.createClass({
                         })
                     }
 
-                    <a className="asset asset__create" href="#"
+                    <a className="asset asset--create" href="#"
                         onClick={() => this.handleNewAssetClick('shirt')}
                         key="asset-create-shirt">
                         <IconShirt />
                         <span className="asset__title">+ Create New</span>
                     </a>
-                    <a className="asset asset__create" href="#"
+                    <a className="asset asset--create" href="#"
                         onClick={() => this.handleNewAssetClick('sticker')}
                         key="asset-create-sticker">
                         <IconPicasso />
