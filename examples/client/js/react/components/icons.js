@@ -127,3 +127,11 @@ export const IconPackage = () => {
       </svg>
     )
 };
+
+export const IconAdd = () => {
+    return (
+      <svg className="icon icon--add" xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23">
+          <path d="M11.5.5L11.5 22.5M22.5 11.5L.5 11.5"/>
+      </svg>
+    )
+};

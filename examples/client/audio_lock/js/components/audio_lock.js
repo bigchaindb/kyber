@@ -15,7 +15,7 @@ import TransactionPanel from './transaction_panel';
 import InputTransaction from './input_transaction';
 import AudioVisual from './audio_visual';
 
-import { IconLockLocked, IconLockUnlocked, IconShirt, IconDiamond, IconPicasso, IconDocument, IconSong, IconTruck, IconBitcoin, IconHouse, IconPackage } from '../../../js/react/components/icons';
+import { IconLockLocked, IconLockUnlocked, IconShirt, IconDiamond, IconPicasso, IconDocument, IconSong, IconTruck, IconBitcoin, IconHouse, IconPackage, IconAdd } from '../../../js/react/components/icons';
 
 const AudioLock = React.createClass({
     propTypes: {
@@ -192,7 +192,7 @@ const StateSwitcher = React.createClass({
                 { (currentState === 'login') &&
                     <div style={{ cursor: "pointer" }}
                         onClick={ this.handleLoginClick }>
-                        <IconLockLocked />
+                        <StatusIntro />
                     </div>
                 }
                 { (currentState === 'list') &&
@@ -203,7 +203,10 @@ const StateSwitcher = React.createClass({
                         handleAssetClick={this.handleAssetClick}/>
                 }
                 { (currentState === 'email') &&
-                    <StatusLockedEmail />
+                    <div>
+                        <IconLockLocked />
+                        <StatusLockedEmail />
+                    </div>
                 }
                 { (currentState === 'locked') &&
                     <div>
@@ -286,7 +289,7 @@ const AssetsList = React.createClass({
 
         return (
             <div className="assets-list">
-                <p>Please create & select an asset to unlock</p>
+                <p>Please select an asset to unlock or create a new asset first.</p>
                 <div className="assets">
                     {
                         assetList.map((asset) => {
@@ -320,14 +323,14 @@ const AssetsList = React.createClass({
                     <a className="asset asset--create" href="#"
                         onClick={() => this.handleNewAssetClick('shirt')}
                         key="asset-create-shirt">
-                        <IconShirt />
-                        <span className="asset__title">+ Create New</span>
+                        <IconAdd />
+                        <span className="asset__title">Create new asset</span>
                     </a>
                     <a className="asset asset--create" href="#"
                         onClick={() => this.handleNewAssetClick('sticker')}
                         key="asset-create-sticker">
-                        <IconPicasso />
-                        <span className="asset__title">+ Create New</span>
+                        <IconAdd />
+                        <span className="asset__title">Create new asset</span>
                     </a>
                 </div>
             </div>
@@ -335,6 +338,16 @@ const AssetsList = React.createClass({
     }
 });
 
+
+const StatusIntro = () => {
+    return (
+        <div className="status status--locked">
+            <h2 className="status__title">Audio Lock</h2>
+            <p className="status__text">Unlock assets with your voice.</p>
+            <button className="button button--primary status__button">Let’s roll</button>
+        </div>
+    )
+};
 
 const StatusLockedEmail = () => {
     return (
