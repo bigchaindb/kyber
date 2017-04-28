@@ -1,4 +1,9 @@
 import React from 'react';
+import moment from 'moment';
+
+import * as driver from 'js-bigchaindb-quickstart';
+
+import { API_PATH } from '../../../js/constants/application_constants';
 
 import AccountActions from '../../../js/react/actions/account_actions';
 import BigchainDBConnection from '../../../js/react/components/bigchaindb_connection';
@@ -50,6 +55,7 @@ const AudioLock = React.createClass({
     },
 
     handleAccountChange(account) {
+        console.log('change', account)
         this.props.handleAccountChange(account);
         this.fetchUnspents(account);
     },
@@ -78,7 +84,7 @@ const AudioLock = React.createClass({
             return null;
         }
 
-        const assetAccount = accountList[0];
+        const assetAccount = activeAccount || accountList[0];
 
         const unspentsForAccount = (
             unspentOutputs
@@ -91,8 +97,10 @@ const AudioLock = React.createClass({
                 .map((transactionId) => {
                     return transactionMap[transactionId];
                 })
-                .filter(transaction => transaction.operation == 'CREATE' && transaction.asset.data.hasOwnProperty('frequency'));
-        
+                .filter(
+                    transaction => transaction.operation == 'CREATE'
+                    && transaction.asset.data.hasOwnProperty('frequency'));
+
         return (
             <div>
                 <nav className="menu">
@@ -100,15 +108,10 @@ const AudioLock = React.createClass({
                     <h1 className="menu__title">BigchainDB Audio Lock</h1>
                 </nav>
                 <section className="app__content">
-                    {
-                        transactionsForAccount && transactionsForAccount.length > 0 ?
-                            <StateSwitcher
-                                assetList={ transactionsForAccount }/> :
-                            <div style={{ cursor: "pointer" }}
-                                onClick={ () => this.handleAccountChange(accountList[0]) }>
-                                <IconLockLocked />
-                            </div>
-                    }
+                    <StateSwitcher
+                        assetAccount={ assetAccount }
+                        assetList={ transactionsForAccount }
+                        onAccountChange={ this.handleAccountChange }/>
                 </section>
             </div>
         );
@@ -119,13 +122,16 @@ export default BigchainDBConnection(AudioLock);
 
 const StateSwitcher = React.createClass({
     propTypes: {
+        assetAccount: React.PropTypes.object,
         assetList: React.PropTypes.array,
-        availableStates: React.PropTypes.array
+        availableStates: React.PropTypes.array,
+        onAccountChange: React.PropTypes.func
     },
 
     getDefaultProps() {
         return {
             availableStates: [
+                'login',
                 'list',
                 'email',
                 'locked',
@@ -137,8 +143,21 @@ const StateSwitcher = React.createClass({
     getInitialState() {
         return {
             activeAsset: null,
-            currentState: 'list'
+            currentState: 'login'
         }
+    },
+
+    handleLoginClick() {
+        const {
+            assetAccount,
+            onAccountChange
+        } = this.props;
+
+        onAccountChange(assetAccount);
+
+        this.setState({
+            currentState: 'list'
+        })
     },
 
     handleAssetClick(asset) {
@@ -149,7 +168,9 @@ const StateSwitcher = React.createClass({
     },
 
     handleFrequencyHit() {
-        console.log('hit')
+        this.setState({
+            currentState: 'unlocked'
+        })
     },
 
     render() {
@@ -158,10 +179,18 @@ const StateSwitcher = React.createClass({
             currentState
         } = this.state;
 
-        const { assetList } = this.props;
+        const {
+            assetList
+        } = this.props;
 
         return (
             <div>
+                { (currentState === 'login') &&
+                    <div style={{ cursor: "pointer" }}
+                        onClick={ this.handleLoginClick }>
+                        <IconLockLocked />
+                    </div>
+                }
                 { (currentState === 'list') &&
                     <AssetsList
                         assetList={assetList}
@@ -200,6 +229,59 @@ const AssetsList = React.createClass({
     propTypes: {
         assetList: React.PropTypes.array,
         handleAssetClick: React.PropTypes.func
+    },
+
+
+        handleInputSubmit(value) {
+        const {
+            activeAccount,
+            inputTransaction
+        } = this.props;
+
+        const toAccount = activeAccount;
+        let transaction;
+
+        if (!inputTransaction) {
+            transaction = this.createTransaction(toAccount, value);
+        }
+        else {
+            transaction = this.transferTransaction(toAccount, inputTransaction, value);
+        }
+        const signedTransaction = driver.Transaction.signTransaction(transaction, activeAccount.sk);
+
+        TransactionActions.postTransaction(signedTransaction);
+
+        setTimeout(() => {
+            driver.Connection.pollStatusAndFetchTransaction(signedTransaction.id, API_PATH)
+                .then(() => {
+                    TransactionActions.fetchOutputList({
+                        public_key: activeAccount.vk,
+                        unspent: true
+                    });
+                    if (toAccount !== activeAccount) {
+                        TransactionActions.fetchOutputList({
+                            public_key: toAccount.vk,
+                            unspent: true
+                        });
+                    }
+                })
+        }, 1000);
+
+        this.setState({ selectedFrequency: null });
+    },
+
+    createTransaction(activeAccount, value) {
+        const asset = {
+            'frequency': value,
+            'timestamp': moment().format('x')
+        };
+
+        return driver.Transaction.makeCreateTransaction(
+            asset,
+            null,
+            [driver.Transaction.makeOutput(driver.Transaction.makeEd25519Condition(activeAccount.vk))],
+            activeAccount.vk
+        );
     },
 
     render() {

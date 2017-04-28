@@ -1,8 +1,6 @@
 import React from 'react';
 
 import classnames from 'classnames';
-import { Col, Row } from 'react-bootstrap/lib';
-
 import moment from 'moment';
 
 import * as driver from 'js-bigchaindb-quickstart';
@@ -113,27 +111,21 @@ const InputTransaction = React.createClass({
         }
 
         return (
-            <div>
-                <Row className="frequency-row transaction-input">
-                    {
-                        frequencies.map((frequency) => {
-                            const selected = selectedFrequency == frequency;
-                            return (
-                                <Col
-                                    className={classnames("frequency-col", {'selected': selected})}
-                                    key={'frequency-input-' + frequency}
-                                    onClick={() => this.handleFrequencyClick(frequency)}
-                                    xs={Math.floor(frequencies.length/12)}>
-                                    <div
-                                        className={classnames("frequency-bar", {'selected': selected})}>
-                                        {selected ? "OK?" : null}
-                                    </div>
-                                </Col>
-                            );
-                        })
-                    }
-                </Row>
-            </div>
+          <aside className="audiobar audiobar--transaction">
+              {
+                  frequencies.map((frequency) => {
+                      const selected = selectedFrequency == frequency;
+                      return (
+                          <div 
+                              className={classnames("audiobar__bar", {'selected': selected})}
+                              key={'frequency-input-' + frequency}
+                              onClick={() => this.handleFrequencyClick(frequency)}>
+                                  {selected ? "OK?" : null}
+                          </div>
+                      );
+                  })
+              }
+          </aside>
         );
     }
 });
