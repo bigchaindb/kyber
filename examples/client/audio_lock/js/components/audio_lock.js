@@ -203,13 +203,13 @@ const StateSwitcher = React.createClass({
                         handleAssetClick={this.handleAssetClick}/>
                 }
                 { (currentState === 'email') &&
-                    <div>
+                    <div className="is-locked">
                         <IconLockLocked />
                         <StatusLockedEmail />
                     </div>
                 }
                 { (currentState === 'locked') &&
-                    <div>
+                    <div className="is-locked">
                         <IconLockLocked />
                         <StatusLocked />
                         <div className="audio-container">
@@ -221,7 +221,7 @@ const StateSwitcher = React.createClass({
                     </div>
                 }
                 { (currentState === 'unlocked') &&
-                    <div>
+                    <div className="is-unlocked">
                         <IconLockUnlocked />
                         <StatusUnlocked />
                     </div>

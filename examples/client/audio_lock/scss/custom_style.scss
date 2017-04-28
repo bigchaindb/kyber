@@ -53,12 +53,28 @@
     //
     transition: .2s ease-out;
     
-    // classes need to be on the direct children div of .app--audio_lock
+    .is-locked,
+    .is-unlocked {
+        &:before {
+            content: "";
+            display: block;
+            position: absolute;
+            left: 0; right: 0; top: 0; bottom: 0;
+            z-index: -1;
+            transition: .2s ease-out;
+        }
+    }
+    
     .is-locked {
-        background: $brand-danger;
+        &:before {
+            background: $brand-danger;
+        }
+        
     }
     
     .is-unlocked {
-        background: $brand-main-green;
+        &:before {
+            background: $brand-main-green;
+        }
     }
 }
