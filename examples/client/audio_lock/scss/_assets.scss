@@ -32,6 +32,25 @@
     }
 }
 
+.asset__create {
+    background: $brand-main-gray-lighter;
+    color: $brand-main-green;
+
+    &:hover,
+    &:active {
+        background: $brand-main-green;
+        color: $brand-main-gray-lighter;
+
+        .icon {
+            stroke: $brand-main-gray-lighter;
+        }
+    }
+
+    .icon {
+        stroke: $brand-main-green;
+    }
+}
+
 .asset__title {
     display: block;
 }

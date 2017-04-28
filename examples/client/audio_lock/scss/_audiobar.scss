@@ -5,8 +5,7 @@ $red:   #FF4136;
 .audiobar {
     display: flex;
     width: 100%;
-    height: $spacer;
-    background: rgba($gray, .3);
+    height: 3*$spacer;
     border-radius: $spacer;
     overflow: hidden;
 }
@@ -28,4 +27,9 @@ $red:   #FF4136;
     &:nth-child(11) { background: rgba($red, .8); }
     &:nth-child(12) { background: $red; }
 
+}
+
+.audiobar__step.target {
+    background: rgba($brand-main-violet, 1);
+    opacity: 1 !important;
 }

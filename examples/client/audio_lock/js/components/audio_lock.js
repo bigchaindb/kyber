@@ -125,11 +125,13 @@ const StateSwitcher = React.createClass({
         assetAccount: React.PropTypes.object,
         assetList: React.PropTypes.array,
         availableStates: React.PropTypes.array,
+        frequencyList: React.PropTypes.array,
         onAccountChange: React.PropTypes.func
     },
 
     getDefaultProps() {
         return {
+            frequencyList: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
             availableStates: [
                 'login',
                 'list',
@@ -180,7 +182,9 @@ const StateSwitcher = React.createClass({
         } = this.state;
 
         const {
-            assetList
+            assetAccount,
+            assetList,
+            frequencyList
         } = this.props;
 
         return (
@@ -193,7 +197,9 @@ const StateSwitcher = React.createClass({
                 }
                 { (currentState === 'list') &&
                     <AssetsList
+                        assetAccount={assetAccount}
                         assetList={assetList}
+                        frequencyList={frequencyList}
                         handleAssetClick={this.handleAssetClick}/>
                 }
                 { (currentState === 'email') &&
@@ -204,7 +210,7 @@ const StateSwitcher = React.createClass({
                         <IconLockLocked />
                         <div className="audio-container">
                             <AudioVisual
-                                frequencies={[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]}
+                                frequencies={frequencyList}
                                 onFrequencyHit={this.handleFrequencyHit}
                                 targetFrequency={3}/>
                             <StatusLocked />
@@ -227,27 +233,20 @@ const StateSwitcher = React.createClass({
 //
 const AssetsList = React.createClass({
     propTypes: {
+        assetAccount: React.PropTypes.object,
         assetList: React.PropTypes.array,
+        frequencyList: React.PropTypes.array,
         handleAssetClick: React.PropTypes.func
     },
 
 
-        handleInputSubmit(value) {
+    handleNewAssetClick(value) {
         const {
-            activeAccount,
-            inputTransaction
+            assetAccount,
         } = this.props;
 
-        const toAccount = activeAccount;
-        let transaction;
-
-        if (!inputTransaction) {
-            transaction = this.createTransaction(toAccount, value);
-        }
-        else {
-            transaction = this.transferTransaction(toAccount, inputTransaction, value);
-        }
-        const signedTransaction = driver.Transaction.signTransaction(transaction, activeAccount.sk);
+        const transaction = this.createTransaction(assetAccount, value);
+        const signedTransaction = driver.Transaction.signTransaction(transaction, assetAccount.sk);
 
         TransactionActions.postTransaction(signedTransaction);
 
@@ -255,32 +254,27 @@ const AssetsList = React.createClass({
             driver.Connection.pollStatusAndFetchTransaction(signedTransaction.id, API_PATH)
                 .then(() => {
                     TransactionActions.fetchOutputList({
-                        public_key: activeAccount.vk,
+                        public_key: assetAccount.vk,
                         unspent: true
                     });
-                    if (toAccount !== activeAccount) {
-                        TransactionActions.fetchOutputList({
-                            public_key: toAccount.vk,
-                            unspent: true
-                        });
-                    }
                 })
         }, 1000);
-
-        this.setState({ selectedFrequency: null });
     },
 
-    createTransaction(activeAccount, value) {
+    createTransaction(account, value) {
+        const { frequencyList } = this.props;
+
         const asset = {
-            'frequency': value,
-            'timestamp': moment().format('x')
+            'item': value,
+            'frequency': frequencyList[Math.floor(Math.random()*frequencyList.length)],
+            'timestamp': moment().format('X')
         };
 
         return driver.Transaction.makeCreateTransaction(
             asset,
             null,
-            [driver.Transaction.makeOutput(driver.Transaction.makeEd25519Condition(activeAccount.vk))],
-            activeAccount.vk
+            [driver.Transaction.makeOutput(driver.Transaction.makeEd25519Condition(account.vk))],
+            account.vk
         );
     },
 
@@ -296,16 +290,46 @@ const AssetsList = React.createClass({
                 <div className="assets">
                     {
                         assetList.map((asset) => {
-                            return (
-                                <a className="asset" href="#"
-                                    onClick={() => handleAssetClick(asset)}
-                                    key={asset.id}>
-                                    <IconShirt />
-                                    <span className="asset__title">Asset 1</span>
-                                </a>
-                            )
+                            if (asset.asset.hasOwnProperty('data')){
+                                const assetDetails = asset.asset.data;
+
+                                if ('item' in assetDetails
+                                    && 'frequency' in assetDetails) {
+                                    const
+                                        item = assetDetails.item,
+                                        frequency = assetDetails.frequency;
+
+                                    return (
+                                        <a className="asset" href="#"
+                                           onClick={() => handleAssetClick(asset)}
+                                           key={asset.id}>
+                                            { (item == 'shirt') && <IconShirt /> }
+                                            { (item == 'sticker') && <IconPicasso /> }
+                                            <span className="asset__title">
+                                                {
+                                                    // @kremalicious: overflow ellipsis would be better here
+                                                    asset.id.slice(0, 8)
+                                                }...
+                                            </span>
+                                        </a>
+                                    )
+                                }
+                            }
                         })
                     }
+
+                    <a className="asset asset__create" href="#"
+                        onClick={() => this.handleNewAssetClick('shirt')}
+                        key="asset-create-shirt">
+                        <IconShirt />
+                        <span className="asset__title">+ Create New</span>
+                    </a>
+                    <a className="asset asset__create" href="#"
+                        onClick={() => this.handleNewAssetClick('sticker')}
+                        key="asset-create-sticker">
+                        <IconPicasso />
+                        <span className="asset__title">+ Create New</span>
+                    </a>
                 </div>
             </div>
         )
