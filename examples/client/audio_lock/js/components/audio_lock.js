@@ -55,7 +55,6 @@ const AudioLock = React.createClass({
     },
 
     handleAccountChange(account) {
-        console.log('change', account)
         this.props.handleAccountChange(account);
         this.fetchUnspents(account);
     },
@@ -135,7 +134,6 @@ const StateSwitcher = React.createClass({
             availableStates: [
                 'login',
                 'list',
-                'email',
                 'locked',
                 'unlocked'
             ]
@@ -145,11 +143,12 @@ const StateSwitcher = React.createClass({
     getInitialState() {
         return {
             activeAsset: null,
+            activeAccount: null,
             currentState: 'login'
         }
     },
 
-    handleLoginClick() {
+    handleLogin(user) {
         const {
             assetAccount,
             onAccountChange
@@ -158,6 +157,7 @@ const StateSwitcher = React.createClass({
         onAccountChange(assetAccount);
 
         this.setState({
+            activeAccount: user,
             currentState: 'list'
         })
     },
@@ -190,9 +190,10 @@ const StateSwitcher = React.createClass({
         return (
             <div>
                 { (currentState === 'login') &&
-                    <div style={{ cursor: "pointer" }}
-                        onClick={ this.handleLoginClick }>
+                    <div>
                         <IconLockLocked />
+                        <StatusLockedEmail
+                            onSubmit={this.handleLogin}/>
                     </div>
                 }
                 { (currentState === 'list') &&
@@ -200,22 +201,13 @@ const StateSwitcher = React.createClass({
                         assetAccount={assetAccount}
                         assetList={assetList}
                         frequencyList={frequencyList}
-                        handleAssetClick={this.handleAssetClick}/>
-                }
-                { (currentState === 'email') &&
-                    <StatusLockedEmail />
+                        onAssetClick={this.handleAssetClick}/>
                 }
                 { (currentState === 'locked') &&
-                    <div>
-                        <IconLockLocked />
-                        <div className="audio-container">
-                            <AudioVisual
-                                frequencies={frequencyList}
-                                onFrequencyHit={this.handleFrequencyHit}
-                                targetFrequency={3}/>
-                            <StatusLocked />
-                        </div>
-                    </div>
+                    <AssetAudioLock
+                        targetFrequency={activeAsset.asset.data.frequency}
+                        frequencyList={frequencyList}
+                        onFrequencyHit={this.handleFrequencyHit}/>
                 }
                 { (currentState === 'unlocked') &&
                     <div>
@@ -236,7 +228,7 @@ const AssetsList = React.createClass({
         assetAccount: React.PropTypes.object,
         assetList: React.PropTypes.array,
         frequencyList: React.PropTypes.array,
-        handleAssetClick: React.PropTypes.func
+        onAssetClick: React.PropTypes.func
     },
 
 
@@ -281,7 +273,7 @@ const AssetsList = React.createClass({
     render() {
         const {
             assetList,
-            handleAssetClick
+            onAssetClick
         } = this.props;
 
         return (
@@ -301,7 +293,7 @@ const AssetsList = React.createClass({
 
                                     return (
                                         <a className="asset" href="#"
-                                           onClick={() => handleAssetClick(asset)}
+                                           onClick={() => onAssetClick(asset)}
                                            key={asset.id}>
                                             { (item == 'shirt') && <IconShirt /> }
                                             { (item == 'sticker') && <IconPicasso /> }
@@ -337,18 +329,90 @@ const AssetsList = React.createClass({
 });
 
 
-const StatusLockedEmail = () => {
-    return (
-        <div className="status status--locked">
-            <h2 className="status__title">Locked</h2>
-            <p className="status__text">Enter your email to receive instructions for unlocking this asset.</p>
-            
-            <form>
-                <input className="form__control" type="email" name="email" placeholder="Your email" />
-            </form>
-        </div>
-    )
-};
+const AssetAudioLock = React.createClass({
+    propTypes: {
+        targetFrequency: React.PropTypes.number,
+        frequencyList: React.PropTypes.array,
+        onFrequencyHit: React.PropTypes.func
+    },
+
+    render() {
+        const {
+            targetFrequency,
+            frequencyList,
+            onFrequencyHit
+        } = this.props;
+
+        return (
+            <div>
+                <IconLockLocked />
+                <div className="audio-container">
+                    <AudioVisual
+                        frequencies={frequencyList}
+                        onFrequencyHit={onFrequencyHit}
+                        targetFrequency={targetFrequency}/>
+                    <StatusLocked />
+                </div>
+            </div>
+        );
+    }
+});
+
+
+
+const StatusLockedEmail = React.createClass({
+    propTypes: {
+        onSubmit: React.PropTypes.func
+    },
+
+    getInitialState() {
+        return {
+            emailValue: null
+        }
+    },
+
+    handleSubmit(event) {
+        event.preventDefault();
+
+        const { emailValue } = this.state;
+        const { onSubmit } = this.props;
+
+        const keyPair = new driver.Ed25519Keypair(emailValue);
+
+        const user = {
+            "id": keyPair.publicKey,
+            "ledger": {
+                "api": "localhost:8000",
+                "id": 0,
+                "ws": "localhost:48888"
+            },
+            "name": emailValue,
+            "sk": keyPair.privateKey,
+            "vk": keyPair.publicKey
+        };
+
+        onSubmit(user);
+    },
+
+    handleInputChange(event) {
+        this.setState({
+            emailValue: event.target.value
+        })
+    },
+
+    render() {
+        return (
+            <div className="status status--locked">
+                <p className="status__text">Enter your email to receive instructions for unlocking an asset.</p>
+
+                <form onSubmit={this.handleSubmit}>
+                    <input className="form__control" type="email" name="email" placeholder="Your email"
+                        onChange={this.handleInputChange}/>
+                </form>
+            </div>
+        )
+    }
+});
 
 const StatusLocked = () => {
     return (
