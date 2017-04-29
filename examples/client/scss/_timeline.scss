@@ -92,6 +92,10 @@ $brand-primary: $brand-main-blue; //Zen Blue
     border: 2px solid $brand-main-blue;
     background: $brand-danger;
 
+    &:hover {
+        background: $brand-main-green;
+    }
+
     @media screen and (max-width: $break-point) {
         float: left;
         margin-right: 20px;
@@ -120,7 +124,6 @@ $brand-primary: $brand-main-blue; //Zen Blue
     width: 130px;
     display: block;
     white-space: nowrap;
-    overflow: hidden;
     text-overflow: ellipsis;
     font-size: 0.6rem;
 

@@ -52,7 +52,7 @@ class TransactionStore {
     }
 
     onFlushTransactionList() {
-        this.transactionList = null;
+        this.transactionList = [];
         this.transactionMeta.asset_id = null;
         this.transactionMeta.operation = null;
         this.transactionMeta.search = null;

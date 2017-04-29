@@ -72,15 +72,6 @@ const AudioLock = React.createClass({
         this.fetchUnspents(account);
     },
 
-    handleAssetClick(assetId) {
-        this.fetchTransactionListForAsset(assetId);
-        this.setState({showHistory: true});
-    },
-
-    handleHistoryClose() {
-        this.setState({showHistory: false});
-    },
-
     render() {
         const {
             activeAccount,
@@ -197,6 +188,7 @@ const StateSwitcher = React.createClass({
         this.setState({
             currentState: 'login'
         })
+        TransactionActions.flushTransactionList();
     },
 
     render() {
