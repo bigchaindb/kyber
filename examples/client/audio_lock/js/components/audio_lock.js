@@ -1,21 +1,34 @@
 import React from 'react';
 import moment from 'moment';
+import classnames from 'classnames';
 
 import * as driver from 'js-bigchaindb-quickstart';
 
-import { API_PATH } from '../../../js/constants/application_constants';
+import {API_PATH} from '../../../js/constants/application_constants';
 
 import AccountActions from '../../../js/react/actions/account_actions';
 import BigchainDBConnection from '../../../js/react/components/bigchaindb_connection';
 
 import TransactionActions from '../../../js/react/actions/transaction_actions';
-import TransactionList from '../../../js/react/components/transactions/transaction_list';
 
-import TransactionPanel from './transaction_panel';
-import InputTransaction from './input_transaction';
 import AudioVisual from './audio_visual';
 
-import { IconLockLocked, IconLockUnlocked, IconShirt, IconDiamond, IconPicasso, IconDocument, IconSong, IconTruck, IconBitcoin, IconHouse, IconPackage, IconAdd, IconArrowLeft, Logo } from '../../../js/react/components/icons';
+import {
+    IconLockLocked,
+    IconLockUnlocked,
+    IconShirt,
+    IconDiamond,
+    IconPicasso,
+    IconDocument,
+    IconSong,
+    IconTruck,
+    IconBitcoin,
+    IconHouse,
+    IconPackage,
+    IconAdd,
+    IconArrowLeft,
+    Logo
+} from '../../../js/react/components/icons';
 
 const AudioLock = React.createClass({
     propTypes: {
@@ -112,6 +125,7 @@ const AudioLock = React.createClass({
                         assetAccount={ assetAccount }
                         assetList={ transactionsForAccount }
                         onAccountChange={ this.handleAccountChange }
+                        transactionList={ transactionList }
                         transactionMeta={ transactionMeta }/>
                 </section>
             </div>
@@ -128,6 +142,7 @@ const StateSwitcher = React.createClass({
         availableStates: React.PropTypes.array,
         frequencyList: React.PropTypes.array,
         onAccountChange: React.PropTypes.func,
+        transactionList: React.PropTypes.array,
         transactionMeta: React.PropTypes.object
     },
 
@@ -178,6 +193,12 @@ const StateSwitcher = React.createClass({
         })
     },
 
+    handleReset() {
+        this.setState({
+            currentState: 'login'
+        })
+    },
+
     render() {
         const {
             activeAsset,
@@ -189,11 +210,18 @@ const StateSwitcher = React.createClass({
             assetAccount,
             assetList,
             frequencyList,
+            transactionList,
             transactionMeta
         } = this.props;
 
         return (
             <div>
+                { (currentState === 'locked'
+                    || currentState === 'unlocked') &&
+                    <TimeLine
+                        transactionList={transactionList}
+                        onClick={this.handleReset}/>
+                }
                 { (currentState === 'login') &&
                     <div className="is-locked">
                         <StatusIntro />
@@ -252,24 +280,15 @@ const AssetsList = React.createClass({
         const signedTransaction = driver.Transaction.signTransaction(transaction, assetAccount.sk);
 
         TransactionActions.postTransaction(signedTransaction);
-
-        setTimeout(() => {
-            driver.Connection.pollStatusAndFetchTransaction(signedTransaction.id, API_PATH)
-                .then(() => {
-                    TransactionActions.fetchOutputList({
-                        public_key: assetAccount.vk,
-                        unspent: true
-                    });
-                })
-        }, 1000);
+        fetchAsset(signedTransaction.id, assetAccount.vk);
     },
 
     createTransaction(account, value) {
-        const { frequencyList } = this.props;
+        const {frequencyList} = this.props;
 
         const asset = {
             'item': value,
-            'frequency': frequencyList[Math.floor(Math.random()*frequencyList.length)],
+            'frequency': frequencyList[Math.floor(Math.random() * frequencyList.length)],
             'timestamp': moment().format('X')
         };
 
@@ -281,10 +300,19 @@ const AssetsList = React.createClass({
         );
     },
 
+    onAssetClick(asset) {
+        const {
+            assetAccount,
+            onAssetClick
+        } = this.props;
+
+        onAssetClick(asset);
+        fetchAsset(asset.id, assetAccount.vk);
+    },
+
     render() {
         const {
             assetList,
-            onAssetClick,
             transactionMeta
         } = this.props;
 
@@ -303,7 +331,7 @@ const AssetsList = React.createClass({
                 <div className="assets">
                     {
                         assetList.map((asset) => {
-                            if (asset.asset.hasOwnProperty('data')){
+                            if (asset.asset.hasOwnProperty('data')) {
                                 const assetDetails = asset.asset.data;
 
                                 if ('item' in assetDetails
@@ -314,7 +342,7 @@ const AssetsList = React.createClass({
 
                                     return (
                                         <a className="asset" href="#"
-                                           onClick={() => onAssetClick(asset)}
+                                           onClick={() => this.onAssetClick(asset)}
                                            key={asset.id}>
                                             { (item == 'shirt') && <IconShirt /> }
                                             { (item == 'sticker') && <IconPicasso /> }
@@ -331,14 +359,14 @@ const AssetsList = React.createClass({
                     }
 
                     <a className="asset asset--create" href="#"
-                        onClick={() => this.handleNewAssetClick('shirt')}
-                        key="asset-create-shirt">
+                       onClick={() => this.handleNewAssetClick('shirt')}
+                       key="asset-create-shirt">
                         <IconAdd />
                         <span className="asset__title">Create new asset</span>
                     </a>
                     <a className="asset asset--create" href="#"
-                        onClick={() => this.handleNewAssetClick('sticker')}
-                        key="asset-create-sticker">
+                       onClick={() => this.handleNewAssetClick('sticker')}
+                       key="asset-create-sticker">
                         <IconAdd />
                         <span className="asset__title">Create new asset</span>
                     </a>
@@ -369,7 +397,7 @@ const AssetAudioLock = React.createClass({
     },
 
     onFrequencyHit() {
-        const { onFrequencyHit } = this.props;
+        const {onFrequencyHit} = this.props;
 
         onFrequencyHit();
 
@@ -383,16 +411,7 @@ const AssetAudioLock = React.createClass({
         const signedTransaction = driver.Transaction.signTransaction(transaction, assetAccount.sk);
 
         TransactionActions.postTransaction(signedTransaction);
-
-        setTimeout(() => {
-            driver.Connection.pollStatusAndFetchTransaction(signedTransaction.id, API_PATH)
-                .then(() => {
-                    TransactionActions.fetchOutputList({
-                        public_key: assetAccount.vk,
-                        unspent: true
-                    });
-                })
-        }, 1000);
+        fetchAsset(activeAsset.id, assetAccount.vk)
     },
 
     transferTransaction(inputTransaction, toAccount) {
@@ -431,7 +450,6 @@ const AssetAudioLock = React.createClass({
 });
 
 
-
 const StatusLockedEmail = React.createClass({
     propTypes: {
         onSubmit: React.PropTypes.func
@@ -446,18 +464,12 @@ const StatusLockedEmail = React.createClass({
     handleSubmit(event) {
         event.preventDefault();
 
-        const { emailValue } = this.state;
-        const { onSubmit } = this.props;
+        const {emailValue} = this.state;
+        const {onSubmit} = this.props;
 
         const keyPair = new driver.Ed25519Keypair(emailValue);
 
         const user = {
-            "id": keyPair.publicKey,
-            "ledger": {
-                "api": "localhost:8000",
-                "id": 0,
-                "ws": "localhost:48888"
-            },
             "name": emailValue,
             "sk": keyPair.privateKey,
             "vk": keyPair.publicKey
@@ -479,7 +491,7 @@ const StatusLockedEmail = React.createClass({
 
                 <form onSubmit={this.handleSubmit}>
                     <input className="form__control" type="email" name="email" placeholder="Your email"
-                        onChange={this.handleInputChange}/>
+                           onChange={this.handleInputChange}/>
                     <button type="submit" className="button button--primary status__button">Let’s roll</button>
                 </form>
             </div>
@@ -504,3 +516,69 @@ const StatusUnlocked = () => {
         </div>
     )
 };
+
+const TimeLine = React.createClass({
+    propTypes: {
+        transactionList: React.PropTypes.array,
+        onClick: React.PropTypes.func
+    },
+
+    render() {
+        const {
+            transactionList,
+            onClick
+        } = this.props;
+
+        return (
+            <section className="timeline-section">
+                <div className="timeline">
+                    <div className="timeline-one">
+                        <div className={classnames("timeline-img", { active: transactionList.length > 0 })}></div>
+                        <h3 className="timeline-name">
+                            BDB
+                        </h3>
+                        <p className="timeline-description">
+                            {transactionList.length > 0 ? transactionList[0].id : null}
+                        </p>
+                    </div>
+
+                    <div className="timeline-two">
+                        <div className={classnames("timeline-img", { active: transactionList.length > 1 })}></div>
+                        <h3 className="timeline-name">
+                            You
+                        </h3>
+                        <p className="timeline-description">
+                            {transactionList.length > 1 ? transactionList[1].id : null}
+                        </p>
+                    </div>
+
+                    <div className="timeline-three" style={{cursor : 'pointer'}}
+                        onClick={onClick}>
+                        <div className={classnames("timeline-img", { active: transactionList.length > 2 })}></div>
+                        <h3 className="timeline-name">
+                            Someone
+                        </h3>
+                        <p className="timeline-description">
+                        </p>
+                    </div>
+
+                </div>
+            </section>
+        )
+    }
+});
+
+function fetchAsset(id, publicKey) {
+    setTimeout(() => {
+        driver.Connection.pollStatusAndFetchTransaction(id, API_PATH)
+            .then(() => {
+                TransactionActions.fetchOutputList({
+                    public_key: publicKey,
+                    unspent: true
+                });
+                TransactionActions.fetchTransactionList({
+                    assetId: id
+                });
+            })
+    }, 1000);
+}
