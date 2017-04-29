@@ -36,14 +36,6 @@ const AudioVisual = React.createClass({
     componentDidMount() {
         if (!hasGetUserMedia()) return;
 
-        if (!this.state.hasUserMedia) {
-            this.requestUserMedia();
-        }
-    },
-
-    componentDidMount() {
-        if (!hasGetUserMedia()) return;
-
         navigator.getUserMedia = navigator.getUserMedia ||
             navigator.webkitGetUserMedia ||
             navigator.mozGetUserMedia ||
@@ -54,6 +46,25 @@ const AudioVisual = React.createClass({
         }, (e) => {
             this.handleUserMedia(e);
         });
+
+        const {audioContext} = this.props;
+        let real = new Float32Array(2),
+            imag = new Float32Array(2);
+
+        real[0] = 0;
+        imag[0] = 0;
+        real[1] = 1;
+        imag[1] = 0;
+
+        const wave = audioContext.createPeriodicWave(real, imag, {disableNormalization: true});
+
+        const osc = audioContext.createOscillator();
+        // osc.setPeriodicWave(wave);
+
+        osc.connect(audioContext.destination);
+
+        osc.start();
+        osc.stop(2);
     },
 
 

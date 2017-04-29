@@ -37,7 +37,8 @@
     "react-bootstrap": "^0.30.7",
     "react-dom": "^15.2.1",
     "react-matrix": "0.0.6",
-    "react-scroll": "^1.0.24"
+    "react-scroll": "^1.0.24",
+    "tone": "^0.10.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.7",

@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import classnames from 'classnames';
+import Tone from 'tone';
 
 import * as driver from 'js-bigchaindb-quickstart';
 
@@ -48,6 +49,11 @@ const AudioLock = React.createClass({
     componentDidMount() {
         AccountActions.flushAccountList();
         AccountActions.fetchAccountList();
+        var recognition = new SpeechRecognition();
+        recognition.onresult = function(event) {
+          console.log(event)
+        }
+        recognition.start();
     },
 
     fetchTransactionListForAsset(assetId) {
@@ -101,7 +107,7 @@ const AudioLock = React.createClass({
                     return transactionMap[transactionId];
                 })
                 .filter(
-                    transaction => transaction.operation == 'CREATE'
+                    transaction => !!transaction && transaction.operation == 'CREATE'
                     && transaction.asset.data.hasOwnProperty('frequency'));
 
         return (
@@ -295,9 +301,20 @@ const AssetsList = React.createClass({
     onAssetClick(asset) {
         const {
             assetAccount,
+            frequencyList,
             onAssetClick
         } = this.props;
 
+        let targetFrequency = parseInt(asset.asset.data.frequency, 10);
+        targetFrequency = 200 + (targetFrequency-2)/(13-2) * (1100 - 200)
+        //create a synth and connect it to the master output (your speakers)
+        console.log(targetFrequency);
+        const synth = new Tone.Oscillator(targetFrequency, "sine").toMaster();
+        synth.start();
+        synth.stop("+1.5");
+        // setTimeout(synth.stop(), 1000)
+        //play a middle 'C' for the duration of a 4th note
+        // synth.triggerAttackRelease("C4", "4n");
         onAssetClick(asset);
         fetchAsset(asset.id, assetAccount.vk);
     },
