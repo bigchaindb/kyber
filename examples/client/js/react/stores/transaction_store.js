@@ -21,7 +21,8 @@ class TransactionStore {
             transaction: null,
             tx_id: null,
             unspent: null,
-            search: null
+            search: null,
+            isFetchingList: false
         };
         this.bindActions(TransactionActions);
         this.registerAsync(TransactionSource);

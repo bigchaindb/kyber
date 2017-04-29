@@ -43,11 +43,14 @@ a {
     &:hover,
     &:focus {
         color: $link-hover-color;
-        background: $link-hover-bg;
         outline: 0;
     }
 
     &:active { }
+    
+    .icon {
+        stroke: $link-color;
+    }
 }
 
 

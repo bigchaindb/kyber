@@ -256,7 +256,7 @@ function renderFrame(analyser) {
         analyser.targetTimer = 1;
     }
 
-    if (analyser.targetTimer > 300) {
+    if (analyser.targetTimer > 150) {
         this.onFrequencyHit();
         analyser.targetTimer = 1;
     }

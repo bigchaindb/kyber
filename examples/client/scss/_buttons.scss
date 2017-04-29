@@ -1,0 +1,158 @@
+.button {
+    display: inline-block;
+    font-family: $btn-font-family;
+    font-weight: $btn-font-weight;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    border: none;
+    box-shadow: none;
+    transition: .2s ease-out;
+    @include button-size($btn-padding-y, $btn-padding-x, $font-size-base, $line-height, $btn-border-radius);
+
+    &:hover,
+    &:focus {
+        box-shadow: 0 1px 4px rgba($brand-main-blue-dark, .4);
+        transform: translateY(-1px);
+    }
+
+    &:active,
+    &.active {
+        background-image: none;
+        outline: 0;
+        transform: translateY(0);
+        box-shadow: 0 1px 2px rgba($brand-main-blue-dark, .3);
+    }
+    &.disabled,
+    &:disabled {
+        opacity: 0.45;
+        box-shadow: none;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    .icon {
+        width: $font-size-base;
+        height: $font-size-base;
+        margin-right: .25rem;
+        margin-bottom: -1px;
+    }
+}
+
+// Future-proof disabling of clicks on `<a>` elements
+a.button.disabled,
+fieldset[disabled] a.btn {
+    pointer-events: none;
+}
+
+//
+// Alternate buttons
+//
+.button--primary {
+    @include button-variant($btn-primary-color, $btn-primary-bg);
+}
+.button--secondary {
+    @include button-variant($btn-secondary-color, $btn-secondary-bg);
+}
+.button--blue {
+    @include button-variant($btn-blue-color, $btn-blue-bg);
+}
+.button--violet {
+    @include button-variant($btn-violet-color, $btn-violet-bg);
+}
+.button--info {
+    @include button-variant($btn-info-color, $btn-info-bg);
+}
+.button--success {
+    @include button-variant($btn-success-color, $btn-success-bg);
+}
+.button--warning {
+    @include button-variant($btn-warning-color, $btn-warning-bg);
+}
+.button--danger {
+    @include button-variant($btn-danger-color, $btn-danger-bg);
+}
+
+
+//
+// Link buttons
+//
+// Make a button look and behave like a link
+.button--link {
+    font-weight: normal;
+    color: $link-color;
+    border-radius: 0;
+    &,
+    &:active,
+    &.active,
+    &:disabled {
+        background-color: transparent;
+        box-shadow: none;
+    }
+    &,
+    &:hover,
+    &:focus,
+    &:active {
+        border-color: transparent;
+        box-shadow: none;
+        background: none;
+    }
+    &:disabled {
+    }
+}
+
+
+//
+// Button Sizes
+//
+.button--lg {
+    // line-height: ensure even-numbered height of button next to large input
+    @include button-size($btn-padding-y-lg, $btn-padding-x-lg, $font-size-lg, $line-height-lg, $btn-border-radius-lg);
+
+    .icon {
+        width: $font-size-lg;
+        height: $font-size-lg;
+    }
+}
+.button--sm {
+    // line-height: ensure proper height of button next to small input
+    @include button-size($btn-padding-y-sm, $btn-padding-x-sm, $font-size-sm, $line-height-sm, $btn-border-radius-sm);
+
+    .icon {
+        width: $font-size-sm;
+        height: $font-size-sm;
+    }
+}
+.button--xs {
+    // line-height: ensure proper height of button next to small input
+    @include button-size($btn-padding-y-xs, $btn-padding-x-xs, $font-size-xs, $line-height-xs, $btn-border-radius-xs);
+
+    .icon {
+        width: $font-size-xs;
+        height: $font-size-xs;
+    }
+}
+
+//
+// Block button
+//
+.button-block {
+    display: block;
+    width: 100%;
+}
+
+// Vertically space out multiple block buttons
+.button-block + .button-block {
+    margin-top: 5px;
+}
+
+// Specificity overrides
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+    &.btn-block {
+        width: 100%;
+    }
+}

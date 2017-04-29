@@ -15,7 +15,7 @@ import TransactionPanel from './transaction_panel';
 import InputTransaction from './input_transaction';
 import AudioVisual from './audio_visual';
 
-import { IconLockLocked, IconLockUnlocked, IconShirt, IconDiamond, IconPicasso, IconDocument, IconSong, IconTruck, IconBitcoin, IconHouse, IconPackage } from '../../../js/react/components/icons';
+import { IconLockLocked, IconLockUnlocked, IconShirt, IconDiamond, IconPicasso, IconDocument, IconSong, IconTruck, IconBitcoin, IconHouse, IconPackage, IconAdd, IconArrowLeft, Logo } from '../../../js/react/components/icons';
 
 const AudioLock = React.createClass({
     propTypes: {
@@ -103,14 +103,16 @@ const AudioLock = React.createClass({
         return (
             <div>
                 <nav className="menu">
-                    <a className="menu__link" href="../">Back to examples</a>
+                    <a className="menu__link" href="../"><IconArrowLeft /> Back to examples</a>
+                    <Logo />
                     <h1 className="menu__title">BigchainDB Audio Lock</h1>
                 </nav>
                 <section className="app__content">
                     <StateSwitcher
                         assetAccount={ assetAccount }
                         assetList={ transactionsForAccount }
-                        onAccountChange={ this.handleAccountChange }/>
+                        onAccountChange={ this.handleAccountChange }
+                        transactionMeta={ transactionMeta }/>
                 </section>
             </div>
         );
@@ -125,7 +127,8 @@ const StateSwitcher = React.createClass({
         assetList: React.PropTypes.array,
         availableStates: React.PropTypes.array,
         frequencyList: React.PropTypes.array,
-        onAccountChange: React.PropTypes.func
+        onAccountChange: React.PropTypes.func,
+        transactionMeta: React.PropTypes.object
     },
 
     getDefaultProps() {
@@ -184,13 +187,15 @@ const StateSwitcher = React.createClass({
         const {
             assetAccount,
             assetList,
-            frequencyList
+            frequencyList,
+            transactionMeta
         } = this.props;
 
         return (
             <div>
                 { (currentState === 'login') &&
-                    <div>
+                    <div className="is-locked">
+                        <StatusIntro />
                         <IconLockLocked />
                         <StatusLockedEmail
                             onSubmit={this.handleLogin}/>
@@ -201,7 +206,8 @@ const StateSwitcher = React.createClass({
                         assetAccount={assetAccount}
                         assetList={assetList}
                         frequencyList={frequencyList}
-                        onAssetClick={this.handleAssetClick}/>
+                        onAssetClick={this.handleAssetClick}
+                        transactionMeta={transactionMeta}/>
                 }
                 { (currentState === 'locked') &&
                     <AssetAudioLock
@@ -210,7 +216,7 @@ const StateSwitcher = React.createClass({
                         onFrequencyHit={this.handleFrequencyHit}/>
                 }
                 { (currentState === 'unlocked') &&
-                    <div>
+                    <div className="is-unlocked">
                         <IconLockUnlocked />
                         <StatusUnlocked />
                     </div>
@@ -228,7 +234,8 @@ const AssetsList = React.createClass({
         assetAccount: React.PropTypes.object,
         assetList: React.PropTypes.array,
         frequencyList: React.PropTypes.array,
-        onAssetClick: React.PropTypes.func
+        onAssetClick: React.PropTypes.func,
+        transactionMeta: React.PropTypes.object
     },
 
 
@@ -273,12 +280,22 @@ const AssetsList = React.createClass({
     render() {
         const {
             assetList,
-            onAssetClick
+            onAssetClick,
+            transactionMeta
         } = this.props;
+
+        if (transactionMeta && transactionMeta.isFetchingList) {
+            // @kremalicious - some cool loading symbol?
+            return (
+                <div>
+                    Loading assets...
+                </div>
+            )
+        }
 
         return (
             <div className="assets-list">
-                <p>Please select an asset to unlock</p>
+                <p>Please select an asset to unlock or create a new asset first.</p>
                 <div className="assets">
                     {
                         assetList.map((asset) => {
@@ -299,9 +316,8 @@ const AssetsList = React.createClass({
                                             { (item == 'sticker') && <IconPicasso /> }
                                             <span className="asset__title">
                                                 {
-                                                    // @kremalicious: overflow ellipsis would be better here
-                                                    asset.id.slice(0, 8)
-                                                }...
+                                                    asset.id
+                                                }
                                             </span>
                                         </a>
                                     )
@@ -310,17 +326,17 @@ const AssetsList = React.createClass({
                         })
                     }
 
-                    <a className="asset asset__create" href="#"
+                    <a className="asset asset--create" href="#"
                         onClick={() => this.handleNewAssetClick('shirt')}
                         key="asset-create-shirt">
-                        <IconShirt />
-                        <span className="asset__title">+ Create New</span>
+                        <IconAdd />
+                        <span className="asset__title">Create new asset</span>
                     </a>
-                    <a className="asset asset__create" href="#"
+                    <a className="asset asset--create" href="#"
                         onClick={() => this.handleNewAssetClick('sticker')}
                         key="asset-create-sticker">
-                        <IconPicasso />
-                        <span className="asset__title">+ Create New</span>
+                        <IconAdd />
+                        <span className="asset__title">Create new asset</span>
                     </a>
                 </div>
             </div>
@@ -328,6 +344,15 @@ const AssetsList = React.createClass({
     }
 });
 
+
+const StatusIntro = () => {
+    return (
+        <div className="status status--locked">
+            <h2 className="status__title">Audio Lock</h2>
+            <p className="status__text">Unlock assets with your voice.</p>
+        </div>
+    )
+};
 
 const AssetAudioLock = React.createClass({
     propTypes: {
@@ -344,14 +369,15 @@ const AssetAudioLock = React.createClass({
         } = this.props;
 
         return (
-            <div>
+            <div className="is-locked">
                 <IconLockLocked />
+                <StatusLocked />
                 <div className="audio-container">
                     <AudioVisual
                         frequencies={frequencyList}
                         onFrequencyHit={onFrequencyHit}
                         targetFrequency={targetFrequency}/>
-                    <StatusLocked />
+
                 </div>
             </div>
         );
@@ -408,6 +434,7 @@ const StatusLockedEmail = React.createClass({
                 <form onSubmit={this.handleSubmit}>
                     <input className="form__control" type="email" name="email" placeholder="Your email"
                         onChange={this.handleInputChange}/>
+                    <button type="submit" className="button button--primary status__button">Let’s roll</button>
                 </form>
             </div>
         )

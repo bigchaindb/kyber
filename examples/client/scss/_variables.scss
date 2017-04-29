@@ -108,6 +108,56 @@ $component-active-color: $brand-main-blue !default;
 $component-active-bg:    $brand-primary !default;
 
 
+//
+// Buttons
+//
+$btn-font-family:                inherit;
+$btn-font-weight:                $font-weight-bold !default;
+
+$btn-padding-x:                  2rem !default;
+$btn-padding-y:                  .5rem !default;
+
+$btn-primary-color:              $brand-main-blue !default;
+$btn-primary-bg:                 $brand-primary !default;
+
+$btn-secondary-color:            $brand-main-blue !default;
+$btn-secondary-bg:               $gray-light !default;
+
+$btn-blue-color:                 $brand-primary !default;
+$btn-blue-bg:                    $brand-main-blue !default;
+
+$btn-violet-color:               $brand-main-blue !default;
+$btn-violet-bg:                  $brand-main-violet !default;
+
+$btn-info-color:                 #fff !default;
+$btn-info-bg:                    $brand-info !default;
+
+$btn-success-color:              #fff !default;
+$btn-success-bg:                 $brand-success !default;
+
+$btn-warning-color:              #fff !default;
+$btn-warning-bg:                 $brand-warning !default;
+
+$btn-danger-color:               #fff !default;
+$btn-danger-bg:                  $brand-danger !default;
+
+$btn-link-disabled-color:        $gray-light !default;
+
+$btn-padding-x-xs:               .75rem !default;
+$btn-padding-y-xs:               .15rem !default;
+
+$btn-padding-x-sm:               1.25rem !default;
+$btn-padding-y-sm:               .4rem !default;
+
+$btn-padding-x-lg:               3rem !default;
+$btn-padding-y-lg:               1rem !default;
+
+// Allows for customizing button radius independently from global border radius
+$btn-border-radius:              $border-radius !default;
+$btn-border-radius-lg:           $border-radius-lg !default;
+$btn-border-radius-sm:           $border-radius-sm !default;
+$btn-border-radius-xs:           $border-radius-xs !default;
+
 
 
 //

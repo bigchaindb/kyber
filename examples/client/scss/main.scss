@@ -1,5 +1,6 @@
 @import '_normalize.css';
 @import 'variables';
+@import 'mixins';
 
 // TODO: remove bootstrap dependency
 //$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
@@ -14,6 +15,8 @@
 @import 'layout';
 @import 'menu';
 @import 'icons';
+@import 'buttons';
+@import 'logo';
 
 @import 'account';
 @import 'asset';

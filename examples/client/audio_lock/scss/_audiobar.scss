@@ -15,17 +15,17 @@ $red:   #FF4136;
     border-left: 1px solid $body-bg;
 
     &:nth-child(1)  { background: $green; border-left-color: $green; }
-    &:nth-child(2)  { background: rgba($green, .8); }
-    &:nth-child(3)  { background: rgba($green, .6); }
-    &:nth-child(4)  { background: rgba($green, .4); }
-    &:nth-child(5)  { background: rgba($green, .2); }
-    &:nth-child(6)  { background: rgba($green, .1); }
-    &:nth-child(7)  { background: rgba($red, .1); }
-    &:nth-child(8)  { background: rgba($red, .2); }
-    &:nth-child(9)  { background: rgba($red, .4); }
-    &:nth-child(10) { background: rgba($red, .3); }
-    &:nth-child(11) { background: rgba($red, .8); }
-    &:nth-child(12) { background: $red; }
+    &:nth-child(2)  { background: rgba($green, .9); }
+    &:nth-child(3)  { background: rgba($green, .8); }
+    &:nth-child(4)  { background: rgba($green, .7); }
+    &:nth-child(5)  { background: rgba($green, .6); }
+    &:nth-child(6)  { background: rgba($green, .5); }
+    &:nth-child(7)  { background: rgba(yellow, .5); }
+    &:nth-child(8)  { background: rgba(yellow, .6); }
+    &:nth-child(9)  { background: rgba(yellow, .7); }
+    &:nth-child(10) { background: rgba(yellow, .8); }
+    &:nth-child(11) { background: rgba(yellow, .9); }
+    &:nth-child(12) { background: yellow; }
 
 }
 

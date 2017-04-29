@@ -1,0 +1,35 @@
+//
+// Button variants
+//
+@mixin button-variant($color, $background) {
+    $active-background: lighten($background, 5%);
+    color: $color !important;
+    background: $background;
+
+    &:hover,
+    &:focus {
+        color: $color !important;
+        background-color: $active-background;
+    }
+    &:active {
+        color: $color !important;
+        background: darken($background, 2%);
+        transition: none;
+    }
+    &.disabled,
+    &:disabled {
+        &:focus {
+            background-color: $background;
+        }
+    }
+
+    .icon { fill: $color; }
+}
+
+// Button sizes
+@mixin button-size($padding-y, $padding-x, $font-size, $line-height, $border-radius) {
+    padding: $padding-y $padding-x;
+    font-size: $font-size;
+    line-height: $line-height;
+    border-radius: $border-radius;
+}
