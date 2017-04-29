@@ -181,6 +181,7 @@ const StateSwitcher = React.createClass({
     render() {
         const {
             activeAsset,
+            activeAccount,
             currentState
         } = this.state;
 
@@ -211,6 +212,9 @@ const StateSwitcher = React.createClass({
                 }
                 { (currentState === 'locked') &&
                     <AssetAudioLock
+                        activeAsset={activeAsset}
+                        activeAccount={activeAccount}
+                        assetAccount={assetAccount}
                         targetFrequency={activeAsset.asset.data.frequency}
                         frequencyList={frequencyList}
                         onFrequencyHit={this.handleFrequencyHit}/>
@@ -356,16 +360,58 @@ const StatusIntro = () => {
 
 const AssetAudioLock = React.createClass({
     propTypes: {
+        activeAsset: React.PropTypes.object,
+        activeAccount: React.PropTypes.object,
+        assetAccount: React.PropTypes.object,
         targetFrequency: React.PropTypes.number,
         frequencyList: React.PropTypes.array,
         onFrequencyHit: React.PropTypes.func
+    },
+
+    onFrequencyHit() {
+        const { onFrequencyHit } = this.props;
+
+        onFrequencyHit();
+
+        const {
+            activeAsset,
+            activeAccount,
+            assetAccount,
+        } = this.props;
+
+        const transaction = this.transferTransaction(activeAsset, activeAccount);
+        const signedTransaction = driver.Transaction.signTransaction(transaction, assetAccount.sk);
+
+        TransactionActions.postTransaction(signedTransaction);
+
+        setTimeout(() => {
+            driver.Connection.pollStatusAndFetchTransaction(signedTransaction.id, API_PATH)
+                .then(() => {
+                    TransactionActions.fetchOutputList({
+                        public_key: assetAccount.vk,
+                        unspent: true
+                    });
+                })
+        }, 1000);
+    },
+
+    transferTransaction(inputTransaction, toAccount) {
+        const metadata = {
+            'message': 'Greetings from BigchainDB'
+        };
+
+        return driver.Transaction.makeTransferTransaction(
+            inputTransaction,
+            metadata,
+            [driver.Transaction.makeOutput(driver.Transaction.makeEd25519Condition(toAccount.vk))],
+            0
+        );
     },
 
     render() {
         const {
             targetFrequency,
             frequencyList,
-            onFrequencyHit
         } = this.props;
 
         return (
@@ -375,7 +421,7 @@ const AssetAudioLock = React.createClass({
                 <div className="audio-container">
                     <AudioVisual
                         frequencies={frequencyList}
-                        onFrequencyHit={onFrequencyHit}
+                        onFrequencyHit={this.onFrequencyHit}
                         targetFrequency={targetFrequency}/>
 
                 </div>
