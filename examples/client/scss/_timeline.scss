@@ -7,7 +7,7 @@ $brand-primary: $brand-main-blue; //Zen Blue
 .section-header {
     color: $brand-primary;
     font-weight: 400;
-    font-size: 1.4em;
+    font-size: 1.2em;
 }
 
 .timeline-header {
@@ -126,6 +126,12 @@ $brand-primary: $brand-main-blue; //Zen Blue
     white-space: nowrap;
     text-overflow: ellipsis;
     font-size: 0.6rem;
+
+    a {
+        color: $brand-main-gray;
+        text-decoration: underline;
+        cursor: pointer;
+    }
 
     @media screen and (min-width: $break-point) {
         text-align: center;

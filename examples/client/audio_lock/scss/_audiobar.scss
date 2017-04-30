@@ -27,9 +27,14 @@ $red:   #FF4136;
     &:nth-child(11) { background: rgba(yellow, .9); }
     &:nth-child(12) { background: yellow; }
 
+    cursor: pointer;
+    &:hover {
+        opacity: 1!important;
+    }
+
 }
 
 .audiobar__step.target {
-    background: rgba($brand-main-violet, 1);
+    background: rgba($brand-main-green, 1);
     opacity: 1 !important;
 }

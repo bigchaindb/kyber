@@ -298,20 +298,9 @@ const AssetsList = React.createClass({
     onAssetClick(asset) {
         const {
             assetAccount,
-            frequencyList,
             onAssetClick
         } = this.props;
 
-        let targetFrequency = parseInt(asset.asset.data.frequency, 10);
-        targetFrequency = 200 + (targetFrequency-2)/(13-2) * (1100 - 200)
-        //create a synth and connect it to the master output (your speakers)
-        console.log(targetFrequency);
-        const synth = new Tone.Oscillator(targetFrequency, "sine").toMaster();
-        synth.start();
-        synth.stop("+1.5");
-        // setTimeout(synth.stop(), 1000)
-        //play a middle 'C' for the duration of a 4th note
-        // synth.triggerAttackRelease("C4", "4n");
         onAssetClick(asset);
         fetchAsset(asset.id, assetAccount.vk);
     },
@@ -402,6 +391,11 @@ const AssetAudioLock = React.createClass({
         onFrequencyHit: React.PropTypes.func
     },
 
+    componentDidMount() {
+        const { activeAsset } = this.props;
+        this.renderTone(parseInt(activeAsset.asset.data.frequency, 10))
+    },
+
     onFrequencyHit() {
         const {onFrequencyHit} = this.props;
 
@@ -433,6 +427,18 @@ const AssetAudioLock = React.createClass({
         );
     },
 
+    handleFrequencyClick(frequencyBin) {
+        this.renderTone(frequencyBin)
+    },
+
+    renderTone(frequencyBin) {
+        const frequency = 200 + (frequencyBin-2)/(13-2) * (1100 - 200);
+        //create a synth and connect it to the master output (your speakers)
+        const synth = new Tone.Oscillator(frequency, "sine").toMaster();
+        synth.start();
+        synth.stop("+1.5");
+    },
+
     render() {
         const {
             targetFrequency,
@@ -446,6 +452,7 @@ const AssetAudioLock = React.createClass({
                 <div className="audio-container">
                     <AudioVisual
                         frequencies={frequencyList}
+                        onFrequencyClick={this.handleFrequencyClick}
                         onFrequencyHit={this.onFrequencyHit}
                         targetFrequency={targetFrequency}/>
 
@@ -541,10 +548,14 @@ const TimeLine = React.createClass({
                     <div className="timeline-one">
                         <div className={classnames("timeline-img", { active: transactionList.length > 0 })}></div>
                         <h3 className="timeline-name">
-                            BDB
+                            BigchainDB
                         </h3>
                         <p className="timeline-description">
-                            {transactionList.length > 0 ? transactionList[0].id : null}
+                            { transactionList.length > 0 ?
+                                    <a href={API_PATH + 'transactions/' + transactionList[0].id} target="_blank">
+                                        {transactionList[0].id}
+                                    </a> : null
+                            }
                         </p>
                     </div>
 
@@ -554,13 +565,17 @@ const TimeLine = React.createClass({
                             You
                         </h3>
                         <p className="timeline-description">
-                            {transactionList.length > 1 ? transactionList[1].id : null}
+                            { transactionList.length > 1 ?
+                                    <a href={API_PATH + 'transactions/' + transactionList[1].id} target="_blank">
+                                        {transactionList[1].id}
+                                    </a> : null
+                            }
                         </p>
                     </div>
 
                     <div className="timeline-three" style={{cursor : 'pointer'}}
                         onClick={onClick}>
-                        <div className={classnames("timeline-img", { active: transactionList.length > 2 })}></div>
+                        <div className="timeline-img"></div>
                         <h3 className="timeline-name">
                             Someone
                         </h3>
