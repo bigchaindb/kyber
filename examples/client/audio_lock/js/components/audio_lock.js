@@ -49,11 +49,6 @@ const AudioLock = React.createClass({
     componentDidMount() {
         AccountActions.flushAccountList();
         AccountActions.fetchAccountList();
-        var recognition = new SpeechRecognition();
-        recognition.onresult = function(event) {
-          console.log(event)
-        }
-        recognition.start();
     },
 
     fetchTransactionListForAsset(assetId) {
