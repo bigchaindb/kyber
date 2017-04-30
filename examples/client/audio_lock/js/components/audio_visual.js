@@ -16,7 +16,8 @@ const AudioVisual = React.createClass({
         audioContext: React.PropTypes.object,
         frequencies: React.PropTypes.array,
         targetFrequency: React.PropTypes.number,
-        onFrequencyHit: React.PropTypes.func
+        onFrequencyHit: React.PropTypes.func,
+        onFrequencyClick: React.PropTypes.func
     },
 
     getDefaultProps() {
@@ -87,7 +88,8 @@ const AudioVisual = React.createClass({
         const {
             frequencies,
             targetFrequency,
-            onFrequencyHit
+            onFrequencyHit,
+            onFrequencyClick
         } = this.props;
 
         return (
@@ -95,6 +97,7 @@ const AudioVisual = React.createClass({
                 audioSource={audioSource}
                 targetFrequency={targetFrequency}
                 onFrequencyHit={onFrequencyHit}
+                onFrequencyClick={onFrequencyClick}
                 frequencies={frequencies}/>
         )
     }
@@ -111,7 +114,8 @@ const FrequencyMeter = React.createClass({
         smoothingTimeConstant: React.PropTypes.number,
         frequencies: React.PropTypes.array,
         targetFrequency: React.PropTypes.number,
-        onFrequencyHit: React.PropTypes.func
+        onFrequencyHit: React.PropTypes.func,
+        onFrequencyClick: React.PropTypes.func
     },
 
     getDefaultProps() {
@@ -200,7 +204,8 @@ const FrequencyMeter = React.createClass({
     render() {
         const {
             frequencies,
-            targetFrequency
+            targetFrequency,
+            onFrequencyClick
         } = this.props;
 
         const { isFrequencyHit } = this.state;
@@ -213,8 +218,9 @@ const FrequencyMeter = React.createClass({
                             <NoteNode
                                 key={'note' + frequency}
                                 ref={'note' + frequency}
-                                isTarget={targetFrequency == frequency || isFrequencyHit}
-                                frequency={frequency}/>
+                                isTarget={targetFrequency === frequency || isFrequencyHit}
+                                frequency={frequency}
+                                onClick={onFrequencyClick}/>
                         );
                     })
                 }
@@ -226,14 +232,27 @@ const FrequencyMeter = React.createClass({
 const NoteNode = React.createClass({
     propTypes: {
         frequency: React.PropTypes.number,
-        isTarget: React.PropTypes.bool
+        isTarget: React.PropTypes.bool,
+        onClick: React.PropTypes.func
+    },
+
+    onClick() {
+        const {
+            frequency,
+            onClick
+        } = this.props;
+
+        if (!!frequency) {
+            onClick(frequency);
+        }
     },
 
     render() {
         const { isTarget } = this.props;
 
         return (
-            <div className={classnames('audiobar__step', {'target': isTarget})}>
+            <div className={classnames('audiobar__step', {'target': isTarget})}
+                onClick={this.onClick}>
             </div>
         )
     }

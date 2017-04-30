@@ -296,20 +296,9 @@ const AssetsList = React.createClass({
     onAssetClick(asset) {
         const {
             assetAccount,
-            frequencyList,
             onAssetClick
         } = this.props;
 
-        let targetFrequency = parseInt(asset.asset.data.frequency, 10);
-        targetFrequency = 200 + (targetFrequency-2)/(13-2) * (1100 - 200)
-        //create a synth and connect it to the master output (your speakers)
-        console.log(targetFrequency);
-        const synth = new Tone.Oscillator(targetFrequency, "sine").toMaster();
-        synth.start();
-        synth.stop("+1.5");
-        // setTimeout(synth.stop(), 1000)
-        //play a middle 'C' for the duration of a 4th note
-        // synth.triggerAttackRelease("C4", "4n");
         onAssetClick(asset);
         fetchAsset(asset.id, assetAccount.vk);
     },
@@ -400,6 +389,11 @@ const AssetAudioLock = React.createClass({
         onFrequencyHit: React.PropTypes.func
     },
 
+    componentDidMount() {
+        const { activeAsset } = this.props;
+        this.renderTone(parseInt(activeAsset.asset.data.frequency, 10))
+    },
+
     onFrequencyHit() {
         const {onFrequencyHit} = this.props;
 
@@ -431,6 +425,18 @@ const AssetAudioLock = React.createClass({
         );
     },
 
+    handleFrequencyClick(frequencyBin) {
+        this.renderTone(frequencyBin)
+    },
+
+    renderTone(frequencyBin) {
+        const frequency = 200 + (frequencyBin-2)/(13-2) * (1100 - 200);
+        //create a synth and connect it to the master output (your speakers)
+        const synth = new Tone.Oscillator(frequency, "sine").toMaster();
+        synth.start();
+        synth.stop("+1.5");
+    },
+
     render() {
         const {
             targetFrequency,
@@ -444,6 +450,7 @@ const AssetAudioLock = React.createClass({
                 <div className="audio-container">
                     <AudioVisual
                         frequencies={frequencyList}
+                        onFrequencyClick={this.handleFrequencyClick}
                         onFrequencyHit={this.onFrequencyHit}
                         targetFrequency={targetFrequency}/>
 
