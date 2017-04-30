@@ -13,6 +13,7 @@ import BigchainDBConnection from '../../../js/react/components/bigchaindb_connec
 import TransactionActions from '../../../js/react/actions/transaction_actions';
 
 import AudioVisual from './audio_visual';
+import Dictaphone from './dictaphone';
 
 import {
     IconLockLocked,
@@ -49,11 +50,6 @@ const AudioLock = React.createClass({
     componentDidMount() {
         AccountActions.flushAccountList();
         AccountActions.fetchAccountList();
-        var recognition = new SpeechRecognition();
-        recognition.onresult = function(event) {
-          console.log(event)
-        }
-        recognition.start();
     },
 
     fetchTransactionListForAsset(assetId) {
@@ -251,6 +247,7 @@ const StateSwitcher = React.createClass({
                         <StatusUnlocked />
                     </div>
                 }
+                <Dictaphone />
             </div>
         )
     }

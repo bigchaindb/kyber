@@ -38,6 +38,7 @@
     "react-dom": "^15.2.1",
     "react-matrix": "0.0.6",
     "react-scroll": "^1.0.24",
+    "react-speech-recognition": "^1.0.1",
     "tone": "^0.10.0"
   },
   "devDependencies": {
