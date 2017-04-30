@@ -1,0 +1,139 @@
+$outline-width: 0;
+$break-point: 500px;
+
+$gray-base: #999999;
+$brand-primary: $brand-main-blue; //Zen Blue
+
+.section-header {
+    color: $brand-primary;
+    font-weight: 400;
+    font-size: 1.2em;
+}
+
+.timeline-header {
+    @extend .section-header;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.timeline {
+    outline: 1px dashed rgba(red, $outline-width);
+
+    @media screen and (max-width: $break-point) {
+        border-left: 2px solid $brand-primary;
+        margin-left: 25px;
+    }
+
+    @media screen and (min-width: $break-point) {
+        border-top: 2px solid $brand-primary;
+        padding-top: 20px;
+        margin-top: 40px;
+        margin-left: 16.65%;
+        margin-right: 16.65%;
+    }
+
+    &:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+
+.timeline-one,
+.timeline-two,
+.timeline-three {
+    outline: 1px dashed rgba(green, $outline-width);
+
+    @media screen and (max-width: $break-point) {
+        margin-left: -25px;
+    }
+
+    @media screen and (min-width: $break-point) {
+        float: left;
+        width: 33%;
+        margin-top: -50px;
+    }
+}
+
+.timeline-one,
+.timeline-two {
+    @media screen and (max-width: $break-point) {
+        padding-bottom: 40px;
+    }
+}
+
+.timeline-one {
+    @media screen and (min-width: $break-point) {
+        margin-left: -16.65%;
+        margin-right: 16.65%;
+    }
+}
+
+.timeline-two {
+
+}
+
+.timeline-three {
+    @media screen and (max-width: $break-point) {
+        margin-bottom: -100%;
+    }
+    @media screen and (min-width: $break-point) {
+        margin-left: 16.65%;
+        margin-right: -16.65%;
+    }
+}
+
+.timeline-img {
+    display: block;
+    margin: auto;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid $brand-main-blue;
+    background: $brand-danger;
+
+    &:hover {
+        background: $brand-main-green;
+    }
+
+    @media screen and (max-width: $break-point) {
+        float: left;
+        margin-right: 20px;
+    }
+}
+
+.timeline-img.active {
+    background: $brand-main-green;
+}
+
+.timeline-name,
+.timeline-description {
+    margin: 0;
+}
+
+.timeline-name {
+    @extend .section-header;
+
+    @media screen and (min-width: $break-point) {
+        text-align: center;
+    }
+}
+
+.timeline-description {
+    overflow: hidden;
+    width: 130px;
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 0.6rem;
+
+    a {
+        color: $brand-main-gray;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+    @media screen and (min-width: $break-point) {
+        text-align: center;
+    }
+}

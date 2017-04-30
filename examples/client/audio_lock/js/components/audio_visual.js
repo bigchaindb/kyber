@@ -16,7 +16,8 @@ const AudioVisual = React.createClass({
         audioContext: React.PropTypes.object,
         frequencies: React.PropTypes.array,
         targetFrequency: React.PropTypes.number,
-        onFrequencyHit: React.PropTypes.func
+        onFrequencyHit: React.PropTypes.func,
+        onFrequencyClick: React.PropTypes.func
     },
 
     getDefaultProps() {
@@ -36,14 +37,6 @@ const AudioVisual = React.createClass({
     componentDidMount() {
         if (!hasGetUserMedia()) return;
 
-        if (!this.state.hasUserMedia) {
-            this.requestUserMedia();
-        }
-    },
-
-    componentDidMount() {
-        if (!hasGetUserMedia()) return;
-
         navigator.getUserMedia = navigator.getUserMedia ||
             navigator.webkitGetUserMedia ||
             navigator.mozGetUserMedia ||
@@ -54,6 +47,25 @@ const AudioVisual = React.createClass({
         }, (e) => {
             this.handleUserMedia(e);
         });
+
+        const {audioContext} = this.props;
+        let real = new Float32Array(2),
+            imag = new Float32Array(2);
+
+        real[0] = 0;
+        imag[0] = 0;
+        real[1] = 1;
+        imag[1] = 0;
+
+        const wave = audioContext.createPeriodicWave(real, imag, {disableNormalization: true});
+
+        const osc = audioContext.createOscillator();
+        // osc.setPeriodicWave(wave);
+
+        osc.connect(audioContext.destination);
+
+        osc.start();
+        osc.stop(2);
     },
 
 
@@ -76,7 +88,8 @@ const AudioVisual = React.createClass({
         const {
             frequencies,
             targetFrequency,
-            onFrequencyHit
+            onFrequencyHit,
+            onFrequencyClick
         } = this.props;
 
         return (
@@ -84,6 +97,7 @@ const AudioVisual = React.createClass({
                 audioSource={audioSource}
                 targetFrequency={targetFrequency}
                 onFrequencyHit={onFrequencyHit}
+                onFrequencyClick={onFrequencyClick}
                 frequencies={frequencies}/>
         )
     }
@@ -100,7 +114,8 @@ const FrequencyMeter = React.createClass({
         smoothingTimeConstant: React.PropTypes.number,
         frequencies: React.PropTypes.array,
         targetFrequency: React.PropTypes.number,
-        onFrequencyHit: React.PropTypes.func
+        onFrequencyHit: React.PropTypes.func,
+        onFrequencyClick: React.PropTypes.func
     },
 
     getDefaultProps() {
@@ -189,7 +204,8 @@ const FrequencyMeter = React.createClass({
     render() {
         const {
             frequencies,
-            targetFrequency
+            targetFrequency,
+            onFrequencyClick
         } = this.props;
 
         const { isFrequencyHit } = this.state;
@@ -202,8 +218,9 @@ const FrequencyMeter = React.createClass({
                             <NoteNode
                                 key={'note' + frequency}
                                 ref={'note' + frequency}
-                                isTarget={targetFrequency == frequency || isFrequencyHit}
-                                frequency={frequency}/>
+                                isTarget={targetFrequency === frequency || isFrequencyHit}
+                                frequency={frequency}
+                                onClick={onFrequencyClick}/>
                         );
                     })
                 }
@@ -215,14 +232,27 @@ const FrequencyMeter = React.createClass({
 const NoteNode = React.createClass({
     propTypes: {
         frequency: React.PropTypes.number,
-        isTarget: React.PropTypes.bool
+        isTarget: React.PropTypes.bool,
+        onClick: React.PropTypes.func
+    },
+
+    onClick() {
+        const {
+            frequency,
+            onClick
+        } = this.props;
+
+        if (!!frequency) {
+            onClick(frequency);
+        }
     },
 
     render() {
         const { isTarget } = this.props;
 
         return (
-            <div className={classnames('audiobar__step', {'target': isTarget})}>
+            <div className={classnames('audiobar__step', {'target': isTarget})}
+                onClick={this.onClick}>
             </div>
         )
     }
@@ -256,7 +286,7 @@ function renderFrame(analyser) {
         analyser.targetTimer = 1;
     }
 
-    if (analyser.targetTimer > 300) {
+    if (analyser.targetTimer > 150) {
         this.onFrequencyHit();
         analyser.targetTimer = 1;
     }
