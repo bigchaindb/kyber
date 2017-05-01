@@ -25,10 +25,8 @@
     
     .icon--lock {
         stroke-width: .5;
-        width: 10rem;
-        height: 10rem;
-        margin-top: $spacer * 3;
-        opacity: .5;
+        width: 6rem;
+        height: 6rem;
     }
     
     .status {
@@ -38,13 +36,24 @@
     .status__title {
         font-size: $font-size-h3;
         margin-top: $spacer;
-        margin-bottom: $spacer;
+        margin-bottom: $spacer / 2;
         color: $brand-main-blue;
+        opacity: .8;
+    }
+    
+    .status__subtitle {
+        font-size: $font-size-h4;
+        margin-top: 0;
+        margin-bottom: $spacer;
         opacity: .5;
     }
-
+    
     .status__text {
-        
+        margin-bottom: $spacer * 2;
+    }
+    
+    .status--intro {
+        margin-bottom: $spacer * 3;        
     }
     
     
@@ -66,6 +75,10 @@
     }
     
     .is-locked {
+        .icon--lock {
+            stroke: darken($brand-danger, 20%);
+        }
+        
         &:before {
             background: $brand-danger;
         }
@@ -73,7 +86,15 @@
     }
     
     .is-unlocked {
+        .icon--lock {
+            stroke: darken($brand-main-green, 20%);
+        }
+        
         &:before {
+            background: $brand-main-green;
+        }
+        
+        + .timeline-section .timeline__indicator:not(.active) {
             background: $brand-main-green;
         }
     }

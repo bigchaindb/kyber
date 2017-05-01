@@ -16,6 +16,7 @@
     &:focus {
         box-shadow: 0 1px 4px rgba($brand-main-blue-dark, .4);
         transform: translateY(-1px);
+        outline: 0;
     }
 
     &:active,
@@ -27,7 +28,7 @@
     }
     &.disabled,
     &:disabled {
-        opacity: 0.45;
+        opacity: .45;
         box-shadow: none;
         cursor: not-allowed;
         pointer-events: none;

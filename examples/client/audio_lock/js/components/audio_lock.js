@@ -30,7 +30,8 @@ import {
     IconPackage,
     IconAdd,
     IconArrowLeft,
-    Logo
+    Logo,
+    IconLoader
 } from '../../../js/react/components/icons';
 
 const AudioLock = React.createClass({
@@ -144,6 +145,7 @@ const StateSwitcher = React.createClass({
         return {
             frequencyList: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
             availableStates: [
+                'start',
                 'login',
                 'list',
                 'locked',
@@ -156,8 +158,14 @@ const StateSwitcher = React.createClass({
         return {
             activeAsset: null,
             activeAccount: null,
-            currentState: 'login'
+            currentState: 'start'
         }
+    },
+
+    handleStart() {
+        this.setState({
+            currentState: 'login'
+        })
     },
 
     handleLogin(user) {
@@ -189,7 +197,7 @@ const StateSwitcher = React.createClass({
 
     handleReset() {
         this.setState({
-            currentState: 'login'
+            currentState: 'start'
         });
         TransactionActions.flushTransactionList();
     },
@@ -211,19 +219,13 @@ const StateSwitcher = React.createClass({
 
         return (
             <div>
-                { (currentState === 'locked'
-                    || currentState === 'unlocked') &&
-                    <TimeLine
-                        transactionList={transactionList}
-                        onClick={this.handleReset}/>
+                { (currentState === 'start') &&
+                    <StatusIntro
+                        onClick={this.handleStart}/>
                 }
                 { (currentState === 'login') &&
-                    <div className="is-locked">
-                        <StatusIntro />
-                        <IconLockLocked />
-                        <StatusLockedEmail
-                            onSubmit={this.handleLogin}/>
-                    </div>
+                    <StatusLockedEmail
+                        onSubmit={this.handleLogin}/>
                 }
                 { (currentState === 'list') &&
                     <AssetsList
@@ -255,6 +257,12 @@ const StateSwitcher = React.createClass({
                         <IconLockUnlocked />
                         <StatusUnlocked />
                     </div>
+                }
+                { (currentState === 'locked'
+                    || currentState === 'unlocked') &&
+                    <TimeLine
+                        transactionList={transactionList}
+                        onClick={this.handleReset}/>
                 }
             </div>
         )
@@ -343,17 +351,17 @@ const AssetsList = React.createClass({
         } = this.props;
 
         if (transactionMeta && transactionMeta.isFetchingList) {
-            // @kremalicious - some cool loading symbol?
             return (
-                <div>
-                    Loading assets...
-                </div>
+                <IconLoader />
             )
         }
 
         return (
             <div className="assets-list">
-                <p>Please select an asset to unlock or create a new asset first.</p>
+                <div className="status">
+                    <h2 className="status__title">Select asset</h2>
+                    <p className="status__text">Affirmative, Dave. I read you. Now, please select an asset to unlock or create a new asset first.</p>
+                </div>
                 <div className="assets">
                     {
                         assetList.map((asset) => {
@@ -403,14 +411,26 @@ const AssetsList = React.createClass({
 });
 
 
-const StatusIntro = () => {
-    return (
-        <div className="status status--locked">
-            <h2 className="status__title">Audio Lock</h2>
-            <p className="status__text">Unlock assets with your voice.</p>
-        </div>
-    )
-};
+const StatusIntro = React.createClass({
+    propTypes: {
+        onClick: React.PropTypes.func
+    },
+
+    render() {
+        const { onClick } = this.props;
+
+        return (
+            <div onClick={onClick} className="status status--intro">
+                <h2 className="status__title">Audio Lock</h2>
+                <h3 className="status__subtitle">Unlock assets with your voice.</h3>
+                <p className="status__text">This app demonstrates how to transfer an asset saved in BigchainDB by
+                    singing to your computer. HAL would be proud.</p>
+
+                <button className="button button--primary status__button">Let’s roll</button>
+            </div>
+        )
+    }
+});
 
 const AssetAudioLock = React.createClass({
     propTypes: {
@@ -547,13 +567,19 @@ const StatusLockedEmail = React.createClass({
 
     render() {
         return (
-            <div className="status status--locked">
-                <p className="status__text">Enter your email to receive instructions for unlocking an asset.</p>
+            <div className="status">
+                <h2 className="status__title">Create user</h2>
+                <p className="status__text">First, I need to create a key pair based on your email so you can receive transactions on BigchainDB.</p>
 
-                <form onSubmit={this.handleSubmit}>
-                    <input className="form__control" type="email" name="email" placeholder="Your email"
-                           onChange={this.handleInputChange}/>
-                    <button type="submit" className="button button--primary status__button">Let’s roll</button>
+                <form className="form" onSubmit={this.handleSubmit}>
+                    <p>Enter your email to get started, Dave.</p>
+                    <p className="form__group">
+                        <input className="form__control" type="email" name="email" id="email" onChange={this.handleInputChange} required/>
+                        <label className="form__label" htmlFor="email">Your email</label>
+                    </p>
+                    <p className="form__group">
+                        <button type="submit" className="button button--primary status__button">Create user</button>
+                    </p>
                 </form>
             </div>
         )
@@ -564,7 +590,7 @@ const StatusLocked = () => {
     return (
         <div className="status status--locked">
             <h2 className="status__title">Locked</h2>
-            <p className="status__text">Speak to unlock, my dear.</p>
+            <p className="status__text">Sing to unlock. Have you heard of Daisy?</p>
         </div>
     )
 };
@@ -573,7 +599,7 @@ const StatusUnlocked = () => {
     return (
         <div className="status status--unlocked is-hidden">
             <h2 className="status__title">Unlocked</h2>
-            <p className="status__text">Well spoken, eloquent human!</p>
+            <p className="status__text">What a lovely voice, Dave. Thank you for a very enjoyable game.</p>
         </div>
     )
 };
@@ -591,14 +617,16 @@ const TimeLine = React.createClass({
         } = this.props;
 
         return (
-            <section className="timeline-section">
+            <aside className="timeline-section">
+
+                <h2 className="timeline-section__title">Asset ownership</h2>
                 <div className="timeline">
-                    <div className="timeline-one">
-                        <div className={classnames("timeline-img", { active: transactionList.length > 0 })}></div>
-                        <h3 className="timeline-name">
+                    <div className="timeline__step">
+                        <div className={classnames("timeline__indicator", { active: transactionList.length > 0 })}></div>
+                        <h3 className="timeline__name">
                             BigchainDB
                         </h3>
-                        <p className="timeline-description">
+                        <p className="timeline__description">
                             { transactionList.length > 0 ?
                                     <a href={API_PATH + 'transactions/' + transactionList[0].id} target="_blank">
                                         {transactionList[0].id}
@@ -607,12 +635,12 @@ const TimeLine = React.createClass({
                         </p>
                     </div>
 
-                    <div className="timeline-two">
-                        <div className={classnames("timeline-img", { active: transactionList.length > 1 })}></div>
-                        <h3 className="timeline-name">
+                    <div className="timeline__step">
+                        <div className={classnames("timeline__indicator", { active: transactionList.length > 1 })}></div>
+                        <h3 className="timeline__name">
                             You
                         </h3>
-                        <p className="timeline-description">
+                        <p className="timeline__description">
                             { transactionList.length > 1 ?
                                     <a href={API_PATH + 'transactions/' + transactionList[1].id} target="_blank">
                                         {transactionList[1].id}
@@ -621,18 +649,18 @@ const TimeLine = React.createClass({
                         </p>
                     </div>
 
-                    <div className="timeline-three" style={{cursor : 'pointer'}}
+                    <div className="timeline__step" style={{cursor : 'pointer'}}
                         onClick={onClick}>
-                        <div className="timeline-img"></div>
-                        <h3 className="timeline-name">
+                        <div className="timeline__indicator"></div>
+                        <h3 className="timeline__name">
                             Someone
                         </h3>
-                        <p className="timeline-description">
+                        <p className="timeline__description">
                         </p>
                     </div>
 
                 </div>
-            </section>
+            </aside>
         )
     }
 });

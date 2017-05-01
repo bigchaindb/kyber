@@ -23,6 +23,16 @@
     flex-basis: (100%/3);
 }
 
+.menu__link,
+.menu__title {
+    font-size: $font-size-sm;
+}
+
+.menu .logo {
+    @extend .logo--sm;
+    margin-right: -$spacer;
+}
+
 .menu__link {
     padding-top: .5rem;
     padding-bottom: .5rem;
@@ -32,8 +42,8 @@
     
     .icon {
         stroke-width: 2;
-        width: $font-size-sm;
-        height: $font-size-sm;
+        width: $font-size-xs;
+        height: $font-size-xs;
         margin-right: $spacer / 4;
     }
 }

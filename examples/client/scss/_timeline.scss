@@ -1,139 +1,103 @@
-$outline-width: 0;
-$break-point: 500px;
+$opacity-border: .8;
 
-$gray-base: #999999;
-$brand-primary: $brand-main-blue; //Zen Blue
-
-.section-header {
-    color: $brand-primary;
-    font-weight: 400;
-    font-size: 1.2em;
+.timeline-section {
+    margin-top: $spacer * 3;
 }
 
-.timeline-header {
-    @extend .section-header;
-    margin-bottom: 20px;
-    text-align: center;
+.timeline-section__title {
+    font-size: $font-size-sm;
+    margin-top: 0;
+    margin-bottom: $spacer * 2;
 }
 
 .timeline {
-    outline: 1px dashed rgba(red, $outline-width);
+    border-left: 1px solid rgba($brand-main-gray-lighter, $opacity-border);
+    margin-left: .5rem;
 
-    @media screen and (max-width: $break-point) {
-        border-left: 2px solid $brand-primary;
-        margin-left: 25px;
-    }
-
-    @media screen and (min-width: $break-point) {
-        border-top: 2px solid $brand-primary;
-        padding-top: 20px;
-        margin-top: 40px;
-        margin-left: 16.65%;
-        margin-right: 16.65%;
-    }
-
-    &:after {
-        content: "";
-        display: table;
-        clear: both;
+    @media ($screen-sm) {
+        border-left: none;
+        border-top: 1px solid rgba($brand-main-gray-lighter, $opacity-border);
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        
+        // lazy break out of container
+        width: 100vw;
+        position: relative;
+        left: 50%;
+        right: 50%;
+        margin-left: -50vw;
+        margin-right: -50vw;
     }
 }
 
-.timeline-one,
-.timeline-two,
-.timeline-three {
-    outline: 1px dashed rgba(green, $outline-width);
+.timeline__step {
+    margin-top: -.6rem;
+    margin-left: -.5rem;
+    margin-bottom: $spacer * 2;
 
-    @media screen and (max-width: $break-point) {
-        margin-left: -25px;
-    }
-
-    @media screen and (min-width: $break-point) {
-        float: left;
-        width: 33%;
-        margin-top: -50px;
+    @media ($screen-sm) {
+        flex: 1;
     }
 }
 
-.timeline-one,
-.timeline-two {
-    @media screen and (max-width: $break-point) {
-        padding-bottom: 40px;
-    }
-}
-
-.timeline-one {
-    @media screen and (min-width: $break-point) {
-        margin-left: -16.65%;
-        margin-right: 16.65%;
-    }
-}
-
-.timeline-two {
-
-}
-
-.timeline-three {
-    @media screen and (max-width: $break-point) {
-        margin-bottom: -100%;
-    }
-    @media screen and (min-width: $break-point) {
-        margin-left: 16.65%;
-        margin-right: -16.65%;
-    }
-}
-
-.timeline-img {
+.timeline__indicator {
     display: block;
-    margin: auto;
-    width: 50px;
-    height: 50px;
+    float: left;
+    width: 1rem;
+    height: 1rem;
     border-radius: 50%;
-    border: 2px solid $brand-main-blue;
+    border: 1px solid rgba($brand-main-gray-lighter, $opacity-border);
     background: $brand-danger;
+    transition: .2s ease-out;
 
-    &:hover {
+    &:hover,
+    &.active {
         background: $brand-main-green;
     }
 
-    @media screen and (max-width: $break-point) {
-        float: left;
-        margin-right: 20px;
+    @media ($screen-sm) {
+        float: none;
+        display: inline-block;
     }
 }
 
-.timeline-img.active {
-    background: $brand-main-green;
-}
-
-.timeline-name,
-.timeline-description {
+.timeline__name,
+.timeline__description {
     margin: 0;
-}
-
-.timeline-name {
-    @extend .section-header;
-
-    @media screen and (min-width: $break-point) {
+    text-align: left;
+    margin-left: $spacer * 2;
+    
+    @media ($screen-sm) {
         text-align: center;
+        margin-left: 0;
     }
 }
 
-.timeline-description {
+.timeline__name {
+    @extend .h6;
+    font-size: $font-size-sm;
+    color: $text-color;
+    margin-top: 0;
+    margin-bottom: $spacer / 3;
+}
+
+.timeline__description {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-light;
     overflow: hidden;
-    width: 130px;
+    width: 120px;
     display: block;
     white-space: nowrap;
     text-overflow: ellipsis;
-    font-size: 0.6rem;
+    
+    @media ($screen-sm) {
+        margin: auto;
+    }
 
     a {
         color: $brand-main-gray;
-        text-decoration: underline;
+        box-shadow: 0 2px 0 $link-color;
         cursor: pointer;
-    }
-
-    @media screen and (min-width: $break-point) {
-        text-align: center;
     }
 }

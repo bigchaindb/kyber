@@ -159,6 +159,25 @@ $btn-border-radius-sm:           $border-radius-sm !default;
 $btn-border-radius-xs:           $border-radius-xs !default;
 
 
+//
+// Forms
+//
+$input-font:                     inherit !default;
+$input-font-weight:              $font-weight-normal !default;
+
+$input-padding-x:                .5rem !default;
+$input-padding-y:                0 !default;
+
+$input-bg:                       transparent !default;
+$input-bg-disabled:              $gray-dark !default;
+
+$input-color:                    $gray-dark !default;
+$input-border-color:             $gray !default;
+
+$input-border-focus:             $gray-dark !default;
+$input-color-placeholder:        $gray !default;
+
+
 
 //
 // Old stuff
