@@ -5,14 +5,14 @@ $red:   #FF4136;
 .audiobar {
     display: flex;
     width: 100%;
-    height: 3*$spacer;
-    border-radius: $spacer;
+    height: $spacer * 3;
     overflow: hidden;
 }
 
 .audiobar__step {
     flex: 1;
     border-left: 1px solid $body-bg;
+    transform-origin: bottom;
 
     &:nth-child(1)  { background: blue; border-left-color: transparent; }
     &:nth-child(2)  { background: rgba(blue, .9); }

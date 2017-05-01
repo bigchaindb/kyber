@@ -142,6 +142,7 @@ const StateSwitcher = React.createClass({
         return {
             frequencyList: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
             availableStates: [
+                'start',
                 'login',
                 'list',
                 'locked',
@@ -154,8 +155,14 @@ const StateSwitcher = React.createClass({
         return {
             activeAsset: null,
             activeAccount: null,
-            currentState: 'login'
+            currentState: 'start'
         }
+    },
+    
+    handleStart() {
+        this.setState({
+            currentState: 'login'
+        })
     },
 
     handleLogin(user) {
@@ -187,7 +194,7 @@ const StateSwitcher = React.createClass({
 
     handleReset() {
         this.setState({
-            currentState: 'login'
+            currentState: 'start'
         })
         TransactionActions.flushTransactionList();
     },
@@ -215,12 +222,13 @@ const StateSwitcher = React.createClass({
                         transactionList={transactionList}
                         onClick={this.handleReset}/>
                 }
+                { (currentState === 'start') &&
+                    <StatusIntro 
+                        onClick={this.handleStart}/>
+                }
                 { (currentState === 'login') &&
-                    <div>
-                        <StatusIntro />
-                        <StatusLockedEmail
-                            onSubmit={this.handleLogin}/>
-                    </div>
+                    <StatusLockedEmail
+                        onSubmit={this.handleLogin}/>
                 }
                 { (currentState === 'list') &&
                     <AssetsList
@@ -373,7 +381,10 @@ const StatusIntro = () => {
     return (
         <div className="status status--intro">
             <h2 className="status__title">Audio Lock</h2>
-            <p className="status__text">Unlock assets by singing to your computer.</p>
+            <h3 className="status__subtitle">Unlock assets by singing to your computer.</h3>
+            <p className="status__text">This app demonstrates how to transfer ownership of an asset saved in BigchainDB by singing to your computer.</p>
+            
+            <button className="button button--primary status__button">Let’s roll</button>
         </div>
     )
 };
@@ -504,7 +515,7 @@ const StatusLockedEmail = React.createClass({
                         <label className="form__label" htmlFor="email">Your email</label>
                     </p>
                     <p className="form__group">
-                        <button type="submit" className="button button--primary status__button">Let’s roll</button>
+                        <button type="submit" className="button button--primary status__button">Create user</button>
                     </p>
                 </form>
             </div>
@@ -516,7 +527,7 @@ const StatusLocked = () => {
     return (
         <div className="status status--locked">
             <h2 className="status__title">Locked</h2>
-            <p className="status__text">Speak to unlock, my dear.</p>
+            <p className="status__text">Hum to unlock, my dear.</p>
         </div>
     )
 };
@@ -525,7 +536,7 @@ const StatusUnlocked = () => {
     return (
         <div className="status status--unlocked is-hidden">
             <h2 className="status__title">Unlocked</h2>
-            <p className="status__text">Well spoken, eloquent human!</p>
+            <p className="status__text">Well hummed, eloquent human!</p>
         </div>
     )
 };

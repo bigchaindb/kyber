@@ -38,17 +38,24 @@
     .status__title {
         font-size: $font-size-h3;
         margin-top: $spacer;
-        margin-bottom: $spacer;
+        margin-bottom: $spacer / 2;
         color: $brand-main-blue;
-        opacity: .5;
+        opacity: .8;
     }
-
-    .status__text {
-        
+    
+    .status__subtitle {
+        font-size: $font-size-h4;
+        margin-top: 0;
+        margin-bottom: $spacer;
+        opacity: .5;
     }
     
     .status--intro {
         margin-bottom: $spacer * 3;
+        
+        .status__text {
+            margin-bottom: $spacer * 2;
+        }
     }
     
     .form {
