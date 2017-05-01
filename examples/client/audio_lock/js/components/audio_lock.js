@@ -329,7 +329,7 @@ const AssetsList = React.createClass({
             <div className="assets-list">
                 <div className="status">
                     <h2 className="status__title">Select asset</h2>
-                    <p className="status__text">Please select an asset to unlock or create a new asset first.</p>
+                    <p className="status__text">Affirmative, Dave. I read you. Now, please select an asset to unlock or create a new asset first.</p>
                 </div>
                 <div className="assets">
                     {
@@ -385,7 +385,7 @@ const StatusIntro = () => {
         <div className="status status--intro">
             <h2 className="status__title">Audio Lock</h2>
             <h3 className="status__subtitle">Unlock assets with your voice.</h3>
-            <p className="status__text">This app demonstrates how to transfer an asset saved in BigchainDB by singing to your computer.</p>
+            <p className="status__text">This app demonstrates how to transfer an asset saved in BigchainDB by singing to your computer. HAL would be proud.</p>
             
             <button className="button button--primary status__button">Let’s roll</button>
         </div>
@@ -512,10 +512,10 @@ const StatusLockedEmail = React.createClass({
         return (
             <div className="status">
                 <h2 className="status__title">Create user</h2>
-                <p className="status__text">First, we need to create a key pair based on your email so you can receive transactions on BigchainDB.</p>
+                <p className="status__text">First, I need to create a key pair based on your email so you can receive transactions on BigchainDB.</p>
                 
                 <form className="form" onSubmit={this.handleSubmit}>
-                    <p>Enter your email to get started.</p>
+                    <p>Enter your email to get started, Dave.</p>
                     <p className="form__group">
                         <input className="form__control" type="email" name="email" id="email" onChange={this.handleInputChange} required/>
                         <label className="form__label" htmlFor="email">Your email</label>
@@ -533,7 +533,7 @@ const StatusLocked = () => {
     return (
         <div className="status status--locked">
             <h2 className="status__title">Locked</h2>
-            <p className="status__text">Hum to unlock, my dear.</p>
+            <p className="status__text">Sing to unlock.</p>
         </div>
     )
 };
@@ -542,7 +542,7 @@ const StatusUnlocked = () => {
     return (
         <div className="status status--unlocked is-hidden">
             <h2 className="status__title">Unlocked</h2>
-            <p className="status__text">Well hummed, eloquent human!</p>
+            <p className="status__text">What a lovely voice, Dave. Thank you for a very enjoyable game.</p>
         </div>
     )
 };
