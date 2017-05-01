@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import base58 from 'bs58';
 import classnames from 'classnames';
 import Tone from 'tone';
 
@@ -11,9 +12,9 @@ import AccountActions from '../../../js/react/actions/account_actions';
 import BigchainDBConnection from '../../../js/react/components/bigchaindb_connection';
 
 import TransactionActions from '../../../js/react/actions/transaction_actions';
-
 import AudioVisual from './audio_visual';
 import Dictaphone from './dictaphone';
+import { fetchAsset } from './utils';
 
 import {
     IconLockLocked,
@@ -85,7 +86,7 @@ const AudioLock = React.createClass({
             unspentOutputs
         } = this.props;
 
-        if (accountList && accountList.length == 0) {
+        if (accountList && accountList.length === 0) {
             return null;
         }
 
@@ -103,7 +104,7 @@ const AudioLock = React.createClass({
                     return transactionMap[transactionId];
                 })
                 .filter(
-                    transaction => !!transaction && transaction.operation == 'CREATE'
+                    transaction => !!transaction && transaction.operation === 'CREATE'
                     && transaction.asset.data.hasOwnProperty('frequency'));
 
         return (
@@ -189,7 +190,7 @@ const StateSwitcher = React.createClass({
     handleReset() {
         this.setState({
             currentState: 'login'
-        })
+        });
         TransactionActions.flushTransactionList();
     },
 
@@ -233,13 +234,20 @@ const StateSwitcher = React.createClass({
                         transactionMeta={transactionMeta}/>
                 }
                 { (currentState === 'locked') &&
-                    <AssetAudioLock
-                        activeAsset={activeAsset}
-                        activeAccount={activeAccount}
-                        assetAccount={assetAccount}
-                        targetFrequency={activeAsset.asset.data.frequency}
-                        frequencyList={frequencyList}
-                        onFrequencyHit={this.handleFrequencyHit}/>
+                    <div>
+                        <AssetAudioLock
+                            activeAsset={activeAsset}
+                            activeAccount={activeAccount}
+                            assetAccount={assetAccount}
+                            targetFrequency={activeAsset.asset.data.frequency}
+                            frequencyList={frequencyList}
+                            onFrequencyHit={this.handleFrequencyHit}/>
+                        <Dictaphone
+                            activeAsset={activeAsset}
+                            activeAccount={activeAccount}
+                            assetAccount={assetAccount}
+                            magicWords={magicWords}/>
+                    </div>
                 }
                 { (currentState === 'unlocked') &&
                     <div className="is-unlocked">
@@ -247,7 +255,6 @@ const StateSwitcher = React.createClass({
                         <StatusUnlocked />
                     </div>
                 }
-                <Dictaphone />
             </div>
         )
     }
@@ -256,6 +263,10 @@ const StateSwitcher = React.createClass({
 //
 // Le components
 //
+
+const magicWords = [
+    'test', 'hello', 'hallo', 'big', 'data'];
+
 const AssetsList = React.createClass({
     propTypes: {
         assetAccount: React.PropTypes.object,
@@ -278,6 +289,16 @@ const AssetsList = React.createClass({
         fetchAsset(signedTransaction.id, assetAccount.vk);
     },
 
+    onAssetClick(asset) {
+        const {
+            assetAccount,
+            onAssetClick
+        } = this.props;
+
+        onAssetClick(asset);
+        fetchAsset(asset.id, assetAccount.vk);
+    },
+
     createTransaction(account, value) {
         const {frequencyList} = this.props;
 
@@ -287,22 +308,31 @@ const AssetsList = React.createClass({
             'timestamp': moment().format('X')
         };
 
+        let condition = driver.Transaction.makeThresholdCondition(null, true);
+        condition.threshold = 1;
+        let subconditionAccount = driver.Transaction.makeEd25519Condition(account.vk, true);
+        condition.addSubfulfillment(subconditionAccount);
+        let subconditionWords = driver.Transaction.makeThresholdCondition(null, true);
+        subconditionWords.threshold = 2;
+        magicWords
+            .forEach((magicWord) => {
+                let subconditionWord = driver.Transaction.makeSha256Condition(magicWord, true);
+                subconditionWords.addSubconditionUri(subconditionWord.getConditionUri());
+            });
+        condition.addSubfulfillment(subconditionWords);
+
+        let output = driver.Transaction.makeOutput(
+            driver.Transaction.makeThresholdCondition(condition)
+        );
+        output.public_keys = [account.vk];
+
+
         return driver.Transaction.makeCreateTransaction(
             asset,
             null,
-            [driver.Transaction.makeOutput(driver.Transaction.makeEd25519Condition(account.vk))],
+            [output],
             account.vk
         );
-    },
-
-    onAssetClick(asset) {
-        const {
-            assetAccount,
-            onAssetClick
-        } = this.props;
-
-        onAssetClick(asset);
-        fetchAsset(asset.id, assetAccount.vk);
     },
 
     render() {
@@ -339,8 +369,8 @@ const AssetsList = React.createClass({
                                         <a className="asset" href="#"
                                            onClick={() => this.onAssetClick(asset)}
                                            key={asset.id}>
-                                            { (item == 'shirt') && <IconShirt /> }
-                                            { (item == 'sticker') && <IconPicasso /> }
+                                            { (item === 'shirt') && <IconShirt /> }
+                                            { (item === 'sticker') && <IconPicasso /> }
                                             <span className="asset__title">
                                                 {
                                                     asset.id
@@ -407,10 +437,27 @@ const AssetAudioLock = React.createClass({
             assetAccount,
         } = this.props;
 
-        const transaction = this.transferTransaction(activeAsset, activeAccount);
-        const signedTransaction = driver.Transaction.signTransaction(transaction, assetAccount.sk);
+        let transaction = this.transferTransaction(activeAsset, activeAccount);
 
-        TransactionActions.postTransaction(signedTransaction);
+        let fulfillment = driver.Transaction.makeThresholdCondition(null, true);
+        fulfillment.threshold = 1;
+
+        let fulfillmentAssetAccount = driver.Transaction.makeEd25519Condition(assetAccount.vk, true);
+        fulfillmentAssetAccount.sign(
+            new Buffer(driver.Transaction.serializeTransactionIntoCanonicalString(transaction)),
+            new Buffer(base58.decode(assetAccount.sk))
+        );
+        fulfillment.addSubfulfillment(fulfillmentAssetAccount);
+
+        let subconditionWordsUri = driver.Transaction
+            .ccJsonLoad(activeAsset.outputs[0].condition.details)
+            .subconditions[1].body
+            .getConditionUri();
+        fulfillment.addSubconditionUri(subconditionWordsUri);
+
+        transaction.inputs[0].fulfillment = fulfillment.serializeUri();
+
+        TransactionActions.postTransaction(transaction);
         fetchAsset(activeAsset.id, assetAccount.vk)
     },
 
@@ -588,18 +635,3 @@ const TimeLine = React.createClass({
         )
     }
 });
-
-function fetchAsset(id, publicKey) {
-    setTimeout(() => {
-        driver.Connection.pollStatusAndFetchTransaction(id, API_PATH)
-            .then(() => {
-                TransactionActions.fetchOutputList({
-                    public_key: publicKey,
-                    unspent: true
-                });
-                TransactionActions.fetchTransactionList({
-                    assetId: id
-                });
-            })
-    }, 1000);
-}
