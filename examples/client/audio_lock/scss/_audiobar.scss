@@ -5,15 +5,24 @@ $yellow: lighten($brand-warning, 20%);
 .audiobar {
     display: flex;
     width: 100%;
-    height: $spacer * 6;
-    margin-top: -($spacer * 5);
-    margin-bottom: $spacer * 3;
-    border-bottom: 1px dashed rgba($brand-main-blue, .3);
+    height: $spacer * 4;
+    position: relative;
+    
+    &:before {
+        content: "";
+        display: block;
+        position: absolute;
+        left: 0; right: 0;
+        top: 50%;
+        height: 1px;
+        background: linear-gradient(to right, $blue, $yellow);
+        z-index: -1;
+        opacity: .8;
+    }
 }
 
 .audiobar__step {
     flex: 1;
-    margin-bottom: -($spacer * 6);
     margin-left: 3%;
     cursor: pointer;
     transition: .1s ease-out;
