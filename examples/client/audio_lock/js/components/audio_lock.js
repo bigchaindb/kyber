@@ -216,9 +216,8 @@ const StateSwitcher = React.createClass({
                         onClick={this.handleReset}/>
                 }
                 { (currentState === 'login') &&
-                    <div className="is-locked">
+                    <div>
                         <StatusIntro />
-                        <IconLockLocked />
                         <StatusLockedEmail
                             onSubmit={this.handleLogin}/>
                     </div>
@@ -372,9 +371,9 @@ const AssetsList = React.createClass({
 
 const StatusIntro = () => {
     return (
-        <div className="status status--locked">
+        <div className="status status--intro">
             <h2 className="status__title">Audio Lock</h2>
-            <p className="status__text">Unlock assets with your voice.</p>
+            <p className="status__text">Unlock assets by singing to your computer.</p>
         </div>
     )
 };
@@ -497,13 +496,16 @@ const StatusLockedEmail = React.createClass({
 
     render() {
         return (
-            <div className="status status--locked">
-                <p className="status__text">Enter your email to receive instructions for unlocking an asset.</p>
-
-                <form onSubmit={this.handleSubmit}>
-                    <input className="form__control" type="email" name="email" placeholder="Your email"
-                           onChange={this.handleInputChange}/>
-                    <button type="submit" className="button button--primary status__button">Let’s roll</button>
+            <div className="status">
+                <form className="form" onSubmit={this.handleSubmit}>
+                    <p className="status__text">First, we need to create a key pair based on your email so you can receive transactions on BigchainDB. Enter your email to get started.</p>
+                    <p className="form__group">
+                        <input className="form__control" type="email" name="email" id="email" onChange={this.handleInputChange} required/>
+                        <label className="form__label" htmlFor="email">Your email</label>
+                    </p>
+                    <p className="form__group">
+                        <button type="submit" className="button button--primary status__button">Let’s roll</button>
+                    </p>
                 </form>
             </div>
         )

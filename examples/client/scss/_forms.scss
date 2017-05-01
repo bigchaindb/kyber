@@ -1,0 +1,107 @@
+.form {
+    padding: $spacer;
+    background: $gray-light;
+    border-radius: $border-radius;
+    margin-bottom: $spacer;
+
+    @media ($screen-sm) {
+        padding: ($spacer * 1.5) ($spacer * 2.5);
+    }
+}
+
+.form__control {
+    display: block;
+    width: 100%;
+    appearance: none;
+    padding: $input-padding-x $input-padding-y;
+    font-family: $input-font;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-base;
+    line-height: $line-height;
+    color: $input-color;
+    text-align: left;
+    background: none;
+    border: none;
+    border-bottom: 2px solid $input-border-color;
+    border-radius: 0;
+    transition: .2s ease-out;
+
+    &:focus {
+        outline: 0;
+        border-color: $input-border-focus;
+    }
+
+    // Placeholder
+    &::placeholder {
+        color: $input-color-placeholder;
+
+        // Override Firefox's unusual default opacity; see https://github.com/twbs/bootstrap/pull/11526.
+        opacity: 1;
+    }
+
+    // Disabled and read-only inputs
+    //
+    // HTML5 says that controls under a fieldset > legend:first-child won't be
+    // disabled if the fieldset is disabled. Due to implementation difficulty, we
+    // don't honor that edge case; we style them as disabled anyway.
+    &:disabled,
+    &[readonly] {
+        background-color: $input-bg-disabled;
+
+        // iOS fix for unreadable disabled content; see https://github.com/twbs/bootstrap/issues/11655.
+        opacity: 1;
+    }
+    &:disabled {
+        cursor: disabled;
+    }
+}
+
+
+//
+// Floating placeholder labels
+//
+.form__label {
+    position: absolute;
+    top: $input-padding-x;
+    left: $input-padding-y;
+    right: $input-padding-y;
+    transition: .15s ease-out;
+    user-select: none;
+    cursor: text;
+
+    // style like placeholder
+    font-family: $input-font;
+    font-weight: $input-font-weight;
+    font-size: $font-size-base;
+    line-height: $line-height;
+    color: $input-color-placeholder;
+    text-align: left;
+    transform-origin: left;
+}
+
+.form__control {
+    // the active state
+    &:focus ~ .form__label {
+        transform: translate3d(0, -(($spacer / 1.5) + $input-padding-x), 0) scale(.7);
+        color: $input-border-focus;
+    }
+}
+
+
+//
+// Form groups
+//
+.form__group {
+    margin-bottom: $spacer;
+    position: relative;
+    // make room for floating labels
+    margin-top: $spacer;
+
+    &:last-of-type {
+        margin-bottom: 0;
+        
+        .btn {
+            margin-top: $spacer;
+        }
+    }
+}

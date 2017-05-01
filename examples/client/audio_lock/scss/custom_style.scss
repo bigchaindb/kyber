@@ -47,6 +47,16 @@
         
     }
     
+    .status--intro {
+        margin-bottom: $spacer * 3;
+    }
+    
+    .form {
+        .status__text {
+            text-align: left;
+        }
+    }
+    
     
     //
     // Lock/unlock state
