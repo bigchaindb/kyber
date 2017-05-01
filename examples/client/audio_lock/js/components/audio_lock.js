@@ -28,7 +28,8 @@ import {
     IconPackage,
     IconAdd,
     IconArrowLeft,
-    Logo
+    Logo,
+    IconLoader
 } from '../../../js/react/components/icons';
 
 const AudioLock = React.createClass({
@@ -317,11 +318,8 @@ const AssetsList = React.createClass({
         } = this.props;
 
         if (transactionMeta && transactionMeta.isFetchingList) {
-            // @kremalicious - some cool loading symbol?
             return (
-                <div>
-                    Loading assets...
-                </div>
+                <IconLoader />
             )
         }
 
