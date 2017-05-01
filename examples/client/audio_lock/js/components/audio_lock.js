@@ -181,7 +181,7 @@ const StateSwitcher = React.createClass({
         })
     },
 
-    handleFrequencyHit() {
+    handleUnlock() {
         this.setState({
             currentState: 'unlocked'
         })
@@ -241,12 +241,13 @@ const StateSwitcher = React.createClass({
                             assetAccount={assetAccount}
                             targetFrequency={activeAsset.asset.data.frequency}
                             frequencyList={frequencyList}
-                            onFrequencyHit={this.handleFrequencyHit}/>
+                            onFrequencyHit={this.handleUnlock}/>
                         <Dictaphone
                             activeAsset={activeAsset}
                             activeAccount={activeAccount}
                             assetAccount={assetAccount}
-                            magicWords={magicWords}/>
+                            magicWords={magicWords}
+                            onWordHit={this.handleUnlock}/>
                     </div>
                 }
                 { (currentState === 'unlocked') &&

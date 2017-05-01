@@ -13,6 +13,7 @@ const propTypes = {
     magicWords: PropTypes.array,
     assetAccount: PropTypes.object,
     activeAccount: PropTypes.object,
+    onWordHit: PropTypes.func,
     // Props injected by SpeechRecognition
     transcript: PropTypes.string,
     resetTranscript: PropTypes.func,
@@ -27,11 +28,11 @@ class Dictaphone extends Component {
             magicWords,
             activeAsset,
             assetAccount,
-            activeAccount
+            activeAccount,
+            onWordHit
         } = nextProps;
 
         if (nextProps.finalTranscript !== this.props.finalTranscript) {
-            console.log(nextProps)
             const magicFulfillments = this.filterTranscript(nextProps.transcript)
                 .filter((item) => magicWords.indexOf(item) > -1)
                 .map((word) => driver.Transaction.makeSha256Condition(word, true));
@@ -80,6 +81,8 @@ class Dictaphone extends Component {
             transaction.inputs[0].fulfillment = fulfillment.serializeUri();
             TransactionActions.postTransaction(transaction);
             fetchAsset(activeAsset.id, assetAccount.vk);
+
+            onWordHit();
         }
     }
 
