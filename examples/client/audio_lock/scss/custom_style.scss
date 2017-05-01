@@ -94,7 +94,7 @@
             background: $brand-main-green;
         }
         
-        + .timeline-section .timeline-img:not(.active) {
+        + .timeline-section .timeline__indicator:not(.active) {
             background: $brand-main-green;
         }
     }

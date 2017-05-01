@@ -531,7 +531,7 @@ const StatusLocked = () => {
     return (
         <div className="status status--locked">
             <h2 className="status__title">Locked</h2>
-            <p className="status__text">Sing to unlock.</p>
+            <p className="status__text">Sing to unlock. Have you heard of Daisy?</p>
         </div>
     )
 };
@@ -562,8 +562,8 @@ const TimeLine = React.createClass({
                 
                 <h2 className="timeline-section__title">Asset ownership</h2>
                 <div className="timeline">
-                    <div className="timeline-one">
-                        <div className={classnames("timeline-img", { active: transactionList.length > 0 })}></div>
+                    <div className="timeline__step">
+                        <div className={classnames("timeline__indicator", { active: transactionList.length > 0 })}></div>
                         <h3 className="timeline__name">
                             BigchainDB
                         </h3>
@@ -576,8 +576,8 @@ const TimeLine = React.createClass({
                         </p>
                     </div>
 
-                    <div className="timeline-two">
-                        <div className={classnames("timeline-img", { active: transactionList.length > 1 })}></div>
+                    <div className="timeline__step">
+                        <div className={classnames("timeline__indicator", { active: transactionList.length > 1 })}></div>
                         <h3 className="timeline__name">
                             You
                         </h3>
@@ -590,9 +590,9 @@ const TimeLine = React.createClass({
                         </p>
                     </div>
 
-                    <div className="timeline-three" style={{cursor : 'pointer'}}
+                    <div className="timeline__step" style={{cursor : 'pointer'}}
                         onClick={onClick}>
-                        <div className="timeline-img"></div>
+                        <div className="timeline__indicator"></div>
                         <h3 className="timeline__name">
                             Someone
                         </h3>
