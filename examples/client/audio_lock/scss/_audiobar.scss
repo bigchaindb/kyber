@@ -1,22 +1,26 @@
 
-$blue:   lighten($brand-main-blue, 30%);
-$yellow: lighten($brand-warning, 30%);
+$blue:   lighten($brand-main-blue, 20%);
+$yellow: lighten($brand-warning, 20%);
 
 .audiobar {
     display: flex;
     width: 100%;
-    height: $spacer * 3;
-    margin-top: -($spacer * 2);
-    overflow: hidden;
+    height: $spacer * 6;
+    margin-top: -($spacer * 5);
+    margin-bottom: $spacer * 3;
     border-bottom: 1px dashed rgba($brand-main-blue, .3);
 }
 
 .audiobar__step {
     flex: 1;
-    border-left: 1px solid $body-bg;
-    transform-origin: bottom;
+    margin-bottom: -($spacer * 6);
+    margin-left: 3%;
+    cursor: pointer;
+    transition: .1s ease-out;
+    opacity: .8;
+    border-radius: 50%;
 
-    &:nth-child(1)  { background: $blue; border-left-color: transparent; }
+    &:nth-child(1)  { background: $blue; margin-left: 0; }
     &:nth-child(2)  { background: rgba($blue, .9); }
     &:nth-child(3)  { background: rgba($blue, .8); }
     &:nth-child(4)  { background: rgba($blue, .7); }
@@ -28,15 +32,13 @@ $yellow: lighten($brand-warning, 30%);
     &:nth-child(10) { background: rgba($yellow, .8); }
     &:nth-child(11) { background: rgba($yellow, .9); }
     &:nth-child(12) { background: $yellow; }
-
-    cursor: pointer;
-    &:hover {
-        opacity: 1!important;
+    
+    &:hover,
+    &.target {
+        opacity: 1;
     }
-
-}
-
-.audiobar__step.target {
-    background: rgba($brand-main-green, 1);
-    opacity: 1 !important;
+    
+    &.target {
+        background: $brand-main-green;
+    }
 }

@@ -25,9 +25,8 @@
     
     .icon--lock {
         stroke-width: .5;
-        width: 10rem;
-        height: 10rem;
-        opacity: .5;
+        width: 6rem;
+        height: 6rem;
     }
     
     .status {
@@ -76,6 +75,10 @@
     }
     
     .is-locked {
+        .icon--lock {
+            stroke: darken($brand-danger, 20%);
+        }
+        
         &:before {
             background: $brand-danger;
         }
@@ -83,7 +86,15 @@
     }
     
     .is-unlocked {
+        .icon--lock {
+            stroke: darken($brand-main-green, 20%);
+        }
+        
         &:before {
+            background: $brand-main-green;
+        }
+        
+        + .timeline-section .timeline-img:not(.active) {
             background: $brand-main-green;
         }
     }

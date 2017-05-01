@@ -268,8 +268,6 @@ function renderFrame(analyser) {
         let domNode = ReactDOM.findDOMNode(note);
 
         let scale = Math.pow(frequencyData[note.props.frequency] / 255, 2);
-        domNode.style.opacity = scale;
-        domNode.style.zIndex = 1000;
         let multiplier = 1;
         if (analyser.targetTimer
             && note.props.frequency === this.props.targetFrequency) {

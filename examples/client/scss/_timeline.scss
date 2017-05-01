@@ -79,18 +79,16 @@ $spacing: 18%;
     border: 1px solid rgba($brand-main-gray-lighter, $opacity);
     background: $brand-danger;
     float: left;
+    transition: .2s ease-out;
 
-    &:hover {
+    &:hover,
+    &.active {
         background: $brand-main-blue;
     }
 
     @media ($screen-sm) {
         float: none;
     }
-}
-
-.timeline-img.active {
-    background: $brand-main-violet;
 }
 
 .timeline__name,
