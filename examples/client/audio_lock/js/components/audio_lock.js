@@ -216,12 +216,6 @@ const StateSwitcher = React.createClass({
 
         return (
             <div>
-                { (currentState === 'locked'
-                    || currentState === 'unlocked') &&
-                    <TimeLine
-                        transactionList={transactionList}
-                        onClick={this.handleReset}/>
-                }
                 { (currentState === 'start') &&
                     <StatusIntro 
                         onClick={this.handleStart}/>
@@ -252,6 +246,12 @@ const StateSwitcher = React.createClass({
                         <IconLockUnlocked />
                         <StatusUnlocked />
                     </div>
+                }
+                { (currentState === 'locked'
+                    || currentState === 'unlocked') &&
+                    <TimeLine
+                        transactionList={transactionList}
+                        onClick={this.handleReset}/>
                 }
             </div>
         )
@@ -327,7 +327,10 @@ const AssetsList = React.createClass({
 
         return (
             <div className="assets-list">
-                <p>Please select an asset to unlock or create a new asset first.</p>
+                <div className="status">
+                    <h2 className="status__title">Select asset</h2>
+                    <p className="status__text">Please select an asset to unlock or create a new asset first.</p>
+                </div>
                 <div className="assets">
                     {
                         assetList.map((asset) => {
@@ -381,8 +384,8 @@ const StatusIntro = () => {
     return (
         <div className="status status--intro">
             <h2 className="status__title">Audio Lock</h2>
-            <h3 className="status__subtitle">Unlock assets by singing to your computer.</h3>
-            <p className="status__text">This app demonstrates how to transfer ownership of an asset saved in BigchainDB by singing to your computer.</p>
+            <h3 className="status__subtitle">Unlock assets with your voice.</h3>
+            <p className="status__text">This app demonstrates how to transfer an asset saved in BigchainDB by singing to your computer.</p>
             
             <button className="button button--primary status__button">Let’s roll</button>
         </div>
@@ -508,8 +511,11 @@ const StatusLockedEmail = React.createClass({
     render() {
         return (
             <div className="status">
+                <h2 className="status__title">Create user</h2>
+                <p className="status__text">First, we need to create a key pair based on your email so you can receive transactions on BigchainDB.</p>
+                
                 <form className="form" onSubmit={this.handleSubmit}>
-                    <p className="status__text">First, we need to create a key pair based on your email so you can receive transactions on BigchainDB. Enter your email to get started.</p>
+                    <p>Enter your email to get started.</p>
                     <p className="form__group">
                         <input className="form__control" type="email" name="email" id="email" onChange={this.handleInputChange} required/>
                         <label className="form__label" htmlFor="email">Your email</label>
@@ -554,14 +560,16 @@ const TimeLine = React.createClass({
         } = this.props;
 
         return (
-            <section className="timeline-section">
+            <aside className="timeline-section">
+                
+                <h2 className="timeline-section__title">Asset ownership</h2>
                 <div className="timeline">
                     <div className="timeline-one">
                         <div className={classnames("timeline-img", { active: transactionList.length > 0 })}></div>
-                        <h3 className="timeline-name">
+                        <h3 className="timeline__name">
                             BigchainDB
                         </h3>
-                        <p className="timeline-description">
+                        <p className="timeline__description">
                             { transactionList.length > 0 ?
                                     <a href={API_PATH + 'transactions/' + transactionList[0].id} target="_blank">
                                         {transactionList[0].id}
@@ -572,10 +580,10 @@ const TimeLine = React.createClass({
 
                     <div className="timeline-two">
                         <div className={classnames("timeline-img", { active: transactionList.length > 1 })}></div>
-                        <h3 className="timeline-name">
+                        <h3 className="timeline__name">
                             You
                         </h3>
-                        <p className="timeline-description">
+                        <p className="timeline__description">
                             { transactionList.length > 1 ?
                                     <a href={API_PATH + 'transactions/' + transactionList[1].id} target="_blank">
                                         {transactionList[1].id}
@@ -587,15 +595,15 @@ const TimeLine = React.createClass({
                     <div className="timeline-three" style={{cursor : 'pointer'}}
                         onClick={onClick}>
                         <div className="timeline-img"></div>
-                        <h3 className="timeline-name">
+                        <h3 className="timeline__name">
                             Someone
                         </h3>
-                        <p className="timeline-description">
+                        <p className="timeline__description">
                         </p>
                     </div>
 
                 </div>
-            </section>
+            </aside>
         )
     }
 });

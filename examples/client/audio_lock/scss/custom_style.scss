@@ -27,7 +27,6 @@
         stroke-width: .5;
         width: 10rem;
         height: 10rem;
-        margin-top: $spacer * 3;
         opacity: .5;
     }
     
@@ -50,18 +49,12 @@
         opacity: .5;
     }
     
-    .status--intro {
-        margin-bottom: $spacer * 3;
-        
-        .status__text {
-            margin-bottom: $spacer * 2;
-        }
+    .status__text {
+        margin-bottom: $spacer * 2;
     }
     
-    .form {
-        .status__text {
-            text-align: left;
-        }
+    .status--intro {
+        margin-bottom: $spacer * 3;        
     }
     
     
