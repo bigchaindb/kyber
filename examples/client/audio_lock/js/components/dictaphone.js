@@ -157,20 +157,20 @@ class Dictaphone extends Component {
         const { magicWordHits } = this.state;
 
         return (
-            <div className="dictaphone--container">
+            <div className="dictaphone">
                 {
                     magicWords.map((magicWord) => {
                         const inMagicList = magicWordHits.indexOf(magicWord) > -1;
 
                         return (
-                            <span className={classnames("dictaphone--word", {"active": inMagicList})}
+                            <span className={classnames("dictaphone__word", {"active": inMagicList})}
                                 key={magicWord}>
                                 { magicWord }
                             </span>
                         )
                     })
                 }
-                <div className="dictaphone--interim">
+                <div className="dictaphone__interim">
                     { transcript }
                 </div>
             </div>

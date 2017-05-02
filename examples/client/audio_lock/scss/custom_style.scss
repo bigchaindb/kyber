@@ -64,7 +64,14 @@
     
     .is-locked,
     .is-unlocked {
+        
+        // make room for timeline
+        @media ($screen-sm) {
+            padding-bottom: $spacer * 7;
+        }
+        
         &:before {
+            @extend .animation-fadein;
             content: "";
             display: block;
             position: absolute;
@@ -98,4 +105,14 @@
             background: $brand-main-green;
         }
     }
+    
+    
+    .timeline-section {
+        @media ($screen-sm) {
+            position: absolute;
+            left: 0; right: 0;
+            bottom: -$spacer;
+        }
+    }
+    
 }

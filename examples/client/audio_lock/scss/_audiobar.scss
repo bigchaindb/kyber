@@ -13,7 +13,7 @@ $yellow: lighten($brand-warning, 20%);
         display: block;
         position: absolute;
         left: 0; right: 0;
-        top: 50%;
+        bottom: 0;
         height: 1px;
         background: linear-gradient(to right, $blue, $yellow);
         z-index: -1;
@@ -22,12 +22,13 @@ $yellow: lighten($brand-warning, 20%);
 }
 
 .audiobar__step {
+    @extend .transition;
     flex: 1;
-    margin-left: 3%;
+    margin-left: 2%;
     cursor: pointer;
-    transition: .1s ease-out;
     opacity: .8;
-    border-radius: 50%;
+    border-radius: 2px;
+    transform-origin: bottom;
 
     &:nth-child(1)  { background: $blue; margin-left: 0; }
     &:nth-child(2)  { background: rgba($blue, .9); }
@@ -50,4 +51,32 @@ $yellow: lighten($brand-warning, 20%);
     &.target {
         background: $brand-main-green;
     }
+}
+
+
+//
+// Speak input feedback
+//
+.dictaphone {
+    margin-top: $spacer;
+    min-height: $font-size-base;
+}
+
+.dictaphone__word,
+.dictaphone__interim {
+    font-family: $font-family-monospace;
+    color: $brand-main-gray-lighter;
+}
+
+.dictaphone__word {
+    padding: 0.2em;
+    &.active {
+        @extend .large;
+        color: $brand-main-green;
+        display: inline;
+    }
+}
+
+.dictaphone__interim {
+    @extend .small;
 }
