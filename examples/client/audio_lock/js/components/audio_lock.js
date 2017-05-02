@@ -626,7 +626,7 @@ const StatusLocked = () => {
     return (
         <div className="status status--locked">
             <h2 className="status__title">Locked</h2>
-            <p className="status__text">Sing to unlock. Have you heard of Daisy?</p>
+            <p className="status__text">Sing to unlock. Can you hit that green note?</p>
         </div>
     )
 };

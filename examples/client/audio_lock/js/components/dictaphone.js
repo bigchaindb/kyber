@@ -158,6 +158,7 @@ class Dictaphone extends Component {
 
         return (
             <div className="dictaphone">
+                <p className="status__text">Or... talk to me. Do you remember Daisy?</p>
                 {
                     magicWords.map((magicWord) => {
                         const inMagicList = magicWordHits.indexOf(magicWord) > -1;
