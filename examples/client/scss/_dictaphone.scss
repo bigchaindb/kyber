@@ -5,7 +5,8 @@
 
 .dictaphone--word {
     padding: 0.2em;
-    display: none;
+    color: $brand-main-gray;
+    font-size: 1rem;
 
     &.active {
         color: $brand-main-green;

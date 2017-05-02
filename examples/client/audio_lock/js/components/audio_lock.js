@@ -249,6 +249,7 @@ const StateSwitcher = React.createClass({
                             activeAccount={activeAccount}
                             assetAccount={assetAccount}
                             magicWords={magicWords}
+                            magicWordsThreshold={magicWordsThreshold}
                             onWordHit={this.handleUnlock}/>
                     </div>
                 }
@@ -274,7 +275,10 @@ const StateSwitcher = React.createClass({
 //
 
 const magicWords = [
-    'daisy', 'hal', 'space', 'dave', 'data'];
+    'daisy', 'hal', 'space', 'dave', 'data'
+];
+
+const magicWordsThreshold = 2;
 
 const AssetsList = React.createClass({
     propTypes: {
@@ -322,7 +326,7 @@ const AssetsList = React.createClass({
         let subconditionAccount = driver.Transaction.makeEd25519Condition(account.vk, true);
         condition.addSubfulfillment(subconditionAccount);
         let subconditionWords = driver.Transaction.makeThresholdCondition(null, true);
-        subconditionWords.threshold = 2;
+        subconditionWords.threshold = magicWordsThreshold;
         magicWords
             .forEach((magicWord) => {
                 let subconditionWord = driver.Transaction.makeSha256Condition(magicWord, true);
