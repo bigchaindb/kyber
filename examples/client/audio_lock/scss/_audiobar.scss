@@ -64,21 +64,19 @@ $yellow: lighten($brand-warning, 20%);
 
 .dictaphone__word,
 .dictaphone__interim {
-    @extend .small;
     font-family: $font-family-monospace;
     color: $brand-main-gray-lighter;
 }
 
 .dictaphone__word {
     padding: 0.2em;
-    display: none;
-
     &.active {
+        @extend .large;
         color: $brand-main-green;
         display: inline;
     }
 }
 
 .dictaphone__interim {
-    
+    @extend .small;
 }

@@ -35,6 +35,14 @@ import {
     IconLoader
 } from '../../../js/react/components/icons';
 
+
+const magicWords = [
+    'daisy', 'hal', 'space', 'dave', 'data'
+];
+
+const magicWordsThreshold = 2;
+const frequencyList = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+
 const AudioLock = React.createClass({
     propTypes: {
         // Injected through BigchainDBConnection
@@ -144,7 +152,7 @@ const StateSwitcher = React.createClass({
 
     getDefaultProps() {
         return {
-            frequencyList: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+            frequencyList: frequencyList,
             availableStates: [
                 'start',
                 'login',
@@ -266,10 +274,11 @@ const StateSwitcher = React.createClass({
                                       activeAccount={activeAccount}
                                       assetAccount={assetAccount}
                                       magicWords={magicWords}
+                                      magicWordsThreshold={magicWordsThreshold}
                                       onWordHit={this.handleUnlock}/>
                            </CSSTransitionGroup>
                     </div>
-                    
+
                 }
                 { (currentState === 'unlocked') &&
                     <div className="is-unlocked">
@@ -292,8 +301,6 @@ const StateSwitcher = React.createClass({
 // Le components
 //
 
-const magicWords = [
-    'test', 'hello', 'hallo', 'big', 'data'];
 
 const AssetsList = React.createClass({
     propTypes: {
@@ -336,22 +343,18 @@ const AssetsList = React.createClass({
             'timestamp': moment().format('X')
         };
 
-        let condition = driver.Transaction.makeThresholdCondition(null, true);
-        condition.threshold = 1;
-        let subconditionAccount = driver.Transaction.makeEd25519Condition(account.vk, true);
-        condition.addSubfulfillment(subconditionAccount);
-        let subconditionWords = driver.Transaction.makeThresholdCondition(null, true);
-        subconditionWords.threshold = 2;
+        let subconditionAccount = driver.Transaction.makeEd25519Condition(account.vk, false);
+
+        let subconditionWords = driver.Transaction.makeThresholdCondition(magicWordsThreshold, undefined, false);
         magicWords
             .forEach((magicWord) => {
-                let subconditionWord = driver.Transaction.makeSha256Condition(magicWord, true);
+                let subconditionWord = driver.Transaction.makeSha256Condition(magicWord, false);
                 subconditionWords.addSubconditionUri(subconditionWord.getConditionUri());
             });
-        condition.addSubfulfillment(subconditionWords);
 
-        let output = driver.Transaction.makeOutput(
-            driver.Transaction.makeThresholdCondition(condition)
-        );
+        let condition = driver.Transaction.makeThresholdCondition(1, [subconditionAccount, subconditionWords]);
+
+        let output = driver.Transaction.makeOutput(condition);
         output.public_keys = [account.vk];
 
 
@@ -469,7 +472,7 @@ const AssetAudioLock = React.createClass({
 
     componentDidMount() {
         const { activeAsset } = this.props;
-        this.renderTone(parseInt(activeAsset.asset.data.frequency, 10))
+        this.renderTone(parseInt(activeAsset.asset.data.frequency, 10), "+1")
     },
 
     onFrequencyHit() {
@@ -485,10 +488,9 @@ const AssetAudioLock = React.createClass({
 
         let transaction = this.transferTransaction(activeAsset, activeAccount);
 
-        let fulfillment = driver.Transaction.makeThresholdCondition(null, true);
-        fulfillment.threshold = 1;
+        let fulfillment = driver.Transaction.makeThresholdCondition(1, undefined, false);
 
-        let fulfillmentAssetAccount = driver.Transaction.makeEd25519Condition(assetAccount.vk, true);
+        let fulfillmentAssetAccount = driver.Transaction.makeEd25519Condition(assetAccount.vk, false);
         fulfillmentAssetAccount.sign(
             new Buffer(driver.Transaction.serializeTransactionIntoCanonicalString(transaction)),
             new Buffer(base58.decode(assetAccount.sk))
@@ -521,15 +523,15 @@ const AssetAudioLock = React.createClass({
     },
 
     handleFrequencyClick(frequencyBin) {
-        this.renderTone(frequencyBin)
+        this.renderTone(frequencyBin, "+3")
     },
 
-    renderTone(frequencyBin) {
+    renderTone(frequencyBin, duration) {
         const frequency = 200 + (frequencyBin-2)/(13-2) * (1100 - 200);
         //create a synth and connect it to the master output (your speakers)
         const synth = new Tone.Oscillator(frequency, "sine").toMaster();
         synth.start();
-        synth.stop("+1.5");
+        synth.stop(duration);
     },
 
     render() {
@@ -622,7 +624,7 @@ const StatusLocked = () => {
     return (
         <div className="status status--locked">
             <h2 className="status__title">Locked</h2>
-            <p className="status__text">Sing to unlock. Have you heard of Daisy?</p>
+            <p className="status__text">Sing to unlock. Can you hit that green note?</p>
         </div>
     )
 };
