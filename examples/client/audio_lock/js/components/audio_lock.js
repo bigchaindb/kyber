@@ -448,7 +448,7 @@ const AssetAudioLock = React.createClass({
 
     componentDidMount() {
         const { activeAsset } = this.props;
-        this.renderTone(parseInt(activeAsset.asset.data.frequency, 10))
+        this.renderTone(parseInt(activeAsset.asset.data.frequency, 10), "+1")
     },
 
     onFrequencyHit() {
@@ -500,15 +500,15 @@ const AssetAudioLock = React.createClass({
     },
 
     handleFrequencyClick(frequencyBin) {
-        this.renderTone(frequencyBin)
+        this.renderTone(frequencyBin, "+3")
     },
 
-    renderTone(frequencyBin) {
+    renderTone(frequencyBin, duration) {
         const frequency = 200 + (frequencyBin-2)/(13-2) * (1100 - 200);
         //create a synth and connect it to the master output (your speakers)
         const synth = new Tone.Oscillator(frequency, "sine").toMaster();
         synth.start();
-        synth.stop("+1.5");
+        synth.stop(duration);
     },
 
     render() {
