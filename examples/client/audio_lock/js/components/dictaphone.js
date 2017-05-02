@@ -32,7 +32,7 @@ class Dictaphone extends Component {
             onWordHit
         } = nextProps;
 
-        if (nextProps.finalTranscript !== this.props.finalTranscript) {
+        if (nextProps.transcript !== this.props.transcript) {
             const magicFulfillments = this.filterTranscript(nextProps.transcript)
                 .filter((item) => magicWords.indexOf(item) > -1)
                 .map((word) => driver.Transaction.makeSha256Condition(word, true));
@@ -128,23 +128,23 @@ class Dictaphone extends Component {
 
         recognition.lang = 'en-US';
 
-        const transcriptArray = this.filterTranscript(finalTranscript);
+        const transcriptArray = this.filterTranscript(transcript);
 
         return (
-            <div className="dictaphone--container">
+            <div className="dictaphone">
                 {
                     transcriptArray.map((transcriptItem) => {
                         const inMagicList = magicWords.indexOf(transcriptItem) > -1;
 
                         return (
-                            <span className={classnames("dictaphone--word", {"active": inMagicList})}
+                            <span className={classnames("dictaphone__word", {"active": inMagicList})}
                                 key={transcriptItem}>
                                 { transcriptItem }
                             </span>
                         )
                     })
                 }
-                <div className="dictaphone--interim">
+                <div className="dictaphone__interim">
                     { interimTranscript }
                 </div>
             </div>

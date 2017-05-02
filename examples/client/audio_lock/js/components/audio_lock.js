@@ -3,6 +3,7 @@ import moment from 'moment';
 import base58 from 'bs58';
 import classnames from 'classnames';
 import Tone from 'tone';
+import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 
 import * as driver from 'js-bigchaindb-quickstart';
 
@@ -220,12 +221,22 @@ const StateSwitcher = React.createClass({
         return (
             <div>
                 { (currentState === 'start') &&
-                    <StatusIntro
-                        onClick={this.handleStart}/>
+                    <CSSTransitionGroup
+                        transitionName="screenchange"
+                        transitionEnter={false}
+                        transitionLeaveTimeout={200}>
+                        <StatusIntro
+                            onClick={this.handleStart}/>
+                    </CSSTransitionGroup>
                 }
                 { (currentState === 'login') &&
-                    <StatusLockedEmail
-                        onSubmit={this.handleLogin}/>
+                    <CSSTransitionGroup
+                        transitionName="screenchange"
+                        transitionEnterTimeout={400}
+                        transitionLeaveTimeout={200}>
+                        <StatusLockedEmail
+                            onSubmit={this.handleLogin}/>
+                    </CSSTransitionGroup>
                 }
                 { (currentState === 'list') &&
                     <AssetsList
@@ -236,21 +247,29 @@ const StateSwitcher = React.createClass({
                         transactionMeta={transactionMeta}/>
                 }
                 { (currentState === 'locked') &&
-                    <div>
-                        <AssetAudioLock
-                            activeAsset={activeAsset}
-                            activeAccount={activeAccount}
-                            assetAccount={assetAccount}
-                            targetFrequency={activeAsset.asset.data.frequency}
-                            frequencyList={frequencyList}
-                            onFrequencyHit={this.handleUnlock}/>
-                        <Dictaphone
-                            activeAsset={activeAsset}
-                            activeAccount={activeAccount}
-                            assetAccount={assetAccount}
-                            magicWords={magicWords}
-                            onWordHit={this.handleUnlock}/>
+                    <div className="is-locked">
+                          <CSSTransitionGroup
+                              transitionName="screenchange"
+                              transitionAppear={true}
+                              transitionAppearTimeout={400}
+                              transitionEnterTimeout={400}
+                              transitionLeaveTimeout={200}>
+                                  <AssetAudioLock
+                                      activeAsset={activeAsset}
+                                      activeAccount={activeAccount}
+                                      assetAccount={assetAccount}
+                                      targetFrequency={activeAsset.asset.data.frequency}
+                                      frequencyList={frequencyList}
+                                      onFrequencyHit={this.handleUnlock}/>
+                                  <Dictaphone
+                                      activeAsset={activeAsset}
+                                      activeAccount={activeAccount}
+                                      assetAccount={assetAccount}
+                                      magicWords={magicWords}
+                                      onWordHit={this.handleUnlock}/>
+                           </CSSTransitionGroup>
                     </div>
+                    
                 }
                 { (currentState === 'unlocked') &&
                     <div className="is-unlocked">
@@ -357,55 +376,62 @@ const AssetsList = React.createClass({
         }
 
         return (
-            <div className="assets-list">
-                <div className="status">
-                    <h2 className="status__title">Select asset</h2>
-                    <p className="status__text">Affirmative, Dave. I read you. Now, please select an asset to unlock or create a new asset first.</p>
-                </div>
-                <div className="assets">
-                    {
-                        assetList.map((asset) => {
-                            if (asset.asset.hasOwnProperty('data')) {
-                                const assetDetails = asset.asset.data;
+            <CSSTransitionGroup
+                transitionName="screenchange"
+                transitionAppear={true}
+                transitionAppearTimeout={400}
+                transitionEnter={false}
+                transitionLeaveTimeout={200}>
+                    <div className="assets-list">
+                        <div className="status">
+                            <h2 className="status__title">Select asset</h2>
+                            <p className="status__text">Affirmative, Dave. I read you. Now, please select an asset to unlock or create a new asset first.</p>
+                        </div>
+                        <div className="assets">
+                            {
+                                assetList.map((asset) => {
+                                    if (asset.asset.hasOwnProperty('data')) {
+                                        const assetDetails = asset.asset.data;
 
-                                if ('item' in assetDetails
-                                    && 'frequency' in assetDetails) {
-                                    const
-                                        item = assetDetails.item,
-                                        frequency = assetDetails.frequency;
+                                        if ('item' in assetDetails
+                                            && 'frequency' in assetDetails) {
+                                            const
+                                                item = assetDetails.item,
+                                                frequency = assetDetails.frequency;
 
-                                    return (
-                                        <a className="asset" href="#"
-                                           onClick={() => this.onAssetClick(asset)}
-                                           key={asset.id}>
-                                            { (item === 'shirt') && <IconShirt /> }
-                                            { (item === 'sticker') && <IconPicasso /> }
-                                            <span className="asset__title">
-                                                {
-                                                    asset.id
-                                                }
-                                            </span>
-                                        </a>
-                                    )
-                                }
+                                            return (
+                                                <a className="asset" href="#"
+                                                   onClick={() => this.onAssetClick(asset)}
+                                                   key={asset.id}>
+                                                    { (item === 'shirt') && <IconShirt /> }
+                                                    { (item === 'sticker') && <IconPicasso /> }
+                                                    <span className="asset__title">
+                                                        {
+                                                            asset.id
+                                                        }
+                                                    </span>
+                                                </a>
+                                            )
+                                        }
+                                    }
+                                })
                             }
-                        })
-                    }
 
-                    <a className="asset asset--create" href="#"
-                       onClick={() => this.handleNewAssetClick('shirt')}
-                       key="asset-create-shirt">
-                        <IconAdd />
-                        <span className="asset__title">Create new asset</span>
-                    </a>
-                    <a className="asset asset--create" href="#"
-                       onClick={() => this.handleNewAssetClick('sticker')}
-                       key="asset-create-sticker">
-                        <IconAdd />
-                        <span className="asset__title">Create new asset</span>
-                    </a>
-                </div>
-            </div>
+                            <a className="asset asset--create" href="#"
+                               onClick={() => this.handleNewAssetClick('shirt')}
+                               key="asset-create-shirt">
+                                <IconAdd />
+                                <span className="asset__title">Create new asset</span>
+                            </a>
+                            <a className="asset asset--create" href="#"
+                               onClick={() => this.handleNewAssetClick('sticker')}
+                               key="asset-create-sticker">
+                                <IconAdd />
+                                <span className="asset__title">Create new asset</span>
+                            </a>
+                        </div>
+                    </div>
+            </CSSTransitionGroup>
         )
     }
 });
@@ -420,11 +446,10 @@ const StatusIntro = React.createClass({
         const { onClick } = this.props;
 
         return (
-            <div onClick={onClick} className="status status--intro">
+            <div onClick={onClick} className="status status--intro animation-slide-in-from-bottom">
                 <h2 className="status__title">Audio Lock</h2>
                 <h3 className="status__subtitle">Unlock assets with your voice.</h3>
-                <p className="status__text">This app demonstrates how to transfer an asset saved in BigchainDB by
-                    singing to your computer. HAL would be proud.</p>
+                <p className="status__text">This app demonstrates how to transfer an asset saved in BigchainDB by singing to your computer. HAL would be proud.</p>
 
                 <button className="button button--primary status__button">Let’s roll</button>
             </div>
@@ -514,7 +539,7 @@ const AssetAudioLock = React.createClass({
         } = this.props;
 
         return (
-            <div className="is-locked">
+            <div>
                 <IconLockLocked />
                 <StatusLocked />
                 <div className="audio-container">
@@ -567,21 +592,28 @@ const StatusLockedEmail = React.createClass({
 
     render() {
         return (
-            <div className="status">
-                <h2 className="status__title">Create user</h2>
-                <p className="status__text">First, I need to create a key pair based on your email so you can receive transactions on BigchainDB.</p>
+            <CSSTransitionGroup
+                transitionName="screenchange"
+                transitionAppear={true}
+                transitionAppearTimeout={400}
+                transitionEnterTimeout={400}
+                transitionLeaveTimeout={200}>
+                <div className="status">
+                    <h2 className="status__title">Create user</h2>
+                    <p className="status__text">First, I need to create a key pair based on your email so you can receive transactions on BigchainDB.</p>
 
-                <form className="form" onSubmit={this.handleSubmit}>
-                    <p>Enter your email to get started, Dave.</p>
-                    <p className="form__group">
-                        <input className="form__control" type="email" name="email" id="email" onChange={this.handleInputChange} required/>
-                        <label className="form__label" htmlFor="email">Your email</label>
-                    </p>
-                    <p className="form__group">
-                        <button type="submit" className="button button--primary status__button">Create user</button>
-                    </p>
-                </form>
-            </div>
+                    <form className="form" onSubmit={this.handleSubmit}>
+                        <p>Enter your email to get started, Dave.</p>
+                        <p className="form__group">
+                            <input className="form__control" type="email" name="email" id="email" onChange={this.handleInputChange} required/>
+                            <label className="form__label" htmlFor="email">Your email</label>
+                        </p>
+                        <p className="form__group">
+                            <button type="submit" className="button button--primary status__button">Create user</button>
+                        </p>
+                    </form>
+                </div>
+            </CSSTransitionGroup>
         )
     }
 });
@@ -617,7 +649,7 @@ const TimeLine = React.createClass({
         } = this.props;
 
         return (
-            <aside className="timeline-section">
+            <aside className="timeline-section animation-slide-in-from-bottom">
 
                 <h2 className="timeline-section__title">Asset ownership</h2>
                 <div className="timeline">
