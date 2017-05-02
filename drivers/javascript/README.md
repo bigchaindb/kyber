@@ -17,45 +17,29 @@ of which I expect you'll know quite well ([otherwise, go check out js-reactor](h
 - [Usage](#usage)
 - [Speed Optimizations](#speed-optimizations)
 - [Warnings](#warnings)
-- [API](#api)
+- [API](API.md)
 
 ## Getting started
 
 ### Install from npm
 
-```
+```bash
+# install from npm
 npm install js-bigchaindb-driver
-```
-
-
-### Install from GitHub
-
-Depending on your GitHub login credentials
-
-- ssh
-```
+# Install from GitHub - ssh
 npm install git+ssh://github.com/bigchaindb/js-bigchaindb-driver.git
-```
-
-- https
-
-```
+# Install from GitHub - https
 npm install git+https://github.com/bigchaindb/js-bigchaindb-driver.git
 ```
 
-### Browser / ES6
+### Import / ES6
 
 ```javascript
+// ES6 Browser
 import * as driver from 'js-bigchaindb-driver';
-```
-
-### Browser / require
-```javascript
+// ES<<6 Browser
 let driver = require('js-bigchaindb-driver');
-```
-
-### CommonJS / node
-```javascript
+// ES<<6 CommonJS / node
 let driver = require('js-bigchaindb-driver/dist/node');
 ```
 
@@ -158,22 +142,3 @@ An example BigchainDB Server-generated keypair (encoded in `base58`):
 
 Your package should be able to take in the decoded version of the **private** key and return you the
 same **public** key (once you encode that to `base58`).
-
-
-## API
-
-### Keypairs
-
-```
-new Ed25519Keypair(secret)
-```
-
-### Transaction
-
-```
-Transaction(secret)
-```
-
-
-
-### Connection
