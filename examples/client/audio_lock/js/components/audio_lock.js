@@ -274,7 +274,7 @@ const StateSwitcher = React.createClass({
 //
 
 const magicWords = [
-    'test', 'hello', 'hallo', 'big', 'data'];
+    'daisy', 'hal', 'space', 'dave', 'data'];
 
 const AssetsList = React.createClass({
     propTypes: {
