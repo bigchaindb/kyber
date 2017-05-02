@@ -1,7 +1,6 @@
 import React, {PropTypes, Component} from 'react'
 import SpeechRecognition from 'react-speech-recognition'
 import classnames from 'classnames';
-import moment from 'moment';
 
 import TransactionActions from '../../../js/react/actions/transaction_actions';
 import { fetchAsset } from './utils';
@@ -61,7 +60,7 @@ class Dictaphone extends Component {
         } = this.props;
 
         const magicFulfillments = updatedMagicWordHits
-            .map((word) => driver.Transaction.makeSha256Condition(word, true));
+            .map((word) => driver.Transaction.makeSha256Condition(word, false));
 
         const magicConditionUris = magicFulfillments
             .map((magicFulfillments) => magicFulfillments.getConditionUri());
@@ -87,13 +86,11 @@ class Dictaphone extends Component {
 
         const transaction = this.transferTransaction(activeAsset, activeAccount);
 
-        let fulfillment = driver.Transaction.makeThresholdCondition(null, true);
-        fulfillment.threshold = 1;
+        let fulfillment = driver.Transaction.makeThresholdCondition(1, undefined, false);
 
-        let fulfillmentAssetAccount = driver.Transaction.makeEd25519Condition(assetAccount.vk, true);
+        let fulfillmentAssetAccount = driver.Transaction.makeEd25519Condition(assetAccount.vk, false);
         fulfillment.addSubconditionUri(fulfillmentAssetAccount.getConditionUri());
-        let subconditionWords = driver.Transaction.makeThresholdCondition(null, true);
-        subconditionWords.threshold = magicThreshold;
+        let subconditionWords = driver.Transaction.makeThresholdCondition(magicThreshold, undefined, false);
 
         targetSubfulfillments.forEach((targetSubfulfillment) => {
             if ('preimage' in targetSubfulfillment && !!targetSubfulfillment.preimage) {

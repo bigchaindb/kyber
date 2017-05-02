@@ -111,7 +111,8 @@
         @media ($screen-sm) {
             position: absolute;
             left: 0; right: 0;
-            bottom: -$spacer;
+            // @kremalicious causes scrollbars on wider screens
+            bottom: 0;
         }
     }
     
