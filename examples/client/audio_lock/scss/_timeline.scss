@@ -2,6 +2,13 @@ $opacity-border: .8;
 
 .timeline-section {
     margin-top: $spacer * 3;
+    
+    @media ($screen-sm) {
+        position: absolute;
+        left: 0; right: 0;
+        bottom: 0;
+        margin-top: 0;
+    }
 }
 
 .timeline-section__title {
@@ -38,6 +45,7 @@ $opacity-border: .8;
 
     @media ($screen-sm) {
         flex: 1;
+        margin-bottom: $spacer;
     }
 }
 
@@ -90,6 +98,7 @@ $opacity-border: .8;
     display: block;
     white-space: nowrap;
     text-overflow: ellipsis;
+    min-height: $font-size-base;
     
     @media ($screen-sm) {
         margin: auto;

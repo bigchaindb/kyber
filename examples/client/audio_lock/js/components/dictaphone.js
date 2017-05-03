@@ -7,6 +7,8 @@ import { fetchAsset } from './utils';
 
 import * as driver from 'js-bigchaindb-quickstart';
 
+import { IconLockLocked } from '../../../js/react/components/icons';
+
 
 const propTypes = {
     assetAccount: PropTypes.object,
@@ -154,22 +156,27 @@ class Dictaphone extends Component {
         const { magicWordHits } = this.state;
 
         return (
-            <div className="dictaphone">
-                <p className="status__text">Or... talk to me. Do you remember Daisy?</p>
-                {
-                    magicWords.map((magicWord) => {
-                        const inMagicList = magicWordHits.indexOf(magicWord) > -1;
+            <div className="status status--locked animation-fadein">
+                <IconLockLocked />
+                <h2 className="status__title">Locked</h2>
+                <p className="status__text">You don’t mind talking about it, do you Dave?</p>
+                
+                <div className="dictaphone">
+                    {
+                        magicWords.map((magicWord) => {
+                            const inMagicList = magicWordHits.indexOf(magicWord) > -1;
 
-                        return (
-                            <span className={classnames("dictaphone__word", {"active": inMagicList})}
-                                key={magicWord}>
-                                { magicWord }
-                            </span>
-                        )
-                    })
-                }
-                <div className="dictaphone__interim">
-                    { transcript }
+                            return (
+                                <span className={classnames("dictaphone__word", {"active": inMagicList})}
+                                    key={magicWord}>
+                                    { magicWord }
+                                </span>
+                            )
+                        })
+                    }
+                    <div className="dictaphone__interim">
+                        { transcript }
+                    </div>
                 </div>
             </div>
         )

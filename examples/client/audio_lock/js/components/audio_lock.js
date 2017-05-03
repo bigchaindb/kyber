@@ -263,38 +263,33 @@ const StateSwitcher = React.createClass({
                         transactionMeta={transactionMeta}/>
                 }
                 { (currentState === 'locked') &&
-                    <div className="is-locked">
-                          <CSSTransitionGroup
-                              transitionName="screenchange"
-                              transitionAppear={true}
-                              transitionAppearTimeout={400}
-                              transitionEnterTimeout={400}
-                              transitionLeaveTimeout={200}>
-                              <button onClick={this.toggleFallback} className="button button--secondary">Fallback</button>
-                              { (!fallback) ?
-                                  <AssetAudioLock
-                                      activeAsset={activeAsset}
-                                      activeAccount={activeAccount}
-                                      assetAccount={assetAccount}
-                                      targetFrequency={activeAsset.asset.data.frequency}
-                                      frequencyList={frequencyList}
-                                      onFrequencyHit={this.handleUnlock}/> :
-                                  < Dictaphone
-                                      activeAsset={activeAsset}
-                                      activeAccount={activeAccount}
-                                      assetAccount={assetAccount}
-                                      magicWords={magicWords}
-                                      magicWordsThreshold={magicWordsThreshold}
-                                      onWordHit={this.handleUnlock}/>
-                              }
-                           </CSSTransitionGroup>
+                    <div className="is-locked animation-fadein">
+                        { (!fallback) ?
+                            <AssetAudioLock
+                                activeAsset={activeAsset}
+                                activeAccount={activeAccount}
+                                assetAccount={assetAccount}
+                                targetFrequency={activeAsset.asset.data.frequency}
+                                frequencyList={frequencyList}
+                                onFrequencyHit={this.handleUnlock}/> :
+                            <Dictaphone
+                                activeAsset={activeAsset}
+                                activeAccount={activeAccount}
+                                assetAccount={assetAccount}
+                                magicWords={magicWords}
+                                magicWordsThreshold={magicWordsThreshold}
+                                onWordHit={this.handleUnlock}/>
+                        }
+                        <button onClick={this.toggleFallback} className="button button--secondary button--xs button--switchchallenge">Switch challenge</button>
                     </div>
 
                 }
                 { (currentState === 'unlocked') &&
-                    <div className="is-unlocked">
-                        <IconLockUnlocked />
-                        <StatusUnlocked />
+                    <div className="is-unlocked animation-fadein">
+                        <div className="animation-slide-in-from-bottom">
+                            <IconLockUnlocked />
+                            <StatusUnlocked />
+                        </div>
                     </div>
                 }
                 { (currentState === 'locked'
@@ -308,11 +303,10 @@ const StateSwitcher = React.createClass({
     }
 });
 
+
 //
 // Le components
 //
-
-
 const AssetsList = React.createClass({
     propTypes: {
         assetAccount: React.PropTypes.object,
@@ -555,14 +549,11 @@ const AssetAudioLock = React.createClass({
             <div>
                 <IconLockLocked />
                 <StatusLocked />
-                <div className="audio-container">
-                    <AudioVisual
-                        frequencies={frequencyList}
-                        onFrequencyClick={this.handleFrequencyClick}
-                        onFrequencyHit={this.onFrequencyHit}
-                        targetFrequency={targetFrequency}/>
-
-                </div>
+                <AudioVisual
+                    frequencies={frequencyList}
+                    onFrequencyClick={this.handleFrequencyClick}
+                    onFrequencyHit={this.onFrequencyHit}
+                    targetFrequency={targetFrequency}/>
             </div>
         );
     }
@@ -644,7 +635,7 @@ const StatusUnlocked = () => {
     return (
         <div className="status status--unlocked is-hidden">
             <h2 className="status__title">Unlocked</h2>
-            <p className="status__text">What a lovely voice, Dave. Thank you for a very enjoyable game.</p>
+            <p className="status__text">That’s a very nice voice, Dave. Thank you for a very enjoyable game.</p>
         </div>
     )
 };
