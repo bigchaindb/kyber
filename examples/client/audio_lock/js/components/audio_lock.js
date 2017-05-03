@@ -442,7 +442,7 @@ const AssetsList = React.createClass({
                             }
                         })
                     }
-                    <a className={classnames("asset asset--create", {"asset--create--loading": newAssetClicked})} href="#"
+                    <a className={classnames("asset asset--create", {"asset--create--loading": newAssetClicked && newAssetClicked === 'shirt'})} href="#"
                        onClick={() => this.handleNewAssetClick('shirt')}
                        key="asset-create-shirt">
                         { newAssetClicked && newAssetClicked === 'shirt' ?
@@ -450,7 +450,7 @@ const AssetsList = React.createClass({
                         }
                         <span className="asset__title">Create new asset</span>
                     </a>
-                    <a className={classnames("asset asset--create", {"asset--create--loading": newAssetClicked})} href="#"
+                    <a className={classnames("asset asset--create", {"asset--create--loading": newAssetClicked && newAssetClicked === 'sticker'})} href="#"
                        onClick={() => this.handleNewAssetClick('sticker')}
                        key="asset-create-sticker">
                         { newAssetClicked && newAssetClicked === 'sticker' ?
