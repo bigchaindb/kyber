@@ -43,12 +43,24 @@
         }
     }
 
-    .icon {
+    .icon,
+    .loader {
         stroke: $brand-main-green;
+        width: 2.8rem;
+        height: 2.8rem;
     }
     
     .asset__title {
+        @extend .transition;
         font-size: $font-size-sm;
+    }
+}
+
+.asset--create--loading {
+    pointer-events: none;
+    
+    .asset__title {
+        opacity: 0;
     }
 }
 

@@ -5,7 +5,7 @@ import React from 'react';
 //
 export const IconLockLocked = () => {
     return (
-        <svg className="icon icon--lock icon--lock--locked" xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 18 24">
+        <svg className="icon icon--lock icon--lock--locked" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 18 24">
             <circle cx="9" cy="15" r="1"/>
             <path d="M9,15.5 L9,18.5" />
             <rect width="17" height="14" x=".5" y="9.5"/>
@@ -16,7 +16,7 @@ export const IconLockLocked = () => {
 
 export const IconLockUnlocked = () => {
     return (
-        <svg className="icon icon--lock icon--lock--unlocked" xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 18 24">
+        <svg className="icon icon--lock icon--lock--unlocked" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
             <circle cx="9" cy="15" r="1"/>
             <path d="M9,15.5 L9,18.5"/>
             <rect width="17" height="14" x=".5" y="9.5"/>
@@ -27,7 +27,7 @@ export const IconLockUnlocked = () => {
 
 export const IconShirt = () => {
     return (
-      <svg className="icon icon--shirt" xmlns="http://www.w3.org/2000/svg" width="23" height="21" viewBox="0 0 23 21">
+      <svg className="icon icon--shirt" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
           <polyline  points="6.999 2.001 5.5 2.001 .5 7.501 3 10.501 5.5 8.001 5.5 20.501 11.499 20.501 17.5 20.501 17.5 8.001 19.999 10.501 22.5 7.501 17.499 2.001 15.999 2.001" />
           <polygon  points="11.499 3.501 8.499 .501 14.499 .501" />
           <rect width="4.243" height="2.121" x="11.627" y="1.69" transform="rotate(-45 13.749 2.75)"/>
@@ -51,7 +51,7 @@ export const IconDiamond = () => {
 
 export const IconPicasso = () => {
     return (
-      <svg className="icon icon--picasso" xmlns="http://www.w3.org/2000/svg" width="20" height="24" viewBox="0 0 20 24">
+      <svg className="icon icon--picasso" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
           <rect width="19" height="23" x=".5" y=".5"/>
           <rect width="13" height="17" x="3.5" y="3.5"/>
           <path d="M16.5 3.5L19.5.5M3.5 3.5L.5.5M.5 23.5L3.5 20.5M16.5 20.5L19.5 23.5M14 9C14 9 12 10.5 11 10.5 10 10.5 8 9 8 9 8 9 10 7.5 11 7.5 12 7.5 14 9 14 9zM11 9L11 10.5M13.5 7L14.5 6M12 6L12.5 5.5M8 7L7 6M9.5 6L9 5.5"/>
@@ -63,7 +63,7 @@ export const IconPicasso = () => {
 
 export const IconDocument = () => {
     return (
-      <svg className="icon icon--document" xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 18 24">
+      <svg className="icon icon--document" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
           <polygon points="17.5 23.5 .5 23.5 .5 .5 11.5 .5 17.5 6.5"/>
           <polyline points="11.5 .5 11.5 6.5 17.5 6.5"/>
           <path d="M4.5 7.5L9 7.5M4.5 10.5L13.5 10.5M4.5 13.5L13.5 13.5M4.5 16.5L13.5 16.5M4.5 19.5L13.5 19.5"/>
@@ -73,7 +73,7 @@ export const IconDocument = () => {
 
 export const IconSong = () => {
     return (
-      <svg className="icon icon--song" xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 18 24">
+      <svg className="icon icon--song" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
           <polygon points="17.5 23.5 .5 23.5 .5 .5 11.5 .5 17.5 6.5"/>
           <polyline points="11.5 .5 11.5 6.5 17.5 6.5"/>
           <ellipse cx="7.564" cy="17.554" transform="rotate(-11.887 7.564 17.554)" rx="3.001" ry="2"/>
@@ -84,7 +84,7 @@ export const IconSong = () => {
 
 export const IconTruck = () => {
     return (
-      <svg className="icon icon--truck" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 18">
+      <svg className="icon icon--truck" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
           <circle cx="8" cy="15" r="2.5"/>
           <circle cx="19" cy="15" r="2.5"/>
           <polyline points="8.5 10.5 8.5 .5 23.5 .5 23.5 14.5"/>
@@ -105,7 +105,7 @@ export const IconBitcoin = () => {
 
 export const IconHouse = () => {
     return (
-      <svg className="icon icon--house" xmlns="http://www.w3.org/2000/svg" width="24" height="20" viewBox="0 0 24 20">
+      <svg className="icon icon--house" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
           <path d="M0.5,18.5 L23.5,18.5" />
           <rect width="17" height="10" x="3.5" y="8.5" />
           <polygon points="12 0 .5 8.5 23.5 8.5" />
@@ -130,7 +130,7 @@ export const IconPackage = () => {
 
 export const IconAdd = () => {
     return (
-      <svg className="icon icon--add" xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23">
+      <svg className="icon icon--add" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
           <path d="M11.5.5L11.5 22.5M22.5 11.5L.5 11.5"/>
       </svg>
     )
