@@ -167,7 +167,8 @@ const StateSwitcher = React.createClass({
         return {
             activeAsset: null,
             activeAccount: null,
-            currentState: 'start'
+            currentState: 'start',
+            fallback: false
         }
     },
 
@@ -211,11 +212,18 @@ const StateSwitcher = React.createClass({
         TransactionActions.flushTransactionList();
     },
 
+    toggleFallback() {
+        this.setState({
+            fallback: !this.state.fallback
+        })
+    },
+
     render() {
         const {
             activeAsset,
             activeAccount,
-            currentState
+            currentState,
+            fallback
         } = this.state;
 
         const {
@@ -262,20 +270,23 @@ const StateSwitcher = React.createClass({
                               transitionAppearTimeout={400}
                               transitionEnterTimeout={400}
                               transitionLeaveTimeout={200}>
+                              <button onClick={this.toggleFallback} className="button button--secondary">Fallback</button>
+                              { (!fallback) ?
                                   <AssetAudioLock
                                       activeAsset={activeAsset}
                                       activeAccount={activeAccount}
                                       assetAccount={assetAccount}
                                       targetFrequency={activeAsset.asset.data.frequency}
                                       frequencyList={frequencyList}
-                                      onFrequencyHit={this.handleUnlock}/>
-                                  <Dictaphone
+                                      onFrequencyHit={this.handleUnlock}/> :
+                                  < Dictaphone
                                       activeAsset={activeAsset}
                                       activeAccount={activeAccount}
                                       assetAccount={assetAccount}
                                       magicWords={magicWords}
                                       magicWordsThreshold={magicWordsThreshold}
                                       onWordHit={this.handleUnlock}/>
+                              }
                            </CSSTransitionGroup>
                     </div>
 
@@ -472,7 +483,7 @@ const AssetAudioLock = React.createClass({
 
     componentDidMount() {
         const { activeAsset } = this.props;
-        this.renderTone(parseInt(activeAsset.asset.data.frequency, 10), "+1")
+        // this.renderTone(parseInt(activeAsset.asset.data.frequency, 10), "+1")
     },
 
     onFrequencyHit() {
