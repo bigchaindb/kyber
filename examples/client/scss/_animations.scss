@@ -23,7 +23,7 @@ $timing-bounce:         cubic-bezier(0,1.02,.32,1.34); // easeOutBack, modified:
 }
 
 .animation-fadein {
-    animation: fadein .2s $timing-default;
+    animation: fadein .4s $timing-default;
 }
 
 @keyframes fadein {

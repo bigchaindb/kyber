@@ -46,15 +46,24 @@
     .icon {
         stroke: $brand-main-green;
     }
+    
+    .asset__title {
+        font-size: $font-size-sm;
+    }
 }
 
 .asset__title {
-    @extend .small;
+    font-size: $font-size-xs;
     display: block;
+    margin: auto;
     
     // truncate text
-    width: 130px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    width: 200px;
+    
+    @media ($screen-sm) {
+        width: 130px;
+    }
 }

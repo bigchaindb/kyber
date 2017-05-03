@@ -2,7 +2,7 @@
     
     // base layout redefinitions
     .app__content {
-        max-width: 600px;
+        max-width: 33em;
         padding-left: $spacer * 2;
         padding-right: $spacer * 2;
         padding-bottom: $spacer * 2;
@@ -22,11 +22,13 @@
     // add components
     @import 'assets';
     @import 'audiobar';
+    @import 'dictaphone';
+    @import 'timeline';
     
     .icon--lock {
         stroke-width: .5;
-        width: 6rem;
-        height: 6rem;
+        width: 4rem;
+        height: 4rem;
     }
     
     .status {
@@ -54,6 +56,10 @@
     
     .status--intro {
         margin-bottom: $spacer * 3;        
+    }
+    
+    .button--switchchallenge {
+        margin-top: $spacer * 2;
     }
     
     
@@ -105,15 +111,4 @@
             background: $brand-main-green;
         }
     }
-    
-    
-    .timeline-section {
-        @media ($screen-sm) {
-            position: absolute;
-            left: 0; right: 0;
-            // @kremalicious causes scrollbars on wider screens
-            bottom: 0;
-        }
-    }
-    
 }
