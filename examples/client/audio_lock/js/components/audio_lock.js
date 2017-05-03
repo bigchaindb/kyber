@@ -316,11 +316,30 @@ const AssetsList = React.createClass({
         transactionMeta: React.PropTypes.object
     },
 
+    getInitialState() {
+        return {
+            newAssetClicked: null
+        }
+    },
+
+    componentWillReceiveProps(nextProps) {
+        if (!!nextProps.assetList
+            && this.props.assetList
+            && nextProps.assetList.length !== this.props.assetList.length) {
+            this.setState({
+                newAssetClicked: null
+            })
+        }
+    },
 
     handleNewAssetClick(value) {
         const {
             assetAccount,
         } = this.props;
+
+        this.setState({
+            newAssetClicked: value
+        });
 
         const transaction = this.createTransaction(assetAccount, value);
         const signedTransaction = driver.Transaction.signTransaction(transaction, assetAccount.sk);
@@ -377,6 +396,10 @@ const AssetsList = React.createClass({
             transactionMeta
         } = this.props;
 
+        const {
+            newAssetClicked
+        } = this.state;
+
         if (transactionMeta && transactionMeta.isFetchingList) {
             return (
                 <IconLoader />
@@ -384,62 +407,59 @@ const AssetsList = React.createClass({
         }
 
         return (
-            <CSSTransitionGroup
-                transitionName="screenchange"
-                transitionAppear={true}
-                transitionAppearTimeout={400}
-                transitionEnter={false}
-                transitionLeaveTimeout={200}>
-                    <div className="assets-list">
-                        <div className="status">
-                            <h2 className="status__title">Select asset</h2>
-                            <p className="status__text">Affirmative, Dave. I read you. Now, please select an asset to unlock or create a new asset first.</p>
-                        </div>
-                        <div className="assets">
-                            {
-                                assetList.map((asset) => {
-                                    if (asset.asset.hasOwnProperty('data')) {
-                                        const assetDetails = asset.asset.data;
 
-                                        if ('item' in assetDetails
-                                            && 'frequency' in assetDetails) {
-                                            const
-                                                item = assetDetails.item,
-                                                frequency = assetDetails.frequency;
+            <div className="assets-list">
+                <div className="status">
+                    <h2 className="status__title">Select asset</h2>
+                    <p className="status__text">Affirmative, Dave. I read you. Now, please select an asset to unlock or create a new asset first.</p>
+                </div>
+                <div className="assets">
+                    {
+                        assetList.map((asset) => {
+                            if (asset.asset.hasOwnProperty('data')) {
+                                const assetDetails = asset.asset.data;
 
-                                            return (
-                                                <a className="asset" href="#"
-                                                   onClick={() => this.onAssetClick(asset)}
-                                                   key={asset.id}>
-                                                    { (item === 'shirt') && <IconShirt /> }
-                                                    { (item === 'sticker') && <IconPicasso /> }
-                                                    <span className="asset__title">
-                                                        {
-                                                            asset.id
-                                                        }
-                                                    </span>
-                                                </a>
-                                            )
-                                        }
-                                    }
-                                })
+                                if ('item' in assetDetails
+                                    && 'frequency' in assetDetails) {
+                                    const
+                                        item = assetDetails.item,
+                                        frequency = assetDetails.frequency;
+
+                                    return (
+                                        <a className="asset" href="#"
+                                           onClick={() => this.onAssetClick(asset)}
+                                           key={asset.id}>
+                                            { (item === 'shirt') && <IconShirt /> }
+                                            { (item === 'sticker') && <IconPicasso /> }
+                                            <span className="asset__title">
+                                                {
+                                                    asset.id
+                                                }
+                                            </span>
+                                        </a>
+                                    )
+                                }
                             }
-
-                            <a className="asset asset--create" href="#"
-                               onClick={() => this.handleNewAssetClick('shirt')}
-                               key="asset-create-shirt">
-                                <IconAdd />
-                                <span className="asset__title">Create new asset</span>
-                            </a>
-                            <a className="asset asset--create" href="#"
-                               onClick={() => this.handleNewAssetClick('sticker')}
-                               key="asset-create-sticker">
-                                <IconAdd />
-                                <span className="asset__title">Create new asset</span>
-                            </a>
-                        </div>
-                    </div>
-            </CSSTransitionGroup>
+                        })
+                    }
+                    <a className={classnames("asset asset--create", {"asset--create--loading": newAssetClicked})} href="#"
+                       onClick={() => this.handleNewAssetClick('shirt')}
+                       key="asset-create-shirt">
+                        { newAssetClicked && newAssetClicked === 'shirt' ?
+                             <IconLoader/> : <IconAdd />
+                        }
+                        <span className="asset__title">Create new asset</span>
+                    </a>
+                    <a className={classnames("asset asset--create", {"asset--create--loading": newAssetClicked})} href="#"
+                       onClick={() => this.handleNewAssetClick('sticker')}
+                       key="asset-create-sticker">
+                        { newAssetClicked && newAssetClicked === 'sticker' ?
+                            <IconLoader/>: <IconAdd />
+                        }
+                        <span className="asset__title">Create new asset</span>
+                    </a>
+                </div>
+            </div>
         )
     }
 });
