@@ -62,6 +62,22 @@
         margin-top: $spacer * 2;
     }
     
+    .button--showcode {
+        position: fixed;
+        top: $menu-height + $spacer;
+        right: $spacer / 2;
+        
+        .icon {
+            stroke: $btn-blue-color;
+            stroke-width: 1;
+            fill: none;
+            width: $font-size-base;
+            height: $font-size-base;
+            vertical-align: middle;
+            margin-bottom: $btn-padding-y-xs;
+        }
+    }
+    
     
     //
     // Lock/unlock state

@@ -187,7 +187,7 @@ const AssetList = React.createClass({
 
         return (
             <div className="assets-list">
-                <button onClick={this.toggleModal} className="button button--secondary">Show code</button>
+                <button onClick={this.toggleModal} className="button button--link button--sm button--showcode"><IconCode/> Show code</button>
                 <ReactModal
                     isOpen={showModal}
                     className="modal__content"

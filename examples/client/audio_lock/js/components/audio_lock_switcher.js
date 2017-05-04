@@ -58,7 +58,7 @@ const AudioLockSwitcher = React.createClass({
 
         return (
             <div className="is-locked animation-fadein">
-                <button onClick={this.toggleModal} className="button button--secondary">Show code</button>
+                <button onClick={this.toggleModal} className="button button--link button--sm button--showcode"><IconCode/> Show code</button>
                 <ReactModal
                     isOpen={showModal}
                     className="modal__content"
