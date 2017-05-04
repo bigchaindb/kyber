@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {Component} from 'react';
+import ReactModal from 'react-modal';
 import moment from 'moment';
 import base58 from 'bs58';
 import classnames from 'classnames';
@@ -660,12 +661,25 @@ const StatusUnlocked = () => {
     )
 };
 
-const TimeLine = React.createClass({
-    propTypes: {
-        transactionList: React.PropTypes.array,
-        onClick: React.PropTypes.func
-    },
+class TimeLine extends Component {
+    constructor () {
+        super();
+        this.state = {
+            showModal: false
+        };
 
+        this.handleOpenModal = this.handleOpenModal.bind(this);
+        this.handleCloseModal = this.handleCloseModal.bind(this);
+    }
+
+    handleOpenModal () {
+        this.setState({ showModal: true });
+    }
+
+    handleCloseModal () {
+        this.setState({ showModal: false });
+    }
+    
     render() {
         const {
             transactionList,
@@ -682,13 +696,23 @@ const TimeLine = React.createClass({
                         <h3 className="timeline__name">
                             BigchainDB
                         </h3>
-                        <p className="timeline__description">
+                        <div className="timeline__description">
                             { transactionList.length > 0 ?
-                                    <a href={API_PATH + 'transactions/' + transactionList[0].id} target="_blank">
-                                        {transactionList[0].id}
-                                    </a> : null
+                              <div>
+                                  <a onClick={this.handleOpenModal}>
+                                      {transactionList[0].id}
+                                  </a>
+                                  <ReactModal 
+                                     isOpen={this.state.showModal}
+                                     className="modal__content"
+                                     overlayClassName="modal__overlay"
+                                     contentLabel="Minimal Modal Example">
+                                     <p>Modal text!</p>
+                                     <button onClick={this.handleCloseModal}>Close Modal</button>
+                                  </ReactModal>
+                              </div> : null
                             }
-                        </p>
+                        </div>
                     </div>
 
                     <div className="timeline__step">
@@ -696,13 +720,23 @@ const TimeLine = React.createClass({
                         <h3 className="timeline__name">
                             You
                         </h3>
-                        <p className="timeline__description">
+                        <div className="timeline__description">
                             { transactionList.length > 1 ?
-                                    <a href={API_PATH + 'transactions/' + transactionList[1].id} target="_blank">
-                                        {transactionList[1].id}
-                                    </a> : null
+                                    <div>
+                                        <a onClick={this.handleOpenModal}>
+                                            {transactionList[1].id}
+                                        </a>
+                                        <ReactModal 
+                                           isOpen={this.state.showModal}
+                                           className="modal__content"
+                                           overlayClassName="modal__overlay"
+                                           contentLabel="Minimal Modal Example">
+                                           <p>Modal text!</p>
+                                           <button onClick={this.handleCloseModal}>Close Modal</button>
+                                        </ReactModal>
+                                    </div> : null
                             }
-                        </p>
+                        </div>
                     </div>
 
                     <div className="timeline__step" style={{cursor : 'pointer'}}
@@ -719,4 +753,10 @@ const TimeLine = React.createClass({
             </aside>
         )
     }
-});
+};
+
+TimeLine.propTypes = {
+    transactionList: React.PropTypes.array,
+    onClick: React.PropTypes.func,
+    
+};
