@@ -10,16 +10,6 @@ $small: 12px;
 $color--brand: #c90000;
 $color--background-secondary: #EEE;
 
-pre {
-    font-size: smaller;
-    background: white;
-    padding: 4px;
-    border: none;
-    background: rgba(0, 0, 0, 0);
-    color: darken(aquamarine, 50%);
-}
-
-
 .input-asset-fixed {
     position: fixed;
     z-index: 100;

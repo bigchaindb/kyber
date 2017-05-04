@@ -109,6 +109,20 @@ $component-active-bg:    $brand-primary !default;
 
 
 //
+// Code
+//
+$code-color:                    $text-color !default;
+$code-bg:                       $gray-dark !default;
+
+$kbd-color:                     $code-color !default;
+$kbd-bg:                        $code-bg !default;
+
+$pre-bg:                        $code-bg !default;
+$pre-color:                     $code-color !default;
+$pre-scrollable-max-height:     340px !default;
+
+
+//
 // Buttons
 //
 $btn-font-family:                inherit;

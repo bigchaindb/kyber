@@ -1,8 +1,18 @@
+.ReactModal__Body--open {
+    overflow: hidden;
+}
+
 .modal__overlay {
     @extend .transition;
     position: fixed;
     left: 0; right: 0; top: 0; bottom: 0;
+    padding-top: $menu-height + $spacer;
+    padding-bottom: $spacer * 2;
     background: rgba($brand-main-gray, .6);
+    backdrop-filter: blur(3px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     
     display: flex;
     align-items: center;
@@ -11,21 +21,20 @@
 
 .modal__content {
     @extend .animation-slide-in-from-bottom;
-    margin: $spacer * 2;
+    margin: auto $spacer * 2;
     padding: $spacer;
     max-width: 100%;
     background: $brand-main-gray-light;
     border: 1px solid darken($brand-main-gray-light, 10%);
     border-radius: $border-radius;
-    -webkit-overflow-scrolling: touch;
-    
-    &:focus,
-    &:active {
-        outline: 0;
-    }
+    outline: 0;
     
     @media ($screen-sm) {
         max-width: $screen-sm-min;
         min-width: $screen-sm-min / 2;
+    }
+    
+    pre {
+        max-height: none;
     }
 }
