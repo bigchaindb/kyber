@@ -707,11 +707,11 @@ class TimeLine extends Component {
                                     isOpen={this.state.showModal}
                                     className="modal__content"
                                     overlayClassName="modal__overlay"
-                                    contentLabel="Minimal Modal Example">
+                                    contentLabel="Minimal Modal Example"
+                                    onRequestClose={this.handleCloseModal}>
                                     <SyntaxHighlighter language='javascript' style={json}>
                                         {JSON.stringify(transactionList[0], null, 2)}
                                     </SyntaxHighlighter>
-                                 {/*<p>{JSON.stringify(transactionList[0])}</p>*/}
                                  <button onClick={this.handleCloseModal}>Close Modal</button>
                               </ReactModal>
                               </div> : null
@@ -726,19 +726,22 @@ class TimeLine extends Component {
                         </h3>
                         <div className="timeline__description">
                             { transactionList.length > 1 ?
-                                    <div>
-                                        <a onClick={this.handleOpenModal}>
-                                            {transactionList[1].id}
-                                        </a>
-                                        <ReactModal 
-                                           isOpen={this.state.showModal}
-                                           className="modal__content"
-                                           overlayClassName="modal__overlay"
-                                           contentLabel="Minimal Modal Example">
-                                           <p>Modal text!</p>
-                                           <button onClick={this.handleCloseModal}>Close Modal</button>
-                                        </ReactModal>
-                                    </div> : null
+                                <div>
+                                    <a onClick={this.handleOpenModal}>
+                                        {transactionList[1].id}
+                                    </a>
+                                    <ReactModal
+                                        isOpen={this.state.showModal}
+                                        className="modal__content"
+                                        overlayClassName="modal__overlay"
+                                        contentLabel="Minimal Modal Example"
+                                        onRequestClose={this.handleCloseModal}>
+                                        <SyntaxHighlighter language='javascript' style={json}>
+                                            {JSON.stringify(transactionList[1], null, 2)}
+                                        </SyntaxHighlighter>
+                                     <button onClick={this.handleCloseModal}>Close Modal</button>
+                                  </ReactModal>
+                                </div> : null
                             }
                         </div>
                     </div>
