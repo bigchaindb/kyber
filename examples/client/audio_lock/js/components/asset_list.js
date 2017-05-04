@@ -6,7 +6,7 @@ import classnames from 'classnames';
 import * as driver from 'js-bigchaindb-quickstart';
 
 import SyntaxHighlighter from 'react-syntax-highlighter';
-import { docco } from 'react-syntax-highlighter/dist/styles'
+import { zenburn } from 'react-syntax-highlighter/dist/styles'
 
 import TransactionActions from '../../../js/react/actions/transaction_actions';
 
@@ -196,14 +196,14 @@ const AssetList = React.createClass({
                     onRequestClose={this.toggleModal}>
                     <SyntaxHighlighter
                         language='javascript'
-                        style={docco}
+                        style={ zenburn }
                         showLineNumbers={true}
                         wrapLines={true}
                         lineStyle={lineNumber => {
                             let style = { display: 'block' };
                             if ([35, 36, 37, 38, 39, 40, 42, 43, 44, 45, 47].includes(lineNumber)) {
                                 //@kremalicious not sure if we can use external css for this (ie set a class)
-                                style.backgroundColor = '#dbffdb';
+                                style.backgroundColor = 'rgba(57, 186, 145, .2)';
                             }
                           return style;
                         }}>

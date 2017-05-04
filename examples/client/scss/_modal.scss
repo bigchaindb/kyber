@@ -34,7 +34,11 @@
         min-width: $screen-sm-min / 2;
     }
     
+    // sledghammer overwrites for react-syntax-highlighter
     pre {
         max-height: none;
+        background-color: $code-bg !important;
+        margin-bottom: 0;
+        padding: $spacer !important;
     }
 }

@@ -7,7 +7,7 @@ import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 import * as driver from 'js-bigchaindb-quickstart';
 
 import SyntaxHighlighter from 'react-syntax-highlighter';
-import { docco } from 'react-syntax-highlighter/dist/styles'
+import { zenburn } from 'react-syntax-highlighter/dist/styles'
 
 import AccountActions from '../../../js/react/actions/account_actions';
 import BigchainDBConnection from '../../../js/react/components/bigchaindb_connection';
@@ -93,14 +93,13 @@ const EmailInput = React.createClass({
                         onRequestClose={this.toggleModal}>
                         <SyntaxHighlighter
                             language='javascript'
-                            style={docco}
-                            showLineNumbers={true}
+                            style={zenburn}
                             wrapLines={true}
                             lineStyle={lineNumber => {
                                 let style = { display: 'block' };
                                 if ([1, 4].includes(lineNumber)) {
                                     //@kremalicious not sure if we can use external css for this (ie set a class)
-                                    style.backgroundColor = '#dbffdb';
+                                    style.backgroundColor = 'rgba(57, 186, 145, .2)';
                                 }
                               return style;
                             }}>

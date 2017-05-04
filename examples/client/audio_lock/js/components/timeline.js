@@ -3,7 +3,7 @@ import ReactModal from 'react-modal';
 import classnames from 'classnames';
 
 import SyntaxHighlighter from 'react-syntax-highlighter';
-import { docco } from 'react-syntax-highlighter/dist/styles'
+import { zenburn } from 'react-syntax-highlighter/dist/styles'
 
 
 class TimeLine extends Component {
@@ -50,7 +50,7 @@ class TimeLine extends Component {
                                     overlayClassName="modal__overlay"
                                     contentLabel="Minimal Modal Example"
                                     onRequestClose={this.toggleModal}>
-                                    <SyntaxHighlighter language='javascript' style={docco}>
+                                    <SyntaxHighlighter language='javascript' style={zenburn}>
                                         {JSON.stringify(transactionList[0], null, 2)}
                                     </SyntaxHighlighter>
                               </ReactModal>
@@ -76,7 +76,7 @@ class TimeLine extends Component {
                                         overlayClassName="modal__overlay"
                                         contentLabel="Minimal Modal Example"
                                         onRequestClose={this.toggleModal}>
-                                        <SyntaxHighlighter language='javascript' style={docco}>
+                                        <SyntaxHighlighter language='javascript' style={zenburn}>
                                             {JSON.stringify(transactionList[1], null, 2)}
                                         </SyntaxHighlighter>
                                   </ReactModal>

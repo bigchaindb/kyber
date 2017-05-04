@@ -38,7 +38,7 @@ kbd {
 // Blocks of code
 pre {
     display: block;
-    padding: 1em;
+    padding: $spacer;
     margin: 0 0 $spacer;
     line-height: $line-height;
     word-break: break-all;
@@ -65,4 +65,8 @@ pre {
         background-color: transparent;
         border-radius: 0;
     }
+}
+
+.react-syntax-highlighter-line-number {
+    opacity: .5;
 }
