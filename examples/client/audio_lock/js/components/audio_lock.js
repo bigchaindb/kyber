@@ -8,7 +8,8 @@ import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 
 import * as driver from 'js-bigchaindb-quickstart';
 
-import {API_PATH} from '../../../js/constants/application_constants';
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { json } from 'react-syntax-highlighter/dist/styles'
 
 import AccountActions from '../../../js/react/actions/account_actions';
 import BigchainDBConnection from '../../../js/react/components/bigchaindb_connection';
@@ -698,18 +699,21 @@ class TimeLine extends Component {
                         </h3>
                         <div className="timeline__description">
                             { transactionList.length > 0 ?
-                              <div>
-                                  <a onClick={this.handleOpenModal}>
-                                      {transactionList[0].id}
-                                  </a>
-                                  <ReactModal 
-                                     isOpen={this.state.showModal}
-                                     className="modal__content"
-                                     overlayClassName="modal__overlay"
-                                     contentLabel="Minimal Modal Example">
-                                     <p>Modal text!</p>
-                                     <button onClick={this.handleCloseModal}>Close Modal</button>
-                                  </ReactModal>
+                                <div>
+                                    <a onClick={this.handleOpenModal}>
+                                        {transactionList[0].id}
+                                    </a>
+                                <ReactModal
+                                    isOpen={this.state.showModal}
+                                    className="modal__content"
+                                    overlayClassName="modal__overlay"
+                                    contentLabel="Minimal Modal Example">
+                                    <SyntaxHighlighter language='javascript' style={json}>
+                                        {JSON.stringify(transactionList[0], null, 2)}
+                                    </SyntaxHighlighter>
+                                 {/*<p>{JSON.stringify(transactionList[0])}</p>*/}
+                                 <button onClick={this.handleCloseModal}>Close Modal</button>
+                              </ReactModal>
                               </div> : null
                             }
                         </div>
