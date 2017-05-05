@@ -1,6 +1,5 @@
-import React, {Component} from 'react';
+import React from 'react';
 import ReactModal from 'react-modal';
-import classnames from 'classnames';
 
 import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 
@@ -8,19 +7,6 @@ import * as driver from 'js-bigchaindb-quickstart';
 
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { zenburn } from 'react-syntax-highlighter/dist/styles'
-
-import AccountActions from '../../../js/react/actions/account_actions';
-import BigchainDBConnection from '../../../js/react/components/bigchaindb_connection';
-
-import TransactionActions from '../../../js/react/actions/transaction_actions';
-import AssetList from './asset_list';
-import AudioLockSwitcher from './audio_lock_switcher';
-
-import {
-    IconLockUnlocked,
-    IconArrowLeft,
-    Logo,
-} from '../../../js/react/components/icons';
 
 
 const keypairCode =
