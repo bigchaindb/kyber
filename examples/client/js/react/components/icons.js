@@ -145,6 +145,17 @@ export const IconArrowLeft = () => {
     )
 };
 
+export const IconCode = () => {
+    return (
+      <svg className="icon icon--code" xmlns="http://www.w3.org/2000/svg" width="24" height="21" viewBox="0 0 24 21">
+          <polyline points="7.5 6.5 10 9 7.5 11.5"/>
+          <path d="M13,9.5 L17,9.5"/>
+          <rect width="23" height="20" x=".5" y=".5"/>
+          <rect width="19" height="16" x="2.5" y="2.5"/>
+      </svg>
+    )
+};
+
 export const IconLoader = () => {
     return (
       <svg className="loader" width="44" height="44" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" stroke="#445261">

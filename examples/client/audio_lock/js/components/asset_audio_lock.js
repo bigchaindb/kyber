@@ -5,7 +5,7 @@ import Tone from 'tone';
 import * as driver from 'js-bigchaindb-quickstart';
 
 import SyntaxHighlighter from 'react-syntax-highlighter';
-import { docco } from 'react-syntax-highlighter/dist/styles'
+import { zenburn } from 'react-syntax-highlighter/dist/styles'
 
 import TransactionActions from '../../../js/react/actions/transaction_actions';
 import AudioVisual from './audio_visual';
