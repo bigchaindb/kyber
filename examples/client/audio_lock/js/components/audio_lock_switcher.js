@@ -8,6 +8,10 @@ import AssetAudioLock from './asset_audio_lock';
 
 import Dictaphone from './dictaphone';
 
+import {
+    IconCode
+} from '../../../js/react/components/icons';
+
 
 const AudioLockSwitcher = React.createClass({
     propTypes: {

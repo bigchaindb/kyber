@@ -16,7 +16,8 @@ import {
     IconShirt,
     IconPicasso,
     IconAdd,
-    IconLoader
+    IconLoader,
+    IconCode
 } from '../../../js/react/components/icons';
 
 
