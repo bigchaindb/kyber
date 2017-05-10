@@ -24,6 +24,7 @@ var/
 .installed.cfg
 *.egg
 node_modules/
+yarn.lock
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

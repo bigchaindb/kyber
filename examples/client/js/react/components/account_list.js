@@ -34,9 +34,8 @@ const AccountList = React.createClass({
     },
 
     fetchAccountList() {
-        const { appName } = this.props;
         AccountActions.flushAccountList();
-        AccountActions.fetchAccountList({ app: appName });
+        AccountActions.fetchAccountList();
     },
 
     render() {

@@ -28,6 +28,7 @@
   "dependencies": {
     "alt": "^0.18.4",
     "bootstrap-sass": "^3.3.6",
+    "bs58": "^4.0.0",
     "classnames": "^2.2.5",
     "core-js": "^2.4.0",
     "ilp-plugin-bigchaindb": "^0.0.7",
@@ -37,7 +38,12 @@
     "react-bootstrap": "^0.30.7",
     "react-dom": "^15.2.1",
     "react-matrix": "0.0.6",
-    "react-scroll": "^1.0.24"
+    "react-modal": "^1.7.7",
+    "react-scroll": "^1.0.24",
+    "react-speech-recognition": "^1.0.1",
+    "react-syntax-highlighter": "^5.5.0",
+    "react-transition-group": "^1.1.2",
+    "tone": "^0.10.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.7",

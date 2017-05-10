@@ -1,5 +1,3 @@
-@import "variables";
-
 /**
  * Colors and backgrounds
  */
@@ -11,39 +9,6 @@ $small: 12px;
 
 $color--brand: #c90000;
 $color--background-secondary: #EEE;
-
-html {
-    font-family: Roboto, "Helvetica Neue", Helvetica, "Hiragino Sans GB", STHeitiSC-Light, "Microsoft YaHei", 微软雅黑, Arial, sans-serif;
-}
-
-body {
-    background-color: $bg-color;
-}
-
-.app {
-    margin: auto;
-    //max-width: $content--max-width + $sidebar--wide;
-    height: 100%;
-}
-
-a {
-    color: $fg-color;
-}
-
-pre {
-    font-size: smaller;
-    background: white;
-    padding: 4px;
-    border: none;
-    background: rgba(0, 0, 0, 0);
-    color: darken(aquamarine, 50%);
-}
-
-h1 {
-    color: #00B277;
-    font-family: "Droid Sans Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
-}
-
 
 .input-asset-fixed {
     position: fixed;
@@ -75,7 +40,6 @@ h1 {
 .input-content {
     border: 1px solid rgba(0, 0, 0, 0);
     background: lighten(aquamarine, 20%);
-    font-family: "Droid Sans Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 .input-content-panel {
@@ -129,8 +93,6 @@ h1 {
 #page-content-wrapper {
     width: 100%;
     max-width: 840px;
-    color: #00B277;
-    font-family: "Droid Sans Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 .page-content {
@@ -187,27 +149,16 @@ h1 {
     vertical-align: middle;
 }
 
-input {
-    width: 100%;
-    font-size: 20px;
-    line-height: 130%;
-    border: 1px solid #BBB;
-    padding: 1em;
-}
-
 #app-container {
     margin-top: 50vh;
     text-align: center;
-    background: $fg-color;
-    color: black;
 }
 
 #container {
-    background-color: $color--background;
+    
 }
 
 .content-header-wrapper {
-    background-color: $bg-color;
     width: 100%;
 }
 
@@ -215,7 +166,6 @@ input {
     width: 100%;
     max-width: $content--max-width;
     position: fixed;
-    background-color: $bg-color;
     height: 70px;
     box-shadow: 0 2px 2px -2px rgba(0, 0, 0, .5);
     z-index: 1200;

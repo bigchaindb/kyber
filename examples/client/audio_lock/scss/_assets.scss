@@ -1,0 +1,81 @@
+.assets {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.asset {
+    flex: 0 0 100%;
+    padding: $spacer;
+    background: $brand-main-violet;
+    color: #fff;
+    border: 2px solid $body-bg;
+    
+    @media ($screen-sm) {
+        flex: 0 1 (100% / 3);
+    }
+    
+    &:hover,
+    &:active {
+        background: $gray;
+    }
+    
+    .icon {
+        stroke: #fff;
+        stroke-width: .75;
+        width: 3rem;
+        height: 3rem;
+        max-width: 100%;
+    }
+}
+
+.asset--create {
+    background: #fff;
+    color: $brand-main-green;
+
+    &:hover,
+    &:active {
+        background: $brand-main-green;
+        color: $brand-main-gray-lighter;
+
+        .icon {
+            stroke: $brand-main-gray-lighter;
+        }
+    }
+
+    .icon,
+    .loader {
+        stroke: $brand-main-green;
+        width: 2.8rem;
+        height: 2.8rem;
+    }
+    
+    .asset__title {
+        @extend .transition;
+        font-size: $font-size-sm;
+    }
+}
+
+.asset--create--loading {
+    pointer-events: none;
+    
+    .asset__title {
+        opacity: 0;
+    }
+}
+
+.asset__title {
+    font-size: $font-size-xs;
+    display: block;
+    margin: auto;
+    
+    // truncate text
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 200px;
+    
+    @media ($screen-sm) {
+        width: 130px;
+    }
+}

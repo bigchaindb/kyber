@@ -1,17 +1,12 @@
-@import "variables";
-
-
 .account-wrapper:first-child {
     border-top: 1px solid darken(aquamarine, 40%);
 }
 
 .list-row,
 .list-item {
-    font-family: "Droid Sans Mono",Menlo,Monaco,Consolas,"Courier New",monospace;
     font-size: .9em;
     text-transform: uppercase;
     padding: 1em;
-    background-color: $bg-color;
     border-bottom: 1px solid darken(aquamarine, 40%);
     color: lighten($fg-color, 30%);
 }

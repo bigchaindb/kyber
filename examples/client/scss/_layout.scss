@@ -1,0 +1,29 @@
+
+//
+// More sane box model
+//
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+
+//
+// Body reset
+//
+html,
+body,
+.app,
+.app > div,
+.app > div > div,
+.app__content {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+}
+
+.app__content {
+    padding-top: $menu-height;
+}

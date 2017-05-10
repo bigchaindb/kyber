@@ -1,53 +1,130 @@
-$color-button: #ED4E2B;
-$dark-transparent: rgba(#000000, .6);
-
-
-.audio-lock {
-
-    #page-content-wrapper {
-        max-width: 840px;
-        color: #00B277;
-        font-family: "Droid Sans Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
-    }
-
-    .page-content {
-        padding-bottom: 5em;
-        padding-top: 1em;
-    }
-
-    .frequency-col {
-        padding: 0;
-    }
-
-    .frequency-bar {
-        background: green;
-        height: 90px;
-        opacity: 0;
-        width: 100%;
-        &.target {
-            background: red;
-            border: 1px solid darken(red, 20%);
-            color: white;
-            text-align: center;
-            font-size: 2em;
+.app--audio_lock {
+    
+    // base layout redefinitions
+    .app__content {
+        max-width: 33em;
+        padding-left: $spacer * 2;
+        padding-right: $spacer * 2;
+        padding-bottom: $spacer * 2;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        > div {
+            width: 100%;
         }
     }
+    
+    // add components
+    @import 'assets';
+    @import 'audiobar';
+    @import 'dictaphone';
+    @import 'timeline';
+    
+    .icon--lock {
+        stroke-width: .5;
+        width: 4rem;
+        height: 4rem;
+    }
+    
+    .status {
+        margin-bottom: $spacer;
+    }
 
-    .transaction-input .frequency-bar{
-        border-right: 1px solid darken(aquamarine, 50%);
-        border-bottom: 1px solid darken(aquamarine, 50%);
-        opacity: 1;
-        background: lighten(aquamarine, 10%);
-        height: 60px;
-        &.selected {
-            background: lighten(red, 20%);
-            color: white;
-            text-align: center;
-            font-size: 2em;
+    .status__title {
+        font-size: $font-size-h3;
+        margin-top: $spacer;
+        margin-bottom: $spacer / 2;
+        color: $brand-main-blue;
+        opacity: .8;
+    }
+    
+    .status__subtitle {
+        font-size: $font-size-h4;
+        margin-top: 0;
+        margin-bottom: $spacer;
+        opacity: .5;
+    }
+    
+    .status__text {
+        margin-bottom: $spacer * 2;
+    }
+    
+    .status--intro {
+        margin-bottom: $spacer * 3;        
+    }
+    
+    .button--switchchallenge {
+        margin-top: $spacer * 2;
+    }
+    
+    .button--showcode {
+        position: fixed;
+        top: $menu-height + $spacer;
+        right: $spacer / 2;
+        
+        .icon {
+            stroke: $btn-blue-color;
+            stroke-width: 1;
+            fill: none;
+            width: $font-size-base;
+            height: $font-size-base;
+            vertical-align: middle;
+            margin-bottom: $btn-padding-y-xs;
         }
-        &:hover{
-            cursor: pointer;
-            background: lighten(red, 20%);
+    }
+    
+    
+    //
+    // Lock/unlock state
+    //
+    transition: .2s ease-out;
+    
+    .is-locked,
+    .is-unlocked {
+        
+        // make room for timeline
+        @media ($screen-sm) {
+            padding-bottom: $spacer * 7;
+        }
+        
+        &:before {
+            @extend .animation-fadein;
+            content: "";
+            display: block;
+            position: absolute;
+            left: 0; right: 0; top: 0; bottom: 0;
+            z-index: -1;
+            transition: .2s ease-out;
+        }
+    }
+    
+    .is-locked {
+        .icon--lock {
+            stroke: darken($brand-danger, 20%);
+        }
+        
+        &:before {
+            background: $brand-danger;
+        }
+        
+    }
+    
+    .is-unlocked {
+        .icon--lock {
+            stroke: darken($brand-main-green, 20%);
+        }
+        
+        &:before {
+            background: $brand-main-green;
+        }
+        
+        + .timeline-section .timeline__indicator:not(.active) {
+            background: $brand-main-green;
         }
     }
 }

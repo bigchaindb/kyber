@@ -1,6 +1,3 @@
-@import "variables";
-
-
 .transaction-container {
 
 }
@@ -18,9 +15,7 @@
 
 .transaction-header,
 .transaction-body {
-    font-family: "Droid Sans Mono",Menlo,Monaco,Consolas,"Courier New",monospace;
     padding: 0.4em 1em;
-    color: #109;
 }
 
 .transaction-link {
@@ -52,8 +47,6 @@
 .transaction-flow-body {
     text-overflow: ellipsis;
     overflow-x: hidden;
-    font-family: "Droid Sans Mono",Menlo,Monaco,Consolas,"Courier New",monospace;
-    color: darken(aquamarine, 50%);
     padding-right: 2em
 }
 
