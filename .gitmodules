@@ -10,3 +10,6 @@
 [submodule "examples/client/asset_composition"]
 	path = examples/client/asset_composition
 	url = git@github.com:ascribe/sicpa-client.git
+[submodule "plugins/bigchaindb-smart-assets"]
+	path = plugins/bigchaindb-smart-assets
+	url = git@github.com:ascribe/bigchaindb-smart-assets.git
