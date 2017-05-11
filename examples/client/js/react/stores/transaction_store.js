@@ -21,7 +21,8 @@ class TransactionStore {
             transaction: null,
             tx_id: null,
             unspent: null,
-            search: null
+            search: null,
+            isFetchingList: false
         };
         this.bindActions(TransactionActions);
         this.registerAsync(TransactionSource);
@@ -51,7 +52,7 @@ class TransactionStore {
     }
 
     onFlushTransactionList() {
-        this.transactionList = null;
+        this.transactionList = [];
         this.transactionMeta.asset_id = null;
         this.transactionMeta.operation = null;
         this.transactionMeta.search = null;

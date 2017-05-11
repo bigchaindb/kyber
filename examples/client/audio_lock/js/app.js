@@ -1,5 +1,4 @@
 // Install necessary polyfills (see supported browsers) into global
-
 import './components/audiocontext-polyfill';
 
 import 'core-js/es6';
@@ -11,14 +10,13 @@ import ReactDOM from 'react-dom';
 
 import AudioLock from './components/audio_lock'
 
-import '../../css/scss/main.scss';
+import '../../scss/main.scss';
 
 
 const App = () => (
-    <div className="app audio-lock">
+    <div className="app--audio_lock">
         <AudioLock />
     </div>
 );
 
-ReactDOM.render(<App />, document.getElementById('bigchaindb-example-app'));
-
+ReactDOM.render(<App />, document.getElementsByClassName('app')[0]);

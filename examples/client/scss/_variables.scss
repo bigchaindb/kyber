@@ -1,0 +1,242 @@
+
+//
+// Global variables
+//
+// taken straight out of 
+// https://github.com/ascribe/bigchain-website/blob/master/_src/_assets/styles/bigchain/_variables.scss
+//
+
+//
+// Colors
+//
+$brand-main-green:        #39BA91 !default;
+$brand-main-blue:         #074354 !default;
+$brand-main-gray:         #445261 !default;
+$brand-main-blue-dark:    #101A25 !default;
+
+$brand-main-violet:       #B581CF !default;
+$brand-main-blue-light:   #BFE6EC !default;
+$brand-main-gray-light:   #CAD2DA !default;
+$brand-main-gray-lighter: #E8EBEF !default;
+
+$gray:                    $brand-main-gray !default;
+$gray-light:              lighten($brand-main-gray, 35%) !default;
+$gray-dark:               darken($brand-main-gray, 5%) !default;
+
+$brand-primary:           $brand-main-green !default;
+
+// alerts
+$brand-success:           #388250 !default;
+$brand-info:              #3E91CE !default;
+$brand-warning:           #8E8E24 !default;
+$brand-danger:            #c9726a !default;
+
+
+//
+// Typography
+//
+$font-family-base:          'europa', 'Avenir Next', 'Avenir', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif !default;
+$font-family-monospace:     Menlo, Monaco, Consolas, 'Courier New', monospace !default;
+
+$font-weight-light:         300 !default;
+$font-weight-normal:        400 !default;
+$font-weight-bold:          600 !default;
+$font-weight-base:          $font-weight-normal !default;
+
+$font-size-root:            18px !default;
+$font-size-root-lg:         20px !default;
+
+$font-size-base:            1rem !default;
+$font-size-lg:              1.3rem !default;
+$font-size-sm:              0.85rem !default;
+$font-size-xs:              0.7rem !default;
+
+$font-size-h1:              2.7rem !default;
+$font-size-h2:              2.3rem !default;
+$font-size-h3:              1.8rem !default;
+$font-size-h4:              1.45rem !default;
+$font-size-h5:              $font-size-lg !default;
+$font-size-h6:              $font-size-base !default;
+
+$line-height:               1.5 !default;
+
+$headings-font-family:      inherit !default;
+$headings-font-weight:      $font-weight-light !default;
+$headings-line-height:      1.2 !default;
+$headings-color:            $brand-main-blue !default;
+
+
+//
+// Scaffolding
+//
+$body-bg:                   $brand-main-gray-lighter !default;
+$text-color:                $brand-main-gray !default;
+
+$link-color:                $brand-primary !default;
+$link-hover-color:          lighten($brand-primary, 10%) !default;
+$link-hover-bg:             rgba($brand-primary, .8) !default;
+
+$menu-height:               3rem !default;
+
+
+//
+// Responsive breakpoints
+//
+$screen-sm-min:             40em !default;
+$screen-md-min:             50em !default;
+$screen-lg-min:             85em !default;
+
+$screen-sm:                 'min-width: #{$screen-sm-min}';
+$screen-md:                 'min-width: #{$screen-md-min}';
+$screen-lg:                 'min-width: #{$screen-lg-min}';
+
+
+//
+// Components
+//
+$spacer:                 1rem !default;
+$line-height-lg:         (4 / 3) !default;
+$line-height-sm:         1.3 !default;
+$line-height-xs:         1.2 !default;
+
+$border-radius:          .15rem !default;
+$border-radius-lg:       .2rem !default;
+$border-radius-sm:       .1rem !default;
+$border-radius-xs:       .1rem !default;
+
+$component-active-color: $brand-main-blue !default;
+$component-active-bg:    $brand-primary !default;
+
+
+//
+// Code
+//
+$code-color:                    $text-color !default;
+$code-bg:                       $gray-dark !default;
+
+$kbd-color:                     $code-color !default;
+$kbd-bg:                        $code-bg !default;
+
+$pre-bg:                        $code-bg !default;
+$pre-color:                     $code-color !default;
+$pre-scrollable-max-height:     340px !default;
+
+
+//
+// Buttons
+//
+$btn-font-family:                inherit;
+$btn-font-weight:                $font-weight-bold !default;
+
+$btn-padding-x:                  2rem !default;
+$btn-padding-y:                  .5rem !default;
+
+$btn-primary-color:              $brand-main-blue !default;
+$btn-primary-bg:                 $brand-primary !default;
+
+$btn-secondary-color:            $brand-main-blue !default;
+$btn-secondary-bg:               $gray-light !default;
+
+$btn-blue-color:                 $brand-primary !default;
+$btn-blue-bg:                    $brand-main-blue !default;
+
+$btn-violet-color:               $brand-main-blue !default;
+$btn-violet-bg:                  $brand-main-violet !default;
+
+$btn-info-color:                 #fff !default;
+$btn-info-bg:                    $brand-info !default;
+
+$btn-success-color:              #fff !default;
+$btn-success-bg:                 $brand-success !default;
+
+$btn-warning-color:              #fff !default;
+$btn-warning-bg:                 $brand-warning !default;
+
+$btn-danger-color:               #fff !default;
+$btn-danger-bg:                  $brand-danger !default;
+
+$btn-link-disabled-color:        $gray-light !default;
+
+$btn-padding-x-xs:               .75rem !default;
+$btn-padding-y-xs:               .15rem !default;
+
+$btn-padding-x-sm:               1.25rem !default;
+$btn-padding-y-sm:               .4rem !default;
+
+$btn-padding-x-lg:               3rem !default;
+$btn-padding-y-lg:               1rem !default;
+
+// Allows for customizing button radius independently from global border radius
+$btn-border-radius:              $border-radius !default;
+$btn-border-radius-lg:           $border-radius-lg !default;
+$btn-border-radius-sm:           $border-radius-sm !default;
+$btn-border-radius-xs:           $border-radius-xs !default;
+
+
+//
+// Forms
+//
+$input-font:                     inherit !default;
+$input-font-weight:              $font-weight-normal !default;
+
+$input-padding-x:                .5rem !default;
+$input-padding-y:                0 !default;
+
+$input-bg:                       transparent !default;
+$input-bg-disabled:              $gray-dark !default;
+
+$input-color:                    $gray-dark !default;
+$input-border-color:             $gray !default;
+
+$input-border-focus:             $gray-dark !default;
+$input-color-placeholder:        $gray !default;
+
+
+
+//
+// Old stuff
+//
+
+/**
+ * Colors and backgrounds
+ */
+
+/*79589F*/
+$ascribe-black: #222;
+$ascribe-dark-blue: #003C69;
+$ascribe-blue: #65CFE9;
+$ascribe-light-blue: #D3DEE4;
+$ascribe-pink: #D10074;
+$ascribe-white: white;
+
+$color--brand: #c90000;
+$color--background: #FAFAFA;
+$color--background-secondary: #FAFAFA;
+
+$bg-color: #FAFAFA;
+$fg-color: black;
+$bg-color--hover: lighten($fg-color, 20%);
+
+/**
+ * Sizes
+ */
+
+$ascribe--spinner-color: $ascribe-blue;
+
+$ascribe--spinner-size-lg: 50px;
+$ascribe--spinner-size-md: 30px;
+$ascribe--spinner-size-sm: 15px;
+
+$navbar-height: 70px;
+$header-height: 70px;
+
+$row: 700px;
+$row--wide: 900px;
+$gutter: 20px;
+$small: 12px;
+
+$content--max-width: 1100px;
+$sidebar--wide: 250px;
+
+
+

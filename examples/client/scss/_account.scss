@@ -1,0 +1,43 @@
+.account-wrapper:first-child {
+    border-top: 1px solid darken(aquamarine, 40%);
+}
+
+.list-row,
+.list-item {
+    font-size: .9em;
+    text-transform: uppercase;
+    padding: 1em;
+    border-bottom: 1px solid darken(aquamarine, 40%);
+    color: lighten($fg-color, 30%);
+}
+
+.list-row {
+    &:hover {
+        background-color: lighten(aquamarine, 20%);
+        cursor: pointer;
+    }
+}
+
+.list-row.active {
+    background: lighten(aquamarine, 10%);
+    .list-row-name,
+    .list-row-detail {
+        color: #109;
+    }
+}
+
+.list-row-name {
+    font-weight: bold;
+}
+
+.list-row-detail {
+    font-size: 0.8em;
+    color: lighten($fg-color, 50%);
+}
+
+.list-row-name,
+.list-row-detail {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    color: darken(aquamarine, 50%)
+}

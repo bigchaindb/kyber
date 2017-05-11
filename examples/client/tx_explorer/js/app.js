@@ -8,13 +8,13 @@ import ReactDOM from 'react-dom';
 
 import TxExplorer from './components/tx_explorer';
 
-import '../../css/scss/main.scss';
+import '../../scss/main.scss';
 
 
 const App = () => (
-    <div className="app tx-explorer">
+    <div className="app--tx_explorer">
         <TxExplorer />
     </div>
 );
 
-ReactDOM.render(<App />, document.getElementById('bigchaindb-example-app'));
+ReactDOM.render(<App />, document.getElementsByClassName('app')[0]);

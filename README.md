@@ -1,20 +1,13 @@
-# Kyber: Tutorials, Examples and Experiments with BigchainDB
+# Kyber
+
+> Tutorials, Examples and Experiments with BigchainDB. Welcome to the BigchainDB application laboratory!
+
+![banner-kyber 2x](https://cloud.githubusercontent.com/assets/90316/25490941/bb123a3e-2b6e-11e7-9208-53127d336115.png)
 
 ## What?! ¯\\\_(ツ)_/¯
 
-### BigchainDB
+Kyber is a full suite of [BigchainDB](https://www.bigchaindb.com) repo's including:
 
-Getting started with BigchainDB? Have a look at our docs:
-
-- the [HTTP API](https://docs.bigchaindb.com/projects/server/en/latest/drivers-clients/http-client-server-api.html)
-- a [Python driver](https://docs.bigchaindb.com/projects/py-driver/en/latest/index.html)
-- a (minimal) [JavaScript driver](https://github.com/bigchaindb/kyber/tree/master/drivers/javascript) for creating transactions
-
-### Kyber 
-
-Welcome to the BigchainDB application laboratory!
-
-Kyber is a full suite of BigchainDB repo's including:
 - BigchainDB [server](https://github.com/bigchaindb/kyber#server-side-setup)
 - BigchainDB client Tutorials (
 [python](https://github.com/bigchaindb/kyber#python-client-tutorials), 
@@ -26,6 +19,13 @@ All versions of the above:
 - Are in sync with the master branch of each BigchainDB repo
 - Might have experimental features (watch out that you don't burn yourself ;-) )
 
+### BigchainDB
+
+Getting started with BigchainDB? Have a look at our docs:
+
+- the [HTTP API](https://docs.bigchaindb.com/projects/server/en/latest/drivers-clients/http-client-server-api.html)
+- a [Python driver](https://docs.bigchaindb.com/projects/py-driver/en/latest/index.html)
+- a (minimal) [JavaScript driver](https://github.com/bigchaindb/kyber/tree/master/drivers/javascript) for creating transactions
 
 ## Server-side setup
 
@@ -251,44 +251,4 @@ frontend_1
 ```
 
 Typically the port is `33000`, so you can simple see the examples on [http://localhost:33000/](http://localhost:33000/).
-
-## Experimental stuff 
-
-> :bangbang: High chance of :fire: and :rage: ahead if you expect this to be production-ready.
-   
-### Asset scripts
-
-> :bangbang: Very highly extremely unsafe evaluation, avoid in production for now! :fire:
-
-> :bangbang: This code may make BigchainDB *less deterministic*! :fire:
-
-Assuming the python driver:
-
-You can add a (limited) script in the asset field and it will be executed. 
-This means that everytime a transaction with that `asset_id` is made that code will be executed on all server nodes.
-Upon error of the execution of the script the transaction is `INVALID`, otherwise it becomes a `VALID` UTXO.
-
-Think of it as permissioned execution of logic/simple contracts.
-
-- Permissioned execution: you need to have the asset in your UTXO set.
-- Logic: for now we'll strip it down to conditional statements and (indexed) BigchainDB queries.
-We provide some basic `bigchain` commands to query the DB on the server side.
-- Contracts: the script is not part of the UTXO lock but has a fixed address at transaction with `tx_id=asset_id`
-
-For example, to query the unspent output transactions for a specific public key.
-
-```python
-asset = {
-    'script': 
-"""
-if len(bigchain.get_outputs_filtered('{}', True)) < 1: 
-    raise".format("<my_pub_key>")
-"""    
-}
-```
-
-(Other functions can be found in the [Bigchain connection code](https://github.com/bigchaindb/DBH17/blob/master/bigchaindb-server/bigchaindb/core.py#L179)). 
-Of course, we will limit this to the `get_` methods only.
-
-Some examples can be found in the [tests](https://github.com/bigchaindb/kyber/blob/master/bigchaindb-server/tests/common/test_asset.py).
 

@@ -1,4 +1,5 @@
 /**
+ * @public
  * Create an Output from a Condition.
  * Note: Assumes the given Condition was generated from a single public key (e.g. a Ed25519 Condition)
  * @param {object} condition Condition (e.g. a Ed25519 Condition from `makeEd25519Condition()`)
@@ -7,8 +8,9 @@
  */
 export default function makeOutput(condition, amount = 1) {
     return {
-        amount,
+        amount: JSON.stringify(amount),
         condition,
-        'public_keys': [condition.details.public_key],
+        'public_keys': condition.details.hasOwnProperty('public_key') ?
+            [condition.details.public_key] : [],
     };
 }

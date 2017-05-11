@@ -1,0 +1,112 @@
+$opacity-border: .8;
+
+.timeline-section {
+    margin-top: $spacer * 3;
+    
+    @media ($screen-sm) {
+        position: absolute;
+        left: 0; right: 0;
+        bottom: 0;
+        margin-top: 0;
+    }
+}
+
+.timeline-section__title {
+    font-size: $font-size-sm;
+    margin-top: 0;
+    margin-bottom: $spacer * 2;
+}
+
+.timeline {
+    border-left: 1px solid rgba($brand-main-gray-lighter, $opacity-border);
+    margin-left: .5rem;
+
+    @media ($screen-sm) {
+        border-left: none;
+        border-top: 1px solid rgba($brand-main-gray-lighter, $opacity-border);
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        
+        // lazy break out of container
+        width: 100vw;
+        position: relative;
+        left: 50%;
+        right: 50%;
+        margin-left: -50vw;
+        margin-right: -50vw;
+    }
+}
+
+.timeline__step {
+    margin-top: -.6rem;
+    margin-left: -.5rem;
+    margin-bottom: $spacer * 2;
+
+    @media ($screen-sm) {
+        flex: 1;
+        margin-bottom: $spacer;
+    }
+}
+
+.timeline__indicator {
+    display: block;
+    float: left;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    border: 1px solid rgba($brand-main-gray-lighter, $opacity-border);
+    background: $brand-danger;
+    transition: .2s ease-out;
+
+    &:hover,
+    &.active {
+        background: $brand-main-violet;
+    }
+
+    @media ($screen-sm) {
+        float: none;
+        display: inline-block;
+    }
+}
+
+.timeline__name,
+.timeline__description {
+    margin: 0;
+    text-align: left;
+    margin-left: $spacer * 2;
+    
+    @media ($screen-sm) {
+        text-align: center;
+        margin-left: 0;
+    }
+}
+
+.timeline__name {
+    @extend .h6;
+    font-size: $font-size-sm;
+    color: $text-color;
+    margin-top: 0;
+    margin-bottom: $spacer / 3;
+}
+
+.timeline__description {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-light;
+    overflow: hidden;
+    width: 120px;
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    min-height: $font-size-base;
+    
+    @media ($screen-sm) {
+        margin: auto;
+    }
+
+    a {
+        color: $brand-main-gray;
+        box-shadow: 0 2px 0 $link-color;
+        cursor: pointer;
+    }
+}

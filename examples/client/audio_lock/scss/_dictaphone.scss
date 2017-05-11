@@ -1,0 +1,27 @@
+//
+// Speak input feedback
+//
+.dictaphone {
+    margin-top: $spacer;
+    min-height: $font-size-base;
+}
+
+.dictaphone__word,
+.dictaphone__interim {
+    font-family: $font-family-monospace;
+    color: $text-color;
+}
+
+.dictaphone__word {
+    padding: 0 .5rem;
+    opacity: .5;
+
+    &.active {
+        color: $brand-main-green;
+        opacity: 1;
+    }
+}
+
+.dictaphone__interim {
+    display: none;
+}

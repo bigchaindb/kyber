@@ -1,6 +1,3 @@
-@import "variables";
-@import "bigchaindb";
-
 /**
  * Colors and backgrounds
  */
@@ -12,37 +9,6 @@ $small: 12px;
 
 $color--brand: #c90000;
 $color--background-secondary: #EEE;
-
-html {
-    font-family: Roboto, "Helvetica Neue", Helvetica, "Hiragino Sans GB", STHeitiSC-Light, "Microsoft YaHei", 微软雅黑, Arial, sans-serif;
-}
-
-body {
-    background-color: $bg-color;
-}
-
-.app {
-    margin: auto;
-    //max-width: $content--max-width + $sidebar--wide;
-    height: 100%;
-}
-
-a {
-    color: $fg-color;
-}
-
-pre {
-    font-size: smaller;
-    background: white;
-    padding: 4px;
-    border: none;
-    background: rgba(0, 0, 0, 0);
-    color: $brand-main-gray;
-}
-
-h1 {
-    color: $brand-main-gray-lighter;
-}
 
 .input-asset-fixed {
     position: fixed;
@@ -74,7 +40,6 @@ h1 {
 .input-content {
     border: 1px solid rgba(0, 0, 0, 0);
     background: lighten(aquamarine, 20%);
-    font-family: "Droid Sans Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 .input-content-panel {
@@ -113,7 +78,6 @@ h1 {
 .left-addon .glyphicon-input {
     left: 0;
 }
-
 .right-addon .glyphicon-input {
     right: 0;
 }
@@ -122,20 +86,13 @@ h1 {
 .left-addon input {
     padding-left: 3em;
 }
-
 .right-addon input {
     padding-right: 3em;
 }
 
-#wrapper {
-}
-
 #page-content-wrapper {
     width: 100%;
-    color: $brand-main-gray;
-    max-width: 100%;
-    height: 100vh;
-    font-family: $font-regular;
+    max-width: 840px;
 }
 
 .page-content {
@@ -170,15 +127,6 @@ h1 {
     }
 }
 
-.navbar-title {
-        font-size: 1.2em;
-        margin: 0 2em 0 1.5em;
-        padding: 0.5em 0;
-        color: $brand-main-gray-lighter;
-        font-style: italic;
-    }
-
-
 /**
  * Layout
  */
@@ -201,27 +149,16 @@ h1 {
     vertical-align: middle;
 }
 
-input {
-    width: 100%;
-    font-size: 20px;
-    line-height: 130%;
-    border: 1px solid #BBB;
-    padding: 1em;
-}
-
 #app-container {
     margin-top: 50vh;
     text-align: center;
-    background: $fg-color;
-    color: black;
 }
 
 #container {
-    background-color: $color--background;
+    
 }
 
 .content-header-wrapper {
-    background-color: $bg-color;
     width: 100%;
 }
 
@@ -229,36 +166,7 @@ input {
     width: 100%;
     max-width: $content--max-width;
     position: fixed;
-    background-color: $bg-color;
     height: 70px;
     box-shadow: 0 2px 2px -2px rgba(0, 0, 0, .5);
     z-index: 1200;
-}
-
-.sidebar-button {
-    width: 30px;
-    height: 30px;
-    position: fixed;
-    top: 47px;
-    left: 6px;
-    margin-left: 1em;
-    padding-left: 8px;
-    padding-top: 7px;
-    font-size: 14px;
-    color: $brand-main-gray-lighter;
-    background: $brand-main-gray;
-    cursor: pointer;
-    border-radius: 50%;
-    box-shadow: 0 0 0 2px white, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);
-    z-index: 2000;
-    &:hover {
-        color: $brand-main-gray;
-        background: $brand-main-gray-lighter;
-    }
-}
-
-.img-logo-bigchaindb {
-    height: 46px;
-    position: absolute;
-    right: 1em;
 }
