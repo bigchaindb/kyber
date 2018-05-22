@@ -1,3 +1,5 @@
+**WARNING: The contents of this repository are old and we aren't supporting it any more. The examples probably don't work with the latest versions of BigchainDB. We're keeping this repository around (in read-only mode) because it explored many interesting ideas.**
+
 # Kyber
 
 > Tutorials, Examples and Experiments with BigchainDB. Welcome to the BigchainDB application laboratory!
